@@ -11,9 +11,6 @@ public class Measure {
     private int c3;
     private int c4;
 
-    public Measure() {
-    }
-
     public Measure(int c4, int c1, int c2, int c3) {
         this.c4 = c4;
         this.c1 = c1;
