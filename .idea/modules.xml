@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< Updated upstream
-      <module fileurl="file://$PROJECT_DIR$/Appli.iml" filepath="$PROJECT_DIR$/Appli.iml" />
-=======
-      <module fileurl="file://$PROJECT_DIR$/TwinMaxApk.iml" filepath="$PROJECT_DIR$/TwinMaxApk.iml" />
->>>>>>> Stashed changes
+      <module fileurl="file://$PROJECT_DIR$/TwinmaxApk.iml" filepath="$PROJECT_DIR$/TwinmaxApk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
