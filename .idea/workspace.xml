@@ -7,18 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="49047f15-7ce8-4300-abf8-096064070de8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/bleService/BLEService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TwinmaxApk.iml" afterPath="$PROJECT_DIR$/TwinmaxApk.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/animated_vector_drawable_23_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/animated_vector_drawable_23_2_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/appcompat_v7_23_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/appcompat_v7_23_2_1.xml" />
+      <change type="DELETED" beforePath="D:\ISEN\M1\SELECTRONIC\TwinMaxApk\TwinmaxApk.iml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/bleService/BLEService.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/bleService/BLEService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/support_annotations_23_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/support_annotations_23_2_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/support_v4_23_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/support_v4_23_2_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/support_vector_drawable_23_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/support_vector_drawable_23_2_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TwinmaxApk.iws" />
@@ -80,14 +72,14 @@
       <file leaf-file-name="BLEService.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/bleService/BLEService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5794504">
-              <caret line="124" column="20" selection-start-line="124" selection-start-column="20" selection-end-line="124" selection-end-column="20" />
+            <state vertical-scroll-proportion="0.35797665">
+              <caret line="261" column="7" selection-start-line="261" selection-start-column="7" selection-end-line="261" selection-end-column="7" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1967#1968#0" expanded="true" />
-                <element signature="e#2013#2014#0" expanded="true" />
-                <element signature="e#2147#2148#0" expanded="true" />
-                <element signature="e#2177#2178#0" expanded="true" />
+                <element signature="e#4496#4497#0" expanded="true" />
+                <element signature="e#4542#4543#0" expanded="true" />
+                <element signature="e#4663#4664#0" expanded="true" />
+                <element signature="e#4693#4694#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -133,6 +125,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Matthieu" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -1335,7 +1332,7 @@
     <option name="modificationStamps">
       <map>
         <entry key="D:\AndroidStudioProjects\TwinmaxApk" value="4373766535513" />
-        <entry key="D:\ISEN\M1\SELECTRONIC\TwinMaxApk" value="4373728192122" />
+        <entry key="D:\ISEN\M1\SELECTRONIC\TwinMaxApk" value="4373738239047" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1770,10 +1767,6 @@
               <option name="myItemId" value="java" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="twinmaxapk" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -1815,20 +1808,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TwinmaxApk" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="manifests" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidManifestsGroupNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -1845,6 +1824,8 @@
     <property name="recentsLimit" value="5" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
+    <property name="android.project.structure.last.selected" value="app" />
+    <property name="android.project.structure.proportion" value="0.15" />
   </component>
   <component name="RunManager" selected="Android Application.app">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
@@ -2020,6 +2001,13 @@
       <option name="number" value="Default" />
       <updated>1458035110692</updated>
     </task>
+    <task id="LOCAL-00001" summary="BLE service almost finished&#10;">
+      <created>1458124757007</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1458124757007</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2031,11 +2019,11 @@
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32988507" sideWeight="0.5021436" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32988507" sideWeight="0.49785638" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2057,8 +2045,20 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="BLE service almost finished&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="BLE service almost finished&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -2143,14 +2143,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/bleService/BLEService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5794504">
-          <caret line="124" column="20" selection-start-line="124" selection-start-column="20" selection-end-line="124" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.35797665">
+          <caret line="261" column="7" selection-start-line="261" selection-start-column="7" selection-end-line="261" selection-end-column="7" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1967#1968#0" expanded="true" />
-            <element signature="e#2013#2014#0" expanded="true" />
-            <element signature="e#2147#2148#0" expanded="true" />
-            <element signature="e#2177#2178#0" expanded="true" />
+            <element signature="e#4496#4497#0" expanded="true" />
+            <element signature="e#4542#4543#0" expanded="true" />
+            <element signature="e#4663#4664#0" expanded="true" />
+            <element signature="e#4693#4694#0" expanded="true" />
           </folding>
         </state>
       </provider>
