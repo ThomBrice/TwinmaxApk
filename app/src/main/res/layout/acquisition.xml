@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_weight="2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    </com.github.mikephil.charting.charts.LineChart>
+
+    <LinearLayout
+        android:layout_weight="7"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingTop="15dip">
+        <CheckBox
+            android:id="@+id/c0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="datat0"
+            android:checked="true"/>
+        <CheckBox
+            android:id="@+id/c1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="data1"
+            android:checked="true"/>
+        <CheckBox
+            android:id="@+id/c2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="data2"
+            android:checked="true"/>
+        <CheckBox
+            android:id="@+id/c3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="data2"
+            android:checked="true" />
+        <Button
+            android:id="@+id/b0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Auto Scale"/>
+
+        <Button
+            android:id="@+id/b1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"/>
+
+        <Button
+            android:id="@+id/b2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"/>
+
+    </LinearLayout>
+</LinearLayout>
