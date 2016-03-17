@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 
 import com.example.isen.twinmaxapk.database.Measure;
@@ -13,11 +14,21 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.hookedonplay.decoviewlib.DecoView;
+import com.hookedonplay.decoviewlib.charts.SeriesItem;
+import com.hookedonplay.decoviewlib.events.DecoEvent;
 
 
 import java.util.ArrayList;
 
 public class Acquisition extends Activity {
+
+    private DecoView arcView;
+    private int serie1Index;
+    private int maxValue=5000;
+    private int minValue=0;
+    private int data=1500;
+
 
     ArrayList<String> labelsInit = new ArrayList<String>();
     ArrayList<Entry> data0 = new ArrayList<Entry>();
@@ -152,26 +163,46 @@ public class Acquisition extends Activity {
             }
         });
 
-        //+ -
-        Button b1 = (Button) findViewById(R.id.b1);
-        b1.setOnClickListener(new View.OnClickListener() {
-            @Override
+
+        // compte tour
+        Button buttonMoins = (Button)findViewById(R.id.moins);
+        buttonMoins.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
+                data = data - 500;
+                arcView.addEvent(new DecoEvent.Builder(data).setIndex(serie1Index).setDelay(0).setDuration(0).build());
+                TextView valeur = (TextView) findViewById(R.id.valeur);
+                valeur.setText(Integer.toString(data));
+
+                // +
+                if(valeurButton > 0){
+                    valeurButton--;
+                }
+            }
+        });
+
+        Button buttonPlus = (Button)findViewById(R.id.plus);
+        buttonPlus.setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                data=data+500;
+                arcView.addEvent(new DecoEvent.Builder(data).setIndex(serie1Index).setDelay(0).setDuration(0).build());
+                TextView valeur = (TextView) findViewById(R.id.valeur);
+                valeur.setText(Integer.toString(data));
+
+                // -
                 if(valeurButton < 150){
                     valeurButton++;
                 }
             }
         });
 
-        Button b2 = (Button) findViewById(R.id.b2);
-        b2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(valeurButton > 0){
-                    valeurButton--;
-                }
-            }
-        });
+        arcView = (DecoView) findViewById(R.id.arcView);
+
+        //create data series
+        createBackSerie();
+        createDataSerie1();
+
+        //setup events
+        createEvents();
     }
 
     protected void onResume() {
@@ -839,5 +870,36 @@ public class Acquisition extends Activity {
         MeasuresList.add(measure298);
         MeasuresList.add(measure299);
         MeasuresList.add(measure300);
+    }
+
+    private void createBackSerie(){
+        arcView.addSeries(new SeriesItem.Builder(Color.WHITE)
+                .setRange(minValue, maxValue, maxValue)
+                .setInitialVisibility(false)
+                .setLineWidth(10f)
+                .setDrawAsPoint(false)
+                .build());
+
+        arcView.configureAngles(280,0);
+    }
+
+    private void createDataSerie1(){
+        final SeriesItem seriesItem1 = new SeriesItem.Builder(Color.argb(255, 64, 255, 64), Color.argb(255, 255, 0, 0))
+                .setRange(minValue,maxValue,minValue)
+                .setLineWidth(6f)
+                .build();
+
+        serie1Index = arcView.addSeries(seriesItem1);
+
+    }
+
+
+    private void createEvents(){
+        arcView.addEvent(new DecoEvent.Builder(DecoEvent.EventType.EVENT_SHOW,true)
+                .setDelay(0)
+                .setDuration(0)
+                .build());
+
+        arcView.addEvent(new DecoEvent.Builder(data).setIndex(serie1Index).setDelay(0).build());
     }
 }
