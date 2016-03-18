@@ -29,7 +29,6 @@ public class Acquisition extends Activity {
     private int minValue=0;
     private int data=1500;
 
-
     ArrayList<String> labelsInit = new ArrayList<String>();
     ArrayList<Entry> data0 = new ArrayList<Entry>();
     ArrayList<Entry> data1 = new ArrayList<Entry>();
