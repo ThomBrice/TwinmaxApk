@@ -127,7 +127,7 @@ public class BLE_ScanActivity extends ListActivity{
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        //TODO implement method : create intent with bundle info(device) 
+        //TODO implement method : create intent with bundle info(device)
         super.onListItemClick(l, v, position, id);
     }
 
