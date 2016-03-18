@@ -1,4 +1,4 @@
-package com.example.isen.twinmaxapk.bleService;
+package com.example.isen.twinmaxapk;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;

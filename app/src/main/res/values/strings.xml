@@ -12,4 +12,6 @@
 
     <string name="sample_no_data">No Data</string>
     <string name="title_devices">Device Scan</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="connected">Connected</string>
 </resources>

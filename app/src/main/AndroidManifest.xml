@@ -26,7 +26,7 @@
         </activity>
         <activity android:name=".bleService.activities_frags.BLE_ScanActivity" android:screenOrientation="landscape" >
         </activity>
-        <service android:name=".bleService.BLEService" android:enabled="true"/>
+        <service android:name=".BLEService" android:enabled="true"/>
     </application>
 
 </manifest>
