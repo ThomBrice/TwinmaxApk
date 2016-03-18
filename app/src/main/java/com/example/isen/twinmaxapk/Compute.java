@@ -33,5 +33,9 @@ public class Compute {
             measures.subList(0, numberPoints - 1).clear();
         }
     }
+
+    public void rpm(){
+
+    }
 }
 
