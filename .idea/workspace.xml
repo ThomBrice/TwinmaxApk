@@ -6,15 +6,7 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="49047f15-7ce8-4300-abf8-096064070de8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/TwinMaxApk.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/bleService/activities_frags/sampleResultActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/sample_result_activity_layout.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/bleService/activities_frags/BLE_ScanActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/bleService/activities_frags/BLE_ScanActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="49047f15-7ce8-4300-abf8-096064070de8" name="Default" comment="" />
     <ignored path="TwinmaxApk.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
