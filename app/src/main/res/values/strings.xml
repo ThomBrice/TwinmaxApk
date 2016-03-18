@@ -11,4 +11,5 @@
     <string name="menu_stop">Stop</string>
 
     <string name="sample_no_data">No Data</string>
+    <string name="title_devices">Device Scan</string>
 </resources>

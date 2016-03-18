@@ -23,6 +23,10 @@ import java.util.ArrayList;
 
 public class Acquisition extends Activity {
 
+    public final static String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
+    public final static String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+
+
     private DecoView arcView;
     private int serie1Index;
     private int maxValue=5000;
