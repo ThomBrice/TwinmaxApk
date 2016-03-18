@@ -31,3 +31,6 @@ proguard/
 # Android Studio captures folder
 captures/
 Appli.iml
+
+.idea/workspace.xml
+
