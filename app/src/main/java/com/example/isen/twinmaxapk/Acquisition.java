@@ -1,6 +1,8 @@
 package com.example.isen.twinmaxapk;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -28,6 +30,8 @@ import com.hookedonplay.decoviewlib.events.DecoEvent;
 
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class Acquisition extends Activity {
 
@@ -39,6 +43,8 @@ public class Acquisition extends Activity {
     private BLEService mBluetoothLeService;
     private boolean mConnected = false;
     private TextView mConnectionState;
+    private BluetoothGattCharacteristic mCharacteristic;
+    private TextView mDataField;
     //End of Ble fields
 
 
@@ -71,6 +77,7 @@ public class Acquisition extends Activity {
         mDeviceAdrress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 
         mConnectionState = (TextView) findViewById(R.id.acquisition_connection_state);
+        mDataField = (TextView) findViewById(R.id.acquisition_data_field);
 
         Intent gattServiceIntent = new Intent(this, BLEService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
@@ -316,13 +323,44 @@ public class Acquisition extends Activity {
 
     private void displayData(String data) {
         if (data != null) {
-            //mDataField.setText(data);
-            mConnectionState.setText(data);
+            mDataField.setText(data);
+            //mConnectionState.setText(data);
         }
     }
 
-    private void connectToService() {
+    private void connectToService(List<BluetoothGattService> gattServices) {
         //TODO implement (will be used at the onResume)
+        //UUID of the service is 0xFFE0
+        UUID uuid = null;
+        for(BluetoothGattService gattService : gattServices) {
+            uuid = gattService.getUuid();
+            Log.e("UUID ", "UUID is " + uuid.toString());
+            if(uuid.toString().contains("0000ffe0")){
+                final List<BluetoothGattCharacteristic> characteristic = gattService.getCharacteristics();
+
+                Log.e("Charac", "Value : " + characteristic.toString());
+                if(characteristic.isEmpty()) {
+                    return;
+                }
+                if(characteristic.get(0) != null) {
+                    final int charaProp = characteristic.get(0).getProperties();
+                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+                        Log.e("REA", "OK !");
+                        if (mCharacteristic != null) {
+                            mBluetoothLeService.setCharacteristicNotification(mCharacteristic, false);
+                            mCharacteristic = null;
+                        }
+                        mBluetoothLeService.readCharacterestic(characteristic.get(0));
+                    }
+                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+                        Log.e("NOTIFIY", "OK !");
+                        mCharacteristic = characteristic.get(0);
+                        mBluetoothLeService.setCharacteristicNotification(
+                                characteristic.get(0), true);
+                    }
+                }
+            }
+        }
     }
 
 
@@ -1004,7 +1042,6 @@ public class Acquisition extends Activity {
             final String action = intent.getAction();
             if (BLEService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
-
                 updateConnectionState(R.string.connected);
                 //invalidateOptionsMenu();
             } else if (BLEService.ACTION_GATT_DISCONNECTED.equals(action)) {
@@ -1015,11 +1052,15 @@ public class Acquisition extends Activity {
             } else if (BLEService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
                 //displayGattServices(mBluetoothLeService.getSupportedGattServices());
+                connectToService(mBluetoothLeService.getSupportedGattServices());
             } else if (BLEService.ACTION_DATA_AVAILABLE.equals(action)) {
-                //displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
+                displayData(intent.getStringExtra(BLEService.EXTRA_DATA));
             }
         }
     };
+
+
+
 
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
