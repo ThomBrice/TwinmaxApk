@@ -10,15 +10,13 @@ import io.realm.RealmObject;
 public class Maintenance extends RealmObject {
 
     private Date date;
-    private String ImageUrlWay;
     private String note;
 
     public Maintenance() {
     }
 
-    public Maintenance(Date date, String imageUrlWay, String note) {
+    public Maintenance(Date date, String note) {
         this.date = date;
-        ImageUrlWay = imageUrlWay;
         this.note = note;
     }
 
@@ -28,14 +26,6 @@ public class Maintenance extends RealmObject {
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public String getImageUrlWay() {
-        return ImageUrlWay;
-    }
-
-    public void setImageUrlWay(String imageUrlWay) {
-        ImageUrlWay = imageUrlWay;
     }
 
     public String getNote() {
