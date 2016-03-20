@@ -63,12 +63,6 @@ public class MotoFragment extends Fragment implements MotoChangeListener {
     public void onStart() {
         super.onStart();
         RealmResults<Moto> motos = compute.getRealm().where(Moto.class).findAll();
-        String s ="";
-        for(Moto m:motos){
-            s+=m.getName();
-            s+=" ";
-        }
-        System.out.println(s);
         onMotoRetrieved(motos);
     }
 

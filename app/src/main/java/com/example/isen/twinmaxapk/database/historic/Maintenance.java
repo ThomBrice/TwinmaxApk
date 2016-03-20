@@ -9,22 +9,22 @@ import io.realm.RealmObject;
  */
 public class Maintenance extends RealmObject {
 
-    private Date date;
+    private String date;
     private String note;
 
     public Maintenance() {
     }
 
-    public Maintenance(Date date, String note) {
+    public Maintenance(String  date, String note) {
         this.date = date;
         this.note = note;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
