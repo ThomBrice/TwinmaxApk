@@ -24,9 +24,13 @@
         <activity android:name=".Acquisition"
             android:screenOrientation="landscape">
         </activity>
+        <activity android:name=".bleService.activities_frags.BLE_ScanActivity"
+            android:screenOrientation="landscape"/>
         <activity android:name=".HistoricActivity"
             android:screenOrientation="landscape">
         </activity>
+
+        <service android:name=".BLEService" android:enabled="true"/>
     </application>
 
 </manifest>

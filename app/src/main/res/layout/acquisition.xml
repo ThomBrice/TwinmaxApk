@@ -41,8 +41,8 @@
             android:layout_height="wrap_content">
 
             <com.hookedonplay.decoviewlib.DecoView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:id="@+id/arcView"
                 android:layout_centerHorizontal="true"/>
             <TextView
@@ -108,6 +108,18 @@
                 android:layout_toRightOf="@+id/plus"
                 android:layout_below="@id/b0"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/moins"
+                android:text="Disconnected"
+                android:id="@+id/acquisition_connection_state"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/acquisition_connection_state"
+                android:text="No Data"
+                android:id="@+id/acquisition_data_field"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
