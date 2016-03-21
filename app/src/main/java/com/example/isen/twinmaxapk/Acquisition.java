@@ -9,7 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.database.Observable;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -19,6 +23,8 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 
+import com.example.isen.twinmaxapk.bleSercive.utils.DecodeFrameAsyncTask;
+import com.example.isen.twinmaxapk.bleSercive.utils.RawContainer;
 import com.example.isen.twinmaxapk.database.Measure;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -34,6 +40,41 @@ import java.util.List;
 import java.util.UUID;
 
 public class Acquisition extends Activity {
+
+    //Decoder fields
+    private RawContainer mRawContainer;
+    private DecodeFrameAsyncTask mDecoder;
+    public ObservableArrayList.OnListChangedCallback mDecoderCallback = new ObservableList.OnListChangedCallback() {
+        @Override
+        public void onChanged(ObservableList sender) {
+
+        }
+
+        @Override
+        public void onItemRangeChanged(ObservableList sender, int positionStart, int itemCount) {
+
+        }
+
+        @Override
+        public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
+
+            if(mDecoder == null || mDecoder.getStatus().compareTo(AsyncTask.Status.FINISHED) == 0) {
+                mDecoder = new DecodeFrameAsyncTask();
+                mDecoder.execute(mRawContainer);
+            }
+        }
+
+        @Override
+        public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {
+
+        }
+
+        @Override
+        public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {
+
+        }
+    };
+
 
     //Ble fields
     public final static String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
@@ -71,6 +112,9 @@ public class Acquisition extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acquisition);
 
+        //Setup Decoder
+        mRawContainer = new RawContainer(mDecoderCallback);
+        mDecoder = null;
         //Setup BLE connection (i.e. getting the adress and name in the intent)
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
@@ -1054,7 +1098,9 @@ public class Acquisition extends Activity {
                 //displayGattServices(mBluetoothLeService.getSupportedGattServices());
                 connectToService(mBluetoothLeService.getSupportedGattServices());
             } else if (BLEService.ACTION_DATA_AVAILABLE.equals(action)) {
-                displayData(intent.getStringExtra(BLEService.EXTRA_DATA));
+                //TODO the work on decoding the frame starts here (keep the UI thread master of the data)
+//                displayData(intent.getStringExtra(BLEService.EXTRA_DATA));
+                mRawContainer.addFrame(intent.getByteArrayExtra(BLEService.EXTRA_DATA));
             }
         }
     };
@@ -1070,4 +1116,8 @@ public class Acquisition extends Activity {
         intentFilter.addAction(BLEService.ACTION_DATA_AVAILABLE);
         return intentFilter;
     }
+
+
+    //ObservableArrayList for the Decoder
+
 }

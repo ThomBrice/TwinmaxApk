@@ -4,6 +4,7 @@ import com.example.isen.twinmaxapk.database.Measure;
 import com.example.isen.twinmaxapk.database.historic.Moto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 
@@ -12,15 +13,35 @@ import io.realm.Realm;
  */
 public class Compute {
 
-    private ArrayList<Measure> measures;
+    private static ArrayList<Measure> measures;
     private static Realm realm;
 
     public Compute() {
         measures = new ArrayList<>();
     }
 
-    public ArrayList<Measure> getMeasures() {
-        return measures;
+
+    /**
+     * @param rangeMin should be 0 most of the times
+     * @param rangeMax users choose
+     * @return
+     */
+    private static boolean wasFirstRemovingMeasures = true;
+    private static int[] range = {0, 0};
+
+    public static synchronized List<Measure> getMeasures(int rangeMin, int rangeMax) {
+        if (!wasFirstRemovingMeasures) {
+            for (int i = range[1]; i >= range[0]; i--) {
+                measures.remove(i);
+            }
+        }
+        if (rangeMin >= 0 && rangeMax < measures.size()) {
+            wasFirstRemovingMeasures = false;
+            range[0] = rangeMin;
+            range[1] = rangeMax;
+            return measures.subList(rangeMin, rangeMax);
+        }
+        return null;
     }
 
     public void setMeasures(ArrayList<Measure> measures) {
@@ -35,7 +56,7 @@ public class Compute {
         Compute.realm = realm;
     }
 
-    public void addMeasure(Measure measure){
+    public static synchronized void addMeasure(Measure measure) {
         measures.add(measure);
     }
 
