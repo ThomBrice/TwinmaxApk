@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/default_image"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:id="@+id/imageView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="nom moto"
+        android:textSize="20dp"
+        android:id="@+id/motoName"
+        android:layout_below="@+id/date"
+        android:layout_toRightOf="@+id/imageView"
+        android:layout_toEndOf="@+id/imageView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="date"
+        android:textSize="16dp"
+        android:id="@+id/date"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignParentRight="true"
+        android:text="Supprimer"
+        android:textSize="10dp"
+        android:id="@+id/buttonDelete"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonDelete"
+        android:layout_toLeftOf="@+id/buttonDelete"
+        android:text="Entretiens"
+        android:textSize="10dp"
+        android:id="@+id/ButtonMaintenance"/>
+</RelativeLayout>
