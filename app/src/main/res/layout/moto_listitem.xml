@@ -42,13 +42,4 @@
         android:text="Supprimer"
         android:textSize="10dp"
         android:id="@+id/buttonDelete"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/buttonDelete"
-        android:layout_toLeftOf="@+id/buttonDelete"
-        android:text="Entretiens"
-        android:textSize="10dp"
-        android:id="@+id/ButtonMaintenance"/>
 </RelativeLayout>

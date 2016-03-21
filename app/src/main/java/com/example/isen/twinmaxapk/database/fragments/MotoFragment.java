@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -23,7 +24,7 @@ import com.example.isen.twinmaxapk.R;
 import com.example.isen.twinmaxapk.database.interfaces.MotoChangeListener;
 
 
-public class MotoFragment extends Fragment implements MotoChangeListener {
+public class MotoFragment extends Fragment implements MotoChangeListener, AdapterView.OnItemClickListener {
 
     ListView listView;
     Context context;
@@ -69,4 +70,8 @@ public class MotoFragment extends Fragment implements MotoChangeListener {
         listView.setAdapter(adapter);
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
 }
