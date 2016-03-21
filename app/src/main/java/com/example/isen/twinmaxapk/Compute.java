@@ -12,14 +12,14 @@ import io.realm.Realm;
  */
 public class Compute {
 
-    private ArrayList<Measure> measures;
+    private static ArrayList<Measure> measures;
     private static Realm realm;
 
     public Compute() {
         measures = new ArrayList<>();
     }
 
-    public ArrayList<Measure> getMeasures() {
+    public static synchronized ArrayList<Measure> getMeasures() {
         return measures;
     }
 
@@ -35,7 +35,7 @@ public class Compute {
         Compute.realm = realm;
     }
 
-    public void addMeasure(Measure measure){
+    public static synchronized void addMeasure(Measure measure) {
         measures.add(measure);
     }
 
