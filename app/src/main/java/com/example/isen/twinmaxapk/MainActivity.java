@@ -14,6 +14,8 @@ import android.widget.Button;
 
 //import com.example.isen.twinmaxapk.database.historic.Migration;
 
+import com.example.isen.twinmaxapk.bleService.activities_frags.BLE_ScanActivity;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -38,7 +40,7 @@ public class MainActivity extends Activity {
         b0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Acquisition.class);
+                Intent intent = new Intent(getApplicationContext(), BLE_ScanActivity.class);
                 startActivity(intent);
             }
         });

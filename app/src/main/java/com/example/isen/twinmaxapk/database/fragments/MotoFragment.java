@@ -2,6 +2,11 @@ package com.example.isen.twinmaxapk.database.fragments;
 
 
 import android.app.ActionBar;
+
+import com.example.isen.twinmaxapk.database.historic.Moto;
+
+import io.realm.RealmResults;
+
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,16 +19,17 @@ import android.widget.ProgressBar;
 
 import com.example.isen.twinmaxapk.Compute;
 import com.example.isen.twinmaxapk.R;
-import com.example.isen.twinmaxapk.database.adapters.MotosAdapter;
+
+//import com.example.isen.twinmaxapk.database.adapters.MotosAdapter;
 import com.example.isen.twinmaxapk.database.historic.Moto;
-import com.example.isen.twinmaxapk.database.interfaces.MotoChangeListener;
+//import com.example.isen.twinmaxapk.database.interfaces.MotoChangeListener;
 
 import io.realm.RealmResults;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MotoFragment extends Fragment implements MotoChangeListener {
+/*public class MotoFragment extends Fragment implements MotoChangeListener {
 
 
     Compute compute;
@@ -78,4 +84,4 @@ public class MotoFragment extends Fragment implements MotoChangeListener {
         listView.setAdapter(adapter);
     }
 
-}
+}*/
