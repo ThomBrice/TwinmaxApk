@@ -3,6 +3,7 @@ package com.example.isen.twinmaxapk.database.fragments;
 
 import android.app.ActionBar;
 
+import com.example.isen.twinmaxapk.database.adapters.MotosAdapter;
 import com.example.isen.twinmaxapk.database.historic.Moto;
 
 import io.realm.RealmResults;
@@ -19,20 +20,11 @@ import android.widget.ProgressBar;
 
 import com.example.isen.twinmaxapk.Compute;
 import com.example.isen.twinmaxapk.R;
-
-//import com.example.isen.twinmaxapk.database.adapters.MotosAdapter;
-import com.example.isen.twinmaxapk.database.historic.Moto;
-//import com.example.isen.twinmaxapk.database.interfaces.MotoChangeListener;
-
-import io.realm.RealmResults;
-
-/**
- * A simple {@link Fragment} subclass.
- */
-/*public class MotoFragment extends Fragment implements MotoChangeListener {
+import com.example.isen.twinmaxapk.database.interfaces.MotoChangeListener;
 
 
-    Compute compute;
+public class MotoFragment extends Fragment implements MotoChangeListener {
+
     ListView listView;
     Context context;
 
@@ -48,7 +40,6 @@ import io.realm.RealmResults;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        compute = new Compute();
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_motos, container, false);
 
@@ -68,13 +59,7 @@ import io.realm.RealmResults;
     @Override
     public void onStart() {
         super.onStart();
-        RealmResults<Moto> motos = compute.getRealm().where(Moto.class).findAll();
-        String s ="";
-        for(Moto m:motos){
-            s+=m.getName();
-            s+=" ";
-        }
-        System.out.println(s);
+        RealmResults<Moto> motos = Compute.getRealm().where(Moto.class).findAll();
         onMotoRetrieved(motos);
     }
 
@@ -84,4 +69,4 @@ import io.realm.RealmResults;
         listView.setAdapter(adapter);
     }
 
-}*/
+}

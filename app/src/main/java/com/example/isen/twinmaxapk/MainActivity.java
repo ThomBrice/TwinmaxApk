@@ -15,6 +15,7 @@ import android.widget.Button;
 //import com.example.isen.twinmaxapk.database.historic.Migration;
 
 import com.example.isen.twinmaxapk.bleService.activities_frags.BLE_ScanActivity;
+import com.example.isen.twinmaxapk.database.historic.Migration;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -29,13 +30,12 @@ public class MainActivity extends Activity {
         Button b2 = (Button) findViewById(R.id.b2);
 
         //instantiate the realm and do migration (compulsory)
-        Compute compute = new Compute();
-        /*RealmConfiguration config1 = new RealmConfiguration.Builder(this)
+        RealmConfiguration config1 = new RealmConfiguration.Builder(this)
                 .name("default1")
                 .schemaVersion(3)
                 .migration(new Migration())
                 .build();
-        compute.setRealm(Realm.getInstance(config1));*/
+        Compute.setRealm(Realm.getInstance(config1));
 
         b0.setOnClickListener(new View.OnClickListener() {
             @Override
