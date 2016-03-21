@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.isen.twinmaxapk.database.historic.Migration;
+//import com.example.isen.twinmaxapk.database.historic.Migration;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -28,12 +28,12 @@ public class MainActivity extends Activity {
 
         //instantiate the realm and do migration (compulsory)
         Compute compute = new Compute();
-        RealmConfiguration config1 = new RealmConfiguration.Builder(this)
+        /*RealmConfiguration config1 = new RealmConfiguration.Builder(this)
                 .name("default1")
                 .schemaVersion(3)
                 .migration(new Migration())
                 .build();
-        compute.setRealm(Realm.getInstance(config1));
+        compute.setRealm(Realm.getInstance(config1));*/
 
         b0.setOnClickListener(new View.OnClickListener() {
             @Override
