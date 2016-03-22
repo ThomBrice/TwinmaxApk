@@ -1,0 +1,21 @@
+Twinmax//TwinmaxPhoto//Branchez le twinmax;
+Twinmax//TwinmaxPhoto//Cliquez sur le bouton;
+Twinmax//TwinmaxPhoto//blablablablabla;
+Twinmax//TwinmaxPhoto//blablablablabla;
+Twinmax//TwinmaxPhoto//blablablablabla;
+Twinmax//TwinmaxPhoto//blablablablabla;
+Twinmax//TwinmaxPhoto//blablablablabla;
+Twinmax//TwinmaxPhoto//blablablablabla;
+Twinmax//TwinmaxPhoto//blablablablabla;
+Twinmax//TwinmaxPhoto//blablablablabla;
+
+Title;
+Application//ApplicationPhoto//Branchez le twinmax;
+Application//ApplicationPhoto//Cliquez sur le bouton;
+Application//ApplicationPhoto//blablablablabla;
+Application//ApplicationPhoto//blablablablabla;
+Application//ApplicationPhoto//blablablablabla;
+Application//ApplicationPhoto//blablablablabla;
+Application//ApplicationPhoto//blablablablabla;
+Application//ApplicationPhoto//blablablablabla;
+Application//ApplicationPhoto//blablablablabla;
