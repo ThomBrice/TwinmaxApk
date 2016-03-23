@@ -1,5 +1,8 @@
 package com.example.isen.twinmaxapk.bleSercive.utils;
 
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
+
 import com.example.isen.twinmaxapk.database.Measure;
 
 import java.util.ArrayList;
@@ -9,10 +12,11 @@ import java.util.List;
  * Created by Matthieu on 23/03/2016.
  */
 public class DataContainer {
-    private ArrayList<Measure> dataContainer;
+    private ObservableArrayList<Measure> dataContainer;
 
-    public DataContainer() {
-        dataContainer = new ArrayList<>();
+    public DataContainer(ObservableList.OnListChangedCallback callback) {
+        dataContainer = new ObservableArrayList<>();
+        dataContainer.addOnListChangedCallback(callback);
     }
 
 

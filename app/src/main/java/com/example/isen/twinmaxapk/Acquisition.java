@@ -47,6 +47,33 @@ public class Acquisition extends Activity  {
     private RawContainer mRawContainer;
     private DecodeFrameAsyncTask mDecoder;
     private DataContainer mCleanData;
+
+    public ObservableArrayList.OnListChangedCallback mCleanDataCallback = new ObservableList.OnListChangedCallback() {
+        @Override
+        public void onChanged(ObservableList sender) {
+
+        }
+
+        @Override
+        public void onItemRangeChanged(ObservableList sender, int positionStart, int itemCount) {
+
+        }
+
+        @Override
+        public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
+
+        }
+
+        @Override
+        public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {
+
+        }
+
+        @Override
+        public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {
+
+        }
+    }
     public ObservableArrayList.OnListChangedCallback mDecoderCallback = new ObservableList.OnListChangedCallback() {
         @Override
         public void onChanged(ObservableList sender) {
@@ -129,7 +156,7 @@ public class Acquisition extends Activity  {
         mRawContainer = new RawContainer(mDecoderCallback);
         mDecoder = null;
 
-        mCleanData = new DataContainer();
+        mCleanData = new DataContainer(mCleanDataCallback);
         //Setup BLE connection (i.e. getting the adress and name in the intent)
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
