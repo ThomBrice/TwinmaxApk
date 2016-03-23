@@ -47,8 +47,9 @@ public class Acquisition extends Activity  {
     private RawContainer mRawContainer;
     private DecodeFrameAsyncTask mDecoder;
     private DataContainer mCleanData;
-
+    private List<Measure> subMeasure = new ArrayList<>(200);
     public ObservableArrayList.OnListChangedCallback mCleanDataCallback = new ObservableList.OnListChangedCallback() {
+        public int changeCounter = 0;
         @Override
         public void onChanged(ObservableList sender) {
 
@@ -61,7 +62,32 @@ public class Acquisition extends Activity  {
 
         @Override
         public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
+            changeCounter++;
+           // Log.w("Clean data", "Adding clean data, nombre de DATA : "+ changeCounter);
+           // Log.w("Taille de sender", "Valeur : " + sender.size());
+            if(changeCounter == 200) {
+                if(sender.size() >= 200) {
+                   // Log.w("Update Graph", "Graph starts update !");
 
+             //       Log.w("Update Graph", "Graph starts update !");
+                    subMeasure.clear();
+               //     Log.w("Update Graph", "Graph starts update !");
+                    for(int i=0; i<200;i++) {
+                 //       Log.w("Update Graph", "Graph starts update !");
+                        subMeasure.add( new Measure((Measure) sender.get(0)));
+                   //     Log.w("Update Graph", "Graph starts update !");
+                        sender.remove(0);
+                    }
+                    //Log.w("Update Graph", "Graph starts update !");
+                }
+
+
+
+                changeCounter = 0;
+
+                updateGraphs();
+                //Log.w("Update Graph", "Graph starts update !");
+            }
         }
 
         @Override
@@ -73,7 +99,7 @@ public class Acquisition extends Activity  {
         public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {
 
         }
-    }
+    };
     public ObservableArrayList.OnListChangedCallback mDecoderCallback = new ObservableList.OnListChangedCallback() {
         @Override
         public void onChanged(ObservableList sender) {
@@ -143,7 +169,7 @@ public class Acquisition extends Activity  {
     ArrayList<Entry> data3 = new ArrayList<Entry>();
     ArrayList<LineDataSet> lines = new ArrayList<LineDataSet>();
     LineChart chart;
-    static int nbrPoints = 150;
+    static int nbrPoints = 200;
     ArrayList<Measure> MeasuresList = new ArrayList<>();
     static int valeurButton = 150;
 
@@ -341,7 +367,7 @@ public class Acquisition extends Activity  {
         }
         //End of BLE setup
 
-
+/*
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -349,7 +375,8 @@ public class Acquisition extends Activity  {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            nbrPoints = valeurButton;
+                            //nbrPoints = valeurButton;
+                            nbrPoints = 200;
                             addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
                             removeItems(nbrPoints);
                             for (int i = 0; i <= nbrPoints; i++) {
@@ -382,8 +409,61 @@ public class Acquisition extends Activity  {
                     }
                 }
             }
+        }).start();*/
+
+    }
+
+    private void updateGraphs() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //nbrPoints = valeurButton;
+                            nbrPoints = 200;
+                           // addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
+                            //removeItems(nbrPoints);
+                            //Log.w("Update Graph", "Graph starts update !");
+                            //Log.w("Size of sublist : ", "value : " + subMeasure.size());
+                            for(int i=0;i<nbrPoints;i++) {
+                                MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
+                                MeasuresList.get(i).setC1(subMeasure.get(i).get(1));
+                                MeasuresList.get(i).setC2(subMeasure.get(i).get(2));
+                                MeasuresList.get(i).setC3(subMeasure.get(i).get(3));
+                            }
+                            //Log.w("Update Graph", "Graph starts update !");
+                            for (int i = 0; i < nbrPoints; i++) {
+                                data0.get(i).setVal(MeasuresList.get(i).get(0));
+                                data1.get(i).setVal(MeasuresList.get(i).get(1));
+                                data2.get(i).setVal(MeasuresList.get(i).get(2));
+                                data3.get(i).setVal(MeasuresList.get(i).get(3));
+                            }
+                            //Log.w("Update Graph", "Graph starts update !");
+                            if (nbrPoints > labelsInit.size()) {
+                                for (int i = 0; i <= (nbrPoints - labelsInit.size()); i++) {
+                                    labelsInit.add("");
+                                }
+                              //  Log.w("Update Graph", "Graph starts update !");
+                            } else {
+                                if (nbrPoints < labelsInit.size()) {
+                                    for (int i = nbrPoints; i < labelsInit.size() - 1; i++) {
+                                        //labelsInit.remove(i);
+                                    }
+                                }
+                            }
+                            //Log.w("Update Graph", "Graph starts update !");
+                            chart.notifyDataSetChanged();
+                            chart.invalidate();
+                            //Log.w("Update Graph", "Graph starts update !");
+                        }
+                    });
+
+            }
         }).start();
     }
+
 
     @Override
     protected void onPause() {
@@ -662,8 +742,8 @@ public class Acquisition extends Activity  {
         Measure measure192 = new Measure(100);
         Measure measure193 = new Measure(101);
         Measure measure194 = new Measure(101);
-        Measure measure195 = new Measure(100);
-        Measure measure196 = new Measure(100);
+        Measure measure195 = new Measure(4100);
+        Measure measure196 = new Measure(-2100);
         Measure measure197 = new Measure(100);
         Measure measure198 = new Measure(99);
         Measure measure199 = new Measure(100);
@@ -767,7 +847,7 @@ public class Acquisition extends Activity  {
         Measure measure297 = new Measure(100);
         Measure measure298 = new Measure(101);
         Measure measure299 = new Measure(100);
-        Measure measure300 = new Measure(99);
+        Measure measure300 = new Measure(4499);
 
         MeasuresList.add(measure1);
         MeasuresList.add(measure2);

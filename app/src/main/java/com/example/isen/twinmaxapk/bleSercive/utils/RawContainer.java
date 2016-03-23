@@ -27,7 +27,7 @@ public class RawContainer {
                 //container.add(new Byte(b));
                 container.add(0, new Byte(b));
             }
-           // Log.w("Size", "value : " + container.size());
+            Log.w("Size", "value : " + container.size());
         }
     }
     public static boolean isFirst = true;

@@ -2,6 +2,7 @@ package com.example.isen.twinmaxapk.bleSercive.utils;
 
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
+import android.util.Log;
 
 import com.example.isen.twinmaxapk.database.Measure;
 
@@ -41,6 +42,7 @@ public class DataContainer {
 
     public synchronized void addValue(Measure newVal) {
         if(dataContainer != null) {
+          //  Log.w("Taille data clean", "Taille CLEAN : " + dataContainer.size());
             dataContainer.add(newVal);
         }
     }
