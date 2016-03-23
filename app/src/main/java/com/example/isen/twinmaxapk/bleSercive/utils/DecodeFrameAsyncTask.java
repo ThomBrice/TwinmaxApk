@@ -11,7 +11,13 @@ import com.example.isen.twinmaxapk.database.Measure;
  */
 public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integer> {
     private RawContainer container;
+    private DecoderListener mListener;
     private static int[] values = {0,0,0,0};
+
+    public DecodeFrameAsyncTask(DecoderListener mListener) {
+        this.mListener = mListener;
+    }
+
     @Override
     protected Integer doInBackground(RawContainer... params) {
         if(params[0] != null) {
@@ -31,7 +37,10 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
 
     private void addNewMeasure() {
         Log.w("Background Decoder", "Capteur 1: " + values[0] + "Capteur 2: " + values[1] + "Capteur 3: " + values[2] + "Capteur 4: " + values[3] );
-        Compute.addMeasure(new Measure(values[0], values[1], values[2], values[3]));
+        //Compute.addMeasure(new Measure(values[0], values[1], values[2], values[3]));
+        if(mListener != null) {
+            mListener.addCleanData(new Measure(values[0], values[1], values[2], values[3]));
+        }
     }
 
     private void decode() {

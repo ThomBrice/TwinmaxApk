@@ -23,7 +23,9 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 
+import com.example.isen.twinmaxapk.bleSercive.utils.DataContainer;
 import com.example.isen.twinmaxapk.bleSercive.utils.DecodeFrameAsyncTask;
+import com.example.isen.twinmaxapk.bleSercive.utils.DecoderListener;
 import com.example.isen.twinmaxapk.bleSercive.utils.RawContainer;
 import com.example.isen.twinmaxapk.database.Measure;
 import com.github.mikephil.charting.charts.LineChart;
@@ -39,11 +41,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Acquisition extends Activity {
+public class Acquisition extends Activity  {
 
     //Decoder fields
     private RawContainer mRawContainer;
     private DecodeFrameAsyncTask mDecoder;
+    private DataContainer mCleanData;
     public ObservableArrayList.OnListChangedCallback mDecoderCallback = new ObservableList.OnListChangedCallback() {
         @Override
         public void onChanged(ObservableList sender) {
@@ -59,7 +62,7 @@ public class Acquisition extends Activity {
         public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
 
             if(mDecoder == null || mDecoder.getStatus().compareTo(AsyncTask.Status.FINISHED) == 0) {
-                mDecoder = new DecodeFrameAsyncTask();
+                mDecoder = new DecodeFrameAsyncTask(mDocedListener);
                 mDecoder.execute(mRawContainer);
             }
         }
@@ -72,6 +75,16 @@ public class Acquisition extends Activity {
         @Override
         public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {
 
+        }
+    };
+
+
+    private DecoderListener mDocedListener = new DecoderListener() {
+        @Override
+        public void addCleanData(Measure measure) {
+            if(mCleanData != null) {
+                mCleanData.addValue(measure);
+            }
         }
     };
 
@@ -115,6 +128,8 @@ public class Acquisition extends Activity {
         //Setup Decoder
         mRawContainer = new RawContainer(mDecoderCallback);
         mDecoder = null;
+
+        mCleanData = new DataContainer();
         //Setup BLE connection (i.e. getting the adress and name in the intent)
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
