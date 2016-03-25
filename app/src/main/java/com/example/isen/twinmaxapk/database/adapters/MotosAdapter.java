@@ -40,17 +40,27 @@ public class MotosAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final View view = inflater.inflate(R.layout.moto_listitem, null);
+
+
+        ViewHolder holder;
+        // If we don't have any convertView to reuse, inflate one
+        if (null == convertView){
+            convertView = inflater.inflate(R.layout.moto_listitem, null);
+
+            // Instantiate the ViewHolder
+            holder = new ViewHolder(convertView);
+            // Set as tag to the convertView to retrieve it easily
+            convertView.setTag(holder);
+        } else {
+            // Just retrieve the ViewHolder instance in the tag of the view
+            holder = (ViewHolder) convertView.getTag();
+        }
 
         final Moto moto = (Moto) getItem(position);
 
-        final TextView name = (TextView) view.findViewById(R.id.motoName);
-        name.setText(moto.getName());
+        holder.getDate().setText(moto.getDate());
+        holder.getName().setText(moto.getName());
 
-        final TextView date = (TextView) view.findViewById(R.id.date);
-        date.setText(moto.getDate());
-
-
-        return view;
+        return convertView;
     }
 }

@@ -8,6 +8,7 @@ import com.example.isen.twinmaxapk.database.historic.Moto;
 
 import io.realm.RealmResults;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -16,18 +17,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.example.isen.twinmaxapk.Compute;
 import com.example.isen.twinmaxapk.R;
 import com.example.isen.twinmaxapk.database.interfaces.MotoChangeListener;
+import com.example.isen.twinmaxapk.database.interfaces.MotoListener;
+
+import java.util.ArrayList;
 
 
-public class MotoFragment extends Fragment implements MotoChangeListener, AdapterView.OnItemClickListener {
+public class MotoFragment extends Fragment implements MotoChangeListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
-    ListView listView;
-    Context context;
+    private ListView listView;
+    private Context context;
+    private MotoListener mListener;
 
     public MotoFragment() {
         // Required empty public constructor
@@ -54,7 +60,20 @@ public class MotoFragment extends Fragment implements MotoChangeListener, Adapte
         ViewGroup root = (ViewGroup) rootView.findViewById(R.id.motosRootRelativeLayout);
         root.addView(progressBar);
 
+        listView.setAdapter(new ArrayAdapter<Moto>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<Moto>()));
+
+        listView.setOnItemClickListener(this);
+
         return rootView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof MotoListener){
+            mListener = (MotoListener) activity;
+        }
     }
 
     @Override
@@ -71,7 +90,24 @@ public class MotoFragment extends Fragment implements MotoChangeListener, Adapte
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onStop() {
+        super.onStop();
+    }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+        if (null != mListener){
+            final Moto moto = (Moto) adapter.getItemAtPosition(position);
+            mListener.onViewMaintenance(moto);
+        }
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
+        if (null != mListener){
+            final Moto moto = (Moto) adapter.getItemAtPosition(position);
+            mListener.deleteItem(moto);
+        }
+        return true;
     }
 }

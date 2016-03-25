@@ -3,10 +3,15 @@ package com.example.isen.twinmaxapk;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.example.isen.twinmaxapk.database.fragments.MaintenancesFragment;
 import com.example.isen.twinmaxapk.database.fragments.MotoFragment;
+import com.example.isen.twinmaxapk.database.historic.Maintenance;
+import com.example.isen.twinmaxapk.database.historic.Moto;
+import com.example.isen.twinmaxapk.database.interfaces.MotoListener;
 
-public class HistoricActivity extends Activity {
+public class HistoricActivity extends Activity implements MotoListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,4 +29,32 @@ public class HistoricActivity extends Activity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onViewMaintenance(Moto moto) {
+        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        final MaintenancesFragment fragment = new MaintenancesFragment(this);
+        final Bundle bundle = new Bundle();
+
+        //mettre les param de moto dans maintenances
+
+        bundle.putSerializable("moto",moto);
+        fragment.setArguments(bundle);
+
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null).commit();
+
+    }
+
+
+    @Override
+    public void deleteItem(Moto moto) {
+
+        Toast.makeText(this,"successful", Toast.LENGTH_LONG).show();
+    }
 }

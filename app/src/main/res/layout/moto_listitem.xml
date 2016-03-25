@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:descendantFocusability="blocksDescendants">
 
     <ImageView
         android:layout_width="100dp"
@@ -18,8 +19,8 @@
         android:layout_height="wrap_content"
         android:text="nom moto"
         android:textSize="20dp"
-        android:id="@+id/motoName"
-        android:layout_below="@+id/date"
+        android:id="@+id/motoNameListItem"
+        android:layout_below="@+id/dateListItem"
         android:layout_toRightOf="@+id/imageView"
         android:layout_toEndOf="@+id/imageView" />
 
@@ -32,7 +33,7 @@
         android:layout_marginBottom="5dp"
         android:text="date"
         android:textSize="16dp"
-        android:id="@+id/date"/>
+        android:id="@+id/dateListItem"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -41,5 +42,5 @@
         android:layout_alignParentRight="true"
         android:text="Supprimer"
         android:textSize="10dp"
-        android:id="@+id/buttonDelete"/>
+        android:id="@+id/buttonDeleteListItem"/>
 </RelativeLayout>
