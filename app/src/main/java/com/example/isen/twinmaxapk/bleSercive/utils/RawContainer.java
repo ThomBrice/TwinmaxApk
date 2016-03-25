@@ -27,7 +27,7 @@ public class RawContainer {
                 //container.add(new Byte(b));
                 container.add(0, new Byte(b));
             }
-            Log.w("Size", "value : " + container.size());
+           // Log.w("Size", "value : " + container.size());
         }
     }
     public static boolean isFirst = true;
@@ -47,6 +47,7 @@ public class RawContainer {
     }
 
     public void resetFrameState() {
+       // Log.w("Reseting","RESETRESETRESETRESETRESET !!!");
         rawFrameState = FrameState.END;
     }
 

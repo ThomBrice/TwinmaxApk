@@ -13,7 +13,7 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
     private RawContainer container;
     private DecoderListener mListener;
     private static int[] values = {0,0,0,0};
-
+    private static int[] prevValues = {0,0,0,0};
     public DecodeFrameAsyncTask(DecoderListener mListener) {
         this.mListener = mListener;
     }
@@ -28,20 +28,44 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
     }
 
     private boolean isCorrectFrame(byte b) {
-        return true;//((int)b % 2 == 0) && ((int)(b&0XFF) <128);
+        boolean isGood = true;
+        if(b % 2 != 0) {
+            isGood = false;
+        }
+        if((int) (b & 0xFF) >= 128) {
+            isGood = false;
+        }
+        return isGood;//((int)b % 2 == 0) && ((int)(b&0XFF) <128);
     }
 
     private boolean isHeader(byte b) {
         return ((int) (b & 0XFF) == 128);
     }
-
+    private boolean isFirst = true;
     private void addNewMeasure() {
-        //Log.w("Background Decoder", "Capteur 1: " + values[0] + "Capteur 2: " + values[1] + "Capteur 3: " + values[2] + "Capteur 4: " + values[3] );
+        Log.w("Background Decoder", "Capteur 1: " + values[0] + "Capteur 2: " + values[1] + "Capteur 3: " + values[2] + "Capteur 4: " + values[3] );
         //Compute.addMeasure(new Measure(values[0], values[1], values[2], values[3]));
+        if(isFirst) {
+            for(int i=0;i<4;i++) {
+                prevValues[i] = values[i];
+            }
+            isFirst = false;
+        }
         if(mListener != null) {
-
+            for(int i=0;i<4;i++) {
+                if(Math.abs(values[i] - prevValues[i]) > 50) {
+                    values[i] = (prevValues[i] + values[i])/2;
+                    //values[i] = 3500;
+                }
+                if(values[i] <= 0) {
+                    values[i] = prevValues[i];
+                    //values[i] = 3500;
+                }
+            }
             mListener.addCleanData(new Measure(values[0], values[1], values[2], values[3]));
-
+            for(int i=0;i<4;i++) {
+                prevValues[i] = values[i];
+            }
         }
     }
 

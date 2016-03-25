@@ -20,6 +20,10 @@ public class DataContainer {
         dataContainer.addOnListChangedCallback(callback);
     }
 
+    public boolean isEmpty() {
+        return dataContainer.isEmpty();
+    }
+
 
     private boolean isFirst = true;
     private int[] precIndex = {0,0};
@@ -38,6 +42,24 @@ public class DataContainer {
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
+    }
+
+    private boolean isFFirst = true;
+    public synchronized Measure getFirst() {
+        if(isFFirst) {
+            isFFirst = false;
+        } else if(!dataContainer.isEmpty()){
+            dataContainer.remove(0);
+        }
+        if(!dataContainer.isEmpty()) {
+            return dataContainer.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public int sizeOfList() {
+        return dataContainer.size();
     }
 
     public synchronized void addValue(Measure newVal) {

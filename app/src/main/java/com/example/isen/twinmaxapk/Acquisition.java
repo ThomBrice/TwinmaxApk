@@ -37,19 +37,31 @@ import com.hookedonplay.decoviewlib.charts.SeriesItem;
 import com.hookedonplay.decoviewlib.events.DecoEvent;
 
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 public class Acquisition extends Activity  {
+
+
 
     //Decoder fields
     private RawContainer mRawContainer;
     private DecodeFrameAsyncTask mDecoder;
     private DataContainer mCleanData;
     private List<Measure> subMeasure = new ArrayList<>(200);
+
+    //Scheudled task for graph refreshing !
+    private Timer mTimer;
+    private int refreshDelay = 400;
+
+
     public ObservableArrayList.OnListChangedCallback mCleanDataCallback = new ObservableList.OnListChangedCallback() {
         public int changeCounter = 0;
+
         @Override
         public void onChanged(ObservableList sender) {
 
@@ -63,29 +75,21 @@ public class Acquisition extends Activity  {
         @Override
         public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
             changeCounter++;
-           // Log.w("Clean data", "Adding clean data, nombre de DATA : "+ changeCounter);
-           // Log.w("Taille de sender", "Valeur : " + sender.size());
+            Log.w("TEST", "TEST");
             if(changeCounter == 200) {
                 if(sender.size() >= 200) {
-                   // Log.w("Update Graph", "Graph starts update !");
-
-             //       Log.w("Update Graph", "Graph starts update !");
-                    subMeasure.clear();
-               //     Log.w("Update Graph", "Graph starts update !");
+                    //subMeasure.clear();
                     for(int i=0; i<200;i++) {
-                 //       Log.w("Update Graph", "Graph starts update !");
-                        subMeasure.add( new Measure((Measure) sender.get(0)));
-                   //     Log.w("Update Graph", "Graph starts update !");
-                        sender.remove(0);
+                      //  subMeasure.add(new Measure((Measure) sender.get(0)));
+                        //sender.remove(0);
                     }
-                    //Log.w("Update Graph", "Graph starts update !");
                 }
 
 
 
                 changeCounter = 0;
 
-                updateGraphs();
+                //updateGraphs();
                 //Log.w("Update Graph", "Graph starts update !");
             }
         }
@@ -177,6 +181,8 @@ public class Acquisition extends Activity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acquisition);
+
+        mTimer = new Timer();
 
         //Setup Decoder
         mRawContainer = new RawContainer(mDecoderCallback);
@@ -413,6 +419,13 @@ public class Acquisition extends Activity  {
 
     }
 
+    private void copyValToSub() {
+        subMeasure.clear();
+        while(!mCleanData.isEmpty()) {
+            subMeasure.add(new Measure(mCleanData.getFirst()));
+        }
+    }
+
     private void updateGraphs() {
         new Thread(new Runnable() {
             @Override
@@ -422,7 +435,10 @@ public class Acquisition extends Activity  {
                         @Override
                         public void run() {
                             //nbrPoints = valeurButton;
-                            nbrPoints = 200;
+                            copyValToSub();
+                            nbrPoints = subMeasure.size();
+                            //nbrPoints = 200;
+
                            // addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
                             //removeItems(nbrPoints);
                             //Log.w("Update Graph", "Graph starts update !");
@@ -591,7 +607,7 @@ public class Acquisition extends Activity  {
         Measure measure41 = new Measure(98);
         Measure measure42 = new Measure(100);
         Measure measure43 = new Measure(101);
-        Measure measure44 = new Measure(101);
+        Measure measure44 = new Measure(4101);
         Measure measure45 = new Measure(100);
         Measure measure46 = new Measure(100);
         Measure measure47 = new Measure(100);
@@ -1209,6 +1225,14 @@ public class Acquisition extends Activity  {
             if (BLEService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
                 updateConnectionState(R.string.connected);
+                if(mTimer != null) {
+                    mTimer.scheduleAtFixedRate(new TimerTask() {
+                        @Override
+                        public void run() {
+                            updateGraphs();
+                        }
+                    }, 0, refreshDelay);
+                }
                 //invalidateOptionsMenu();
             } else if (BLEService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;

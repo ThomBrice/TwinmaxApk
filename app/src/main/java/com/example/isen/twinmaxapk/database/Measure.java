@@ -20,10 +20,12 @@ public class Measure {
 
 
     public Measure(Measure measure) {
-        c0 = measure.get(0);
-        c1 = measure.get(1);
-        c2 = measure.get(2);
-        c3 = measure.get(3);
+        if(measure != null) {
+            c0 = measure.get(0);
+            c1 = measure.get(1);
+            c2 = measure.get(2);
+            c3 = measure.get(3);
+        }
     }
 
     //Un autre constructeur pour faciliter
