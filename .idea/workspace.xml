@@ -10,27 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cbe8f37e-46a2-4d72-898c-255b74485e3c" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/design_23_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_manual.xml" />
-      <change type="DELETED" beforePath="D:\cours\M1\projet M1\TwinmaxApk\app\src\main\assets\ManualText" afterPath="" />
-      <change type="DELETED" beforePath="D:\cours\M1\projet M1\TwinmaxApk\app\src\main\res\drawable\Ensemble-de-reparation.jpg" afterPath="" />
-      <change type="DELETED" beforePath="D:\cours\M1\projet M1\TwinmaxApk\app\src\main\res\layout\manual.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\cours\M1\projet M1\TwinmaxApk\app\src\main\res\layout\test.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/Compute.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/Compute.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/manual/Manual.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/manual/Manual.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/manual/PageAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/manual/PageAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/manual/PageViewHolder.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/manual/PageViewHolder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/manual/ReadFileHelper.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/isen/twinmaxapk/manual/ReadFileHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/acquisition.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/acquisition.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/library_2_4_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/library_2_4_0.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/manual_card.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/manual_card.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/realm_android_0_87_4.xml" afterPath="$PROJECT_DIR$/.idea/libraries/realm_android_0_87_4.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/recyclerview_v7_24_0_0_alpha1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/recyclerview_v7_24_0_0_alpha1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/support_v4_24_0_0_alpha1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/support_v4_24_0_0_alpha1.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TwinmaxApk.iws" />
@@ -2139,6 +2118,13 @@
       <option name="number" value="Default" />
       <updated>1459177018787</updated>
     </task>
+    <task id="LOCAL-00001" summary="RecyclerView in TabbedActivity.&#10;Reste le design à terminer">
+      <created>1459196603848</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1459196603848</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2188,6 +2174,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="RecyclerView in TabbedActivity.&#10;Reste le design à terminer" />
+    <option name="LAST_COMMIT_MESSAGE" value="RecyclerView in TabbedActivity.&#10;Reste le design à terminer" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
