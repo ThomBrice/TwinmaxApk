@@ -1,7 +1,22 @@
 package com.example.isen.twinmaxapk.manual;
 
-/**
- * Created by isen on 21/03/2016.
- */
-public class Manual {
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+
+import com.example.isen.twinmaxapk.R;
+
+
+public class Manual extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.manual_activity);
+        ViewPager vpPager = (ViewPager) findViewById(R.id.vPager);
+        MyPagerAdapter adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
+        vpPager.setAdapter(adapterViewPager);
+    }
 }

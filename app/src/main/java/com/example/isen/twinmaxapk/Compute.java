@@ -10,6 +10,8 @@ import java.util.ArrayList;
 public class Compute {
 
     private ArrayList<Measure> measures;
+    private int mRPM;
+    private int nbPoint;
 
     public Compute() {
         measures = new ArrayList<>();
@@ -35,6 +37,24 @@ public class Compute {
     }
 
     public void rpm(){
+        boolean deuxiemeMin=false,premierMin=false;
+        int i=1,min2=measures.get(0).get(0),min1=min2,index1;
+
+        while(deuxiemeMin==false){
+            if(measures.get(i).get(0)<=min1 && premierMin==false){
+                min1=measures.get(i).get(0);
+                i++;
+                if(measures.get(i).get(0)>min1){
+                    premierMin=true;
+                    index1=i;
+                }
+            }
+            if(premierMin==true){
+
+            }
+
+
+        }
 
     }
 }

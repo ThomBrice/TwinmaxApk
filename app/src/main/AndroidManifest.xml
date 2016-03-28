@@ -13,12 +13,15 @@
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Acquisition"
+        <activity
+            android:name=".Acquisition"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".manual.Manual"
             android:screenOrientation="landscape">
         </activity>
     </application>
