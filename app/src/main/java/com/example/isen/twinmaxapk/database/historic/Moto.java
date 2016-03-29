@@ -10,8 +10,14 @@ public class Moto extends RealmObject {
 
     private String name;
     private RealmList<Maintenance> maintenances;
+    private String date;
 
     public Moto() {
+    }
+
+    public Moto(String name, String date) {
+        this.name = name;
+        this.date = date;
     }
 
     public Moto(String name) {
@@ -33,4 +39,13 @@ public class Moto extends RealmObject {
     public void setMaintenances(RealmList<Maintenance> maintenances) {
         this.maintenances = maintenances;
     }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
 }

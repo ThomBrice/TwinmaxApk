@@ -3,10 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-
     defaultConfig {
         applicationId "com.example.isen.twinmaxapk"
-        minSdkVersion 16
+        minSdkVersion 18
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -17,11 +16,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+    }
+    dataBinding{
+        enabled = true
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['mpandroidchartlibrary-2-0-9.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile 'io.realm:realm-android:0.87.4'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'io.realm:realm-android:0.87.4'
     compile 'com.github.bmarrdev:android-DecoView-charting:v0.9.3'
@@ -31,5 +36,5 @@ dependencies {
 }
 
 repositories {
-    maven { url "https://jitpack.io" }
+    maven {url "https://jitpack.io"}
 }

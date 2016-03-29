@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">TwinmaxApk</string>
+
+    <string name="toast_ble_not_supported">BLE is not supported on this device.</string>
+    <string name="toast_bl_not_supported">Bluetooth not supported.</string>
+    <string name="ble_scan_adapter_unknown_device">Unknown device</string>
+    <string name="ble_scan_adapter_unknown_address">Unknown address</string>
+    <string name="ble_refused_bluetooth">Bluetooth must be turn on !</string>
+
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
+
+    <string name="sample_no_data">No Data</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
 </resources>

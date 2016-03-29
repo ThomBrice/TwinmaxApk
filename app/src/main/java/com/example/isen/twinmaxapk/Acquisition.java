@@ -1,14 +1,32 @@
 package com.example.isen.twinmaxapk;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.database.Observable;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 
+import com.example.isen.twinmaxapk.bleSercive.utils.DataContainer;
+import com.example.isen.twinmaxapk.bleSercive.utils.DecodeFrameAsyncTask;
+import com.example.isen.twinmaxapk.bleSercive.utils.DecoderListener;
+import com.example.isen.twinmaxapk.bleSercive.utils.RawContainer;
 import com.example.isen.twinmaxapk.database.Measure;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -19,24 +37,142 @@ import com.hookedonplay.decoviewlib.charts.SeriesItem;
 import com.hookedonplay.decoviewlib.events.DecoEvent;
 
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
 
-public class Acquisition extends Activity {
+public class Acquisition extends Activity  {
+
+
+
+    //Decoder fields
+    private RawContainer mRawContainer;
+    private DecodeFrameAsyncTask mDecoder;
+    private DataContainer mCleanData;
+    private List<Measure> subMeasure = new ArrayList<>(200);
+
+    //Scheudled task for graph refreshing !
+    private Timer mTimer;
+    private int refreshDelay = 400;
+
+
+    public ObservableArrayList.OnListChangedCallback mCleanDataCallback = new ObservableList.OnListChangedCallback() {
+        public int changeCounter = 0;
+
+        @Override
+        public void onChanged(ObservableList sender) {
+
+        }
+
+        @Override
+        public void onItemRangeChanged(ObservableList sender, int positionStart, int itemCount) {
+
+        }
+
+        @Override
+        public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
+            changeCounter++;
+            Log.w("TEST", "TEST");
+            if(changeCounter == 200) {
+                if(sender.size() >= 200) {
+                    //subMeasure.clear();
+                    for(int i=0; i<200;i++) {
+                      //  subMeasure.add(new Measure((Measure) sender.get(0)));
+                        //sender.remove(0);
+                    }
+                }
+
+
+
+                changeCounter = 0;
+
+                //updateGraphs();
+                //Log.w("Update Graph", "Graph starts update !");
+            }
+        }
+
+        @Override
+        public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {
+
+        }
+
+        @Override
+        public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {
+
+        }
+    };
+    public ObservableArrayList.OnListChangedCallback mDecoderCallback = new ObservableList.OnListChangedCallback() {
+        @Override
+        public void onChanged(ObservableList sender) {
+
+        }
+
+        @Override
+        public void onItemRangeChanged(ObservableList sender, int positionStart, int itemCount) {
+
+        }
+
+        @Override
+        public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
+
+            if(mDecoder == null || mDecoder.getStatus().compareTo(AsyncTask.Status.FINISHED) == 0) {
+                mDecoder = new DecodeFrameAsyncTask(mDocedListener);
+                mDecoder.execute(mRawContainer);
+            }
+        }
+
+        @Override
+        public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {
+
+        }
+
+        @Override
+        public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {
+
+        }
+    };
+
+
+    private DecoderListener mDocedListener = new DecoderListener() {
+        @Override
+        public void addCleanData(Measure measure) {
+            if(mCleanData != null) {
+                mCleanData.addValue(measure);
+            }
+        }
+    };
+
+
+    //Ble fields
+    public final static String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
+    public final static String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    private String mDeviceAdrress;
+    private String mDeviceName;
+    private BLEService mBluetoothLeService;
+    private boolean mConnected = false;
+    private TextView mConnectionState;
+    private BluetoothGattCharacteristic mCharacteristic;
+    private TextView mDataField;
+    //End of Ble fields
+
 
     private DecoView arcView;
     private int serie1Index;
-    private int maxValue=5000;
-    private int minValue=0;
-    private int data=1500;
+    private int maxValue = 5000;
+    private int minValue = 0;
+    private int data = 1500;
 
     ArrayList<String> labelsInit = new ArrayList<String>();
     ArrayList<Entry> data0 = new ArrayList<Entry>();
     ArrayList<Entry> data1 = new ArrayList<Entry>();
     ArrayList<Entry> data2 = new ArrayList<Entry>();
     ArrayList<Entry> data3 = new ArrayList<Entry>();
-    ArrayList<LineDataSet> lines = new ArrayList<LineDataSet> ();
-    LineChart chart ;
-    static int nbrPoints = 150;
+    ArrayList<LineDataSet> lines = new ArrayList<LineDataSet>();
+    LineChart chart;
+    static int nbrPoints = 200;
     ArrayList<Measure> MeasuresList = new ArrayList<>();
     static int valeurButton = 150;
 
@@ -44,20 +180,41 @@ public class Acquisition extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acquisition);
+
+        mTimer = new Timer();
+
+        //Setup Decoder
+        mRawContainer = new RawContainer(mDecoderCallback);
+        mDecoder = null;
+
+        mCleanData = new DataContainer(mCleanDataCallback);
+        //Setup BLE connection (i.e. getting the adress and name in the intent)
+        final Intent intent = getIntent();
+        mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
+        mDeviceAdrress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+
+        mConnectionState = (TextView) findViewById(R.id.acquisition_connection_state);
+        mDataField = (TextView) findViewById(R.id.acquisition_data_field);
+
+        Intent gattServiceIntent = new Intent(this, BLEService.class);
+        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+        //End of BLE setup !
+
+
         chart = new LineChart(this);
         chart = (LineChart) findViewById(R.id.chart);
         //init labels
-        for(int i = 0; i<= nbrPoints; i++){
+        for (int i = 0; i <= nbrPoints; i++) {
             labelsInit.add("");
         }
         fillMeasuresList();
 
         //Mise à jour des data0,1,2,3
         for (int i = 0; i <= nbrPoints; i++) {
-            data0.add(new Entry(MeasuresList.get(i).get(0),i));
-            data1.add(new Entry(MeasuresList.get(i).get(1),i));
-            data2.add(new Entry(MeasuresList.get(i).get(2),i));
-            data3.add(new Entry(MeasuresList.get(i).get(3),i));
+            data0.add(new Entry(MeasuresList.get(i).get(0), i));
+            data1.add(new Entry(MeasuresList.get(i).get(1), i));
+            data2.add(new Entry(MeasuresList.get(i).get(2), i));
+            data3.add(new Entry(MeasuresList.get(i).get(3), i));
         }
         //Mise à jour de dataset
         lines.add(new LineDataSet(data0, "data0"));
@@ -78,17 +235,17 @@ public class Acquisition extends Activity {
         chart.getLineData().getDataSetByIndex(0).setDrawCubic(true);
         chart.getLineData().getDataSetByIndex(0).setValueTextSize(0);
         chart.getLineData().getDataSetByIndex(0).setDrawCircles(false);
-        chart.getLineData().getDataSetByIndex(0).setColor(Color.rgb(237,127,16));
+        chart.getLineData().getDataSetByIndex(0).setColor(Color.rgb(237, 127, 16));
         //options data1
         chart.getLineData().getDataSetByIndex(1).setDrawCubic(true);
         chart.getLineData().getDataSetByIndex(1).setValueTextSize(0);
         chart.getLineData().getDataSetByIndex(1).setDrawCircles(false);
-        chart.getLineData().getDataSetByIndex(1).setColor(Color.rgb(58,142,186));
+        chart.getLineData().getDataSetByIndex(1).setColor(Color.rgb(58, 142, 186));
         //options data2
         chart.getLineData().getDataSetByIndex(2).setDrawCubic(true);
         chart.getLineData().getDataSetByIndex(2).setValueTextSize(0);
         chart.getLineData().getDataSetByIndex(2).setDrawCircles(false);
-        chart.getLineData().getDataSetByIndex(2).setColor(Color.rgb(127,221,76));
+        chart.getLineData().getDataSetByIndex(2).setColor(Color.rgb(127, 221, 76));
         //options data3
         chart.getLineData().getDataSetByIndex(3).setDrawCubic(true);
         chart.getLineData().getDataSetByIndex(3).setValueTextSize(0);
@@ -164,7 +321,7 @@ public class Acquisition extends Activity {
 
 
         // compte tour
-        Button buttonMoins = (Button)findViewById(R.id.moins);
+        Button buttonMoins = (Button) findViewById(R.id.moins);
         buttonMoins.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 data = data - 500;
@@ -173,22 +330,22 @@ public class Acquisition extends Activity {
                 valeur.setText(Integer.toString(data));
 
                 // +
-                if(valeurButton > 0){
+                if (valeurButton > 0) {
                     valeurButton--;
                 }
             }
         });
 
-        Button buttonPlus = (Button)findViewById(R.id.plus);
-        buttonPlus.setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v){
-                data=data+500;
+        Button buttonPlus = (Button) findViewById(R.id.plus);
+        buttonPlus.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                data = data + 500;
                 arcView.addEvent(new DecoEvent.Builder(data).setIndex(serie1Index).setDelay(0).setDuration(0).build());
                 TextView valeur = (TextView) findViewById(R.id.valeur);
                 valeur.setText(Integer.toString(data));
 
                 // -
-                if(valeurButton < 150){
+                if (valeurButton < 150) {
                     valeurButton++;
                 }
             }
@@ -207,6 +364,15 @@ public class Acquisition extends Activity {
     protected void onResume() {
         super.onResume();
 
+        //Setup BLE
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        if (mBluetoothLeService != null) {
+            final boolean result = mBluetoothLeService.connect(mDeviceAdrress);
+            Log.d("Acquisition", "Connect request result = " + result);
+        }
+        //End of BLE setup
+
+/*
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -214,7 +380,8 @@ public class Acquisition extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            nbrPoints = valeurButton;
+                            //nbrPoints = valeurButton;
+                            nbrPoints = 200;
                             addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
                             removeItems(nbrPoints);
                             for (int i = 0; i <= nbrPoints; i++) {
@@ -223,14 +390,13 @@ public class Acquisition extends Activity {
                                 data2.get(i).setVal(MeasuresList.get(i).get(2));
                                 data3.get(i).setVal(MeasuresList.get(i).get(3));
                             }
-                            if(nbrPoints > labelsInit.size()) {
-                                for(int i = 0; i<= (nbrPoints-labelsInit.size()); i++){
+                            if (nbrPoints > labelsInit.size()) {
+                                for (int i = 0; i <= (nbrPoints - labelsInit.size()); i++) {
                                     labelsInit.add("");
                                 }
-                            }
-                            else{
-                                if(nbrPoints < labelsInit.size()){
-                                    for(int i = nbrPoints; i < labelsInit.size()-1; i++) {
+                            } else {
+                                if (nbrPoints < labelsInit.size()) {
+                                    for (int i = nbrPoints; i < labelsInit.size() - 1; i++) {
                                         labelsInit.remove(i);
                                     }
                                 }
@@ -248,25 +414,154 @@ public class Acquisition extends Activity {
                     }
                 }
             }
+        }).start();*/
+
+    }
+
+    private void copyValToSub() {
+        subMeasure.clear();
+        while(!mCleanData.isEmpty()) {
+            subMeasure.add(new Measure(mCleanData.getFirst()));
+        }
+    }
+
+    private void updateGraphs() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //nbrPoints = valeurButton;
+                            copyValToSub();
+                            nbrPoints = subMeasure.size();
+                            //nbrPoints = 200;
+
+                           // addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
+                            //removeItems(nbrPoints);
+                            //Log.w("Update Graph", "Graph starts update !");
+                            //Log.w("Size of sublist : ", "value : " + subMeasure.size());
+                            for(int i=0;i<nbrPoints;i++) {
+                                MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
+                                MeasuresList.get(i).setC1(subMeasure.get(i).get(1));
+                                MeasuresList.get(i).setC2(subMeasure.get(i).get(2));
+                                MeasuresList.get(i).setC3(subMeasure.get(i).get(3));
+                            }
+                            //Log.w("Update Graph", "Graph starts update !");
+                            for (int i = 0; i < nbrPoints; i++) {
+                                data0.get(i).setVal(MeasuresList.get(i).get(0));
+                                data1.get(i).setVal(MeasuresList.get(i).get(1));
+                                data2.get(i).setVal(MeasuresList.get(i).get(2));
+                                data3.get(i).setVal(MeasuresList.get(i).get(3));
+                            }
+                            //Log.w("Update Graph", "Graph starts update !");
+                            if (nbrPoints > labelsInit.size()) {
+                                for (int i = 0; i <= (nbrPoints - labelsInit.size()); i++) {
+                                    labelsInit.add("");
+                                }
+                              //  Log.w("Update Graph", "Graph starts update !");
+                            } else {
+                                if (nbrPoints < labelsInit.size()) {
+                                    for (int i = nbrPoints; i < labelsInit.size() - 1; i++) {
+                                        //labelsInit.remove(i);
+                                    }
+                                }
+                            }
+                            //Log.w("Update Graph", "Graph starts update !");
+                            chart.notifyDataSetChanged();
+                            chart.invalidate();
+                            //Log.w("Update Graph", "Graph starts update !");
+                        }
+                    });
+
+            }
         }).start();
     }
 
-    public void removeItems(int points){
-        if (MeasuresList.size()>= points) {
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mGattUpdateReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mServiceConnection);
+        mBluetoothLeService = null;
+    }
+
+    private void updateConnectionState(final int resourceId) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mConnectionState.setText(resourceId);
+            }
+        });
+    }
+
+    private void displayData(String data) {
+        if (data != null) {
+            mDataField.setText(data);
+            //mConnectionState.setText(data);
+        }
+    }
+
+    private void connectToService(List<BluetoothGattService> gattServices) {
+        //TODO implement (will be used at the onResume)
+        //UUID of the service is 0xFFE0
+        UUID uuid = null;
+        for(BluetoothGattService gattService : gattServices) {
+            uuid = gattService.getUuid();
+            Log.e("UUID ", "UUID is " + uuid.toString());
+            if(uuid.toString().contains("0000ffe0")){
+                final List<BluetoothGattCharacteristic> characteristic = gattService.getCharacteristics();
+
+                Log.e("Charac", "Value : " + characteristic.toString());
+                if(characteristic.isEmpty()) {
+                    return;
+                }
+                if(characteristic.get(0) != null) {
+                    final int charaProp = characteristic.get(0).getProperties();
+                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+                        Log.e("REA", "OK !");
+                        if (mCharacteristic != null) {
+                            mBluetoothLeService.setCharacteristicNotification(mCharacteristic, false);
+                            mCharacteristic = null;
+                        }
+                        mBluetoothLeService.readCharacterestic(characteristic.get(0));
+                    }
+                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+                        Log.e("NOTIFIY", "OK !");
+                        mCharacteristic = characteristic.get(0);
+                        mBluetoothLeService.setCharacteristicNotification(
+                                characteristic.get(0), true);
+                    }
+                }
+            }
+        }
+    }
+
+
+    public void removeItems(int points) {
+        if (MeasuresList.size() >= points) {
             MeasuresList.subList(0, points).clear();
         }
     }
 
-    public void addItemsAtTheEnd(int points){
-        for (int i=0;i<=points-1;i++){
+    public void addItemsAtTheEnd(int points) {
+        for (int i = 0; i <= points - 1; i++) {
             int m0 = MeasuresList.get(i).get(0);
             int m1 = MeasuresList.get(i).get(1);
             int m2 = MeasuresList.get(i).get(2);
             int m3 = MeasuresList.get(i).get(3);
-            Measure m = new Measure(m0,m1,m2,m3);
+            Measure m = new Measure(m0, m1, m2, m3);
             MeasuresList.add(m);
         }
     }
+
     public void fillMeasuresList() {
         Measure measure1 = new Measure(100);
         Measure measure2 = new Measure(100);
@@ -311,7 +606,7 @@ public class Acquisition extends Activity {
         Measure measure41 = new Measure(98);
         Measure measure42 = new Measure(100);
         Measure measure43 = new Measure(101);
-        Measure measure44 = new Measure(101);
+        Measure measure44 = new Measure(4101);
         Measure measure45 = new Measure(100);
         Measure measure46 = new Measure(100);
         Measure measure47 = new Measure(100);
@@ -462,8 +757,8 @@ public class Acquisition extends Activity {
         Measure measure192 = new Measure(100);
         Measure measure193 = new Measure(101);
         Measure measure194 = new Measure(101);
-        Measure measure195 = new Measure(100);
-        Measure measure196 = new Measure(100);
+        Measure measure195 = new Measure(4100);
+        Measure measure196 = new Measure(-2100);
         Measure measure197 = new Measure(100);
         Measure measure198 = new Measure(99);
         Measure measure199 = new Measure(100);
@@ -567,7 +862,7 @@ public class Acquisition extends Activity {
         Measure measure297 = new Measure(100);
         Measure measure298 = new Measure(101);
         Measure measure299 = new Measure(100);
-        Measure measure300 = new Measure(99);
+        Measure measure300 = new Measure(4499);
 
         MeasuresList.add(measure1);
         MeasuresList.add(measure2);
@@ -871,7 +1166,7 @@ public class Acquisition extends Activity {
         MeasuresList.add(measure300);
     }
 
-    private void createBackSerie(){
+    private void createBackSerie() {
         arcView.addSeries(new SeriesItem.Builder(Color.WHITE)
                 .setRange(minValue, maxValue, maxValue)
                 .setInitialVisibility(false)
@@ -879,12 +1174,12 @@ public class Acquisition extends Activity {
                 .setDrawAsPoint(false)
                 .build());
 
-        arcView.configureAngles(280,0);
+        arcView.configureAngles(280, 0);
     }
 
-    private void createDataSerie1(){
+    private void createDataSerie1() {
         final SeriesItem seriesItem1 = new SeriesItem.Builder(Color.argb(255, 64, 255, 64), Color.argb(255, 255, 0, 0))
-                .setRange(minValue,maxValue,minValue)
+                .setRange(minValue, maxValue, minValue)
                 .setLineWidth(6f)
                 .build();
 
@@ -893,12 +1188,81 @@ public class Acquisition extends Activity {
     }
 
 
-    private void createEvents(){
-        arcView.addEvent(new DecoEvent.Builder(DecoEvent.EventType.EVENT_SHOW,true)
+    private void createEvents() {
+        arcView.addEvent(new DecoEvent.Builder(DecoEvent.EventType.EVENT_SHOW, true)
                 .setDelay(0)
                 .setDuration(0)
                 .build());
 
         arcView.addEvent(new DecoEvent.Builder(data).setIndex(serie1Index).setDelay(0).build());
     }
+
+    // Code to manage Service lifecycle.
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            mBluetoothLeService = ((BLEService.LocalBinder) service).getService();
+            if (!mBluetoothLeService.initialize()) {
+                Log.e("Acquisition", "Unable to initialize Bluetooth");
+                finish();
+            }
+            // Automatically connects to the device upon successful start-up initialization.
+            mBluetoothLeService.connect(mDeviceAdrress);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBluetoothLeService = null;
+        }
+    };
+
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BLEService.ACTION_GATT_CONNECTED.equals(action)) {
+                mConnected = true;
+                updateConnectionState(R.string.connected);
+                if(mTimer != null) {
+                    mTimer.scheduleAtFixedRate(new TimerTask() {
+                        @Override
+                        public void run() {
+                            updateGraphs();
+                        }
+                    }, 0, refreshDelay);
+                }
+                //invalidateOptionsMenu();
+            } else if (BLEService.ACTION_GATT_DISCONNECTED.equals(action)) {
+                mConnected = false;
+                updateConnectionState(R.string.disconnected);
+                invalidateOptionsMenu();
+                //clearUI();
+            } else if (BLEService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+                // Show all the supported services and characteristics on the user interface.
+                //displayGattServices(mBluetoothLeService.getSupportedGattServices());
+                connectToService(mBluetoothLeService.getSupportedGattServices());
+            } else if (BLEService.ACTION_DATA_AVAILABLE.equals(action)) {
+                //TODO the work on decoding the frame starts here (keep the UI thread master of the data)
+//                displayData(intent.getStringExtra(BLEService.EXTRA_DATA));
+                mRawContainer.addFrame(intent.getByteArrayExtra(BLEService.EXTRA_DATA));
+            }
+        }
+    };
+
+
+
+
+    private static IntentFilter makeGattUpdateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BLEService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(BLEService.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(BLEService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(BLEService.ACTION_DATA_AVAILABLE);
+        return intentFilter;
+    }
+
+
+    //ObservableArrayList for the Decoder
+
 }
