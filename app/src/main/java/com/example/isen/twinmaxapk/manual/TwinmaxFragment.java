@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TwinmaxFragment extends Fragment {
-    private String title;
     private int page;
 
     private List<Page> pages = new ArrayList<>();
@@ -24,11 +23,10 @@ public class TwinmaxFragment extends Fragment {
     private PageAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
 
-    public static TwinmaxFragment newInstance(int page, String title) {
+    public static TwinmaxFragment newInstance(int page) {
         TwinmaxFragment fragment = new TwinmaxFragment();
         Bundle args = new Bundle();
         args.putInt("someInt", page);
-        args.putString("someTitle", title);
         fragment.setArguments(args);
         return fragment;
     }
@@ -37,7 +35,6 @@ public class TwinmaxFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         page=getArguments().getInt("someInt", 0);
-        title=getArguments().getString("someTitle");
         initDataset();
     }
 
@@ -64,10 +61,8 @@ public class TwinmaxFragment extends Fragment {
     }
 
     private void initDataset(){
-        pages.add(new Page("kok","twinmaxphoto","twinmax"));
-        pages.add(new Page("kok","twinmaxphoto","twinmax"));
-        pages.add(new Page("kok","twinmaxphoto","twinmax"));
-        pages.add(new Page("kok","twinmaxphoto","twinmax"));
+        pages = ReadFileHelper.getManualFromFile(getContext(),"Twinmax");
+
     }
 }
 

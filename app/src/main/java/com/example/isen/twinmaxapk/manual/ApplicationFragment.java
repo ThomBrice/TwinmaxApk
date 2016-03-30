@@ -1,5 +1,6 @@
 package com.example.isen.twinmaxapk.manual;
 
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApplicationFragment extends Fragment {
-    private String title;
     private int page;
 
     private List<Page> pages = new ArrayList<>();
@@ -23,11 +23,10 @@ public class ApplicationFragment extends Fragment {
     private PageAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
 
-    public static ApplicationFragment newInstance(int page, String title) {
+    public static ApplicationFragment newInstance(int page) {
         ApplicationFragment fragment = new ApplicationFragment();
         Bundle args = new Bundle();
         args.putInt("someInt", page);
-        args.putString("someTitle", title);
         fragment.setArguments(args);
         return fragment;
     }
@@ -36,7 +35,6 @@ public class ApplicationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         page=getArguments().getInt("someInt", 0);
-        title=getArguments().getString("someTitle");
         initDataset();
     }
 
@@ -63,9 +61,7 @@ public class ApplicationFragment extends Fragment {
     }
 
     private void initDataset(){
-        pages.add(new Page("kok","applicationphoto","application"));
-        pages.add(new Page("kok","applicationphoto","application"));
-        pages.add(new Page("kok","applicationphoto","application"));
-        pages.add(new Page("kok","applicationphoto","application"));
+        pages = ReadFileHelper.getManualFromFile(getContext(),"Application");
+
     }
 }

@@ -31,7 +31,7 @@ public class ReadFileHelper {
         return contenuDuFichier;
     }
 
-    public static List<Page> getManualFromFile(Context context) {
+    public static List<Page> getManualFromFile(Context context, String categorie) {
         String fileContent =readFile(context);
         List<Page> listOfPage = new ArrayList<>();
 
@@ -41,12 +41,13 @@ public class ReadFileHelper {
             String pageContent[] = arrayOfPages[i].split(";");
             for(int u=0;u<pageContent.length;u++) {
                 String tempo[]=pageContent[u].split("//");
-                String pageCategorie = tempo[0];
-                String pagePicture = tempo[1];
-                String pageText = tempo[2];
-
-                Page page=new Page(pageCategorie,pagePicture,pageText);
-                listOfPage.add(page);
+                if(tempo[0].equals(categorie)) {
+                    String pageCategorie = tempo[0];
+                    String pagePicture = tempo[1];
+                    String pageText = tempo[2];
+                    Page page=new Page(pageCategorie,pagePicture,pageText);
+                    listOfPage.add(page);
+                }
             }
         }
         return listOfPage ;
