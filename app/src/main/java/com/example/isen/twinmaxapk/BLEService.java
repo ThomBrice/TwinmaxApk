@@ -95,7 +95,9 @@ public class BLEService extends Service {
         final Intent intent = new Intent(action);
         sendBroadcast(intent);
     }
-
+    private static final Boolean canSendData = true;
+    private static int state=0;
+    private static boolean isOk = true;
     private void broadcastUpdate(final String action, final BluetoothGattCharacteristic characteristic) {
         //TODO gestion des données reçues
         /* Proposition 1:
@@ -107,8 +109,9 @@ public class BLEService extends Service {
         /* Proposition 2:
         1. Envoyé broadcast avec données à l'activité concerné (qui s'occupera de faire le traitement (i.e. parsing des trames)
          */
-        final Intent intent = new Intent(action);
-        final byte[] data = characteristic.getValue();
+        synchronized (canSendData) {
+            final Intent intent = new Intent(action);
+            final byte[] data = characteristic.getValue();
         /*if (data != null && data.length > 0) {
             final StringBuilder stringBuilder = new StringBuilder(data.length);
             for(byte byteChar : data)
@@ -116,11 +119,103 @@ public class BLEService extends Service {
             intent.putExtra(EXTRA_DATA, new String(data) + "\n" +
                     stringBuilder.toString());
         }*/
+            for (byte b : data) {
+                switch (state) {
+                    case 0:
+                        if((int)(b & 0xFF) == 128) {
+                            state = 1;
+                            isOk = true;
+                        } else {
+                            printisPasOk();
+                        }
+                        break;
+                    case 1:
+                        if((int)(b & 0xFF) == 126) {
+                            state = 2;
+                            isOk = true;
+                        } else {
+                            state = 0;
+                            printisPasOk();
+                        }
+                        break;
+                    case 2:
+                        if((int)(b & 0xFF) == 126) {
+                            state = 3;
+                            isOk = true;
+                        } else {
+                            state = 0;
+                            printisPasOk();
+                        }
+                        break;
+                    case 3:
+                        if((int)(b & 0xFF) == 126) {
+                            state = 4;
+                            isOk = true;
+                        } else {
+                            state = 0;
+                            printisPasOk();
+                        }
+                        break;
+                    case 4:
+                        if((int)(b & 0xFF) == 70) {
+                            state = 5;
+                            isOk = true;
+                        } else {
+                            state = 0;
+                            printisPasOk();
+                        }
+                        break;
+                    case 5:
+                        if((int)(b & 0xFF) == 120) {
+                            state = 6;
+                            isOk = true;
+                        } else {
+                            state = 0;
+                            printisPasOk();
+                        }
+                        break;
+                    case 6:
+                        if((int)(b & 0xFF) == 56) {
+                            state = 7;
+                            isOk = true;
+                        } else {
+                            state = 0;
+                            printisPasOk();
+                        }
+                        break;
+                    case 7:
+                        if((int)(b & 0xFF) == 120) {
+                            state = 8;
+                            isOk = true;
+                        } else {
+                            state = 0;
+                            printisPasOk();
+                        }
+                        break;
+                    case 8:
+                        if((int)(b & 0xFF) == 126) {
+                            state = 0;
+                            printisOk();
+                            isOk = true;
+                        } else {
+                            state = 0;
+                            printisPasOk();
+                        }
+                        break;
+                }
+               // Log.w("VeryRaw data", "Valeur : " + (int) (b & 0xFF));
+            }
 
-        intent.putExtra(EXTRA_DATA, data);
-        sendBroadcast(intent);
+            intent.putExtra(EXTRA_DATA, data);
+            sendBroadcast(intent);
+        }
     }
-
+    public void printisPasOk() {
+        Log.w("isOk", "Valeur : FALSE !");
+    }
+    public void printisOk() {
+        Log.w("isOk", "Valeur : TRUE !");
+    }
 
     public class LocalBinder extends Binder {
         BLEService getService() {
