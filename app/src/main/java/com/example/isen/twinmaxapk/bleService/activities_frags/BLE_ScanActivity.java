@@ -252,7 +252,9 @@ public class BLE_ScanActivity extends ListActivity {
             return view;
         }
     }
-
+    public Context getContext() {
+        return this;
+    }
     // Device scan callback.
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
@@ -264,6 +266,17 @@ public class BLE_ScanActivity extends ListActivity {
                         public void run() {
                             mLeDeviceListAdapter.addDevice(device);
                             mLeDeviceListAdapter.notifyDataSetChanged();
+                            if(device.getName().compareTo("TwinMax") == 0) {
+                                if (device == null) return;
+                                final Intent intent = new Intent(getContext(), Acquisition.class);
+                                intent.putExtra(Acquisition.EXTRAS_DEVICE_NAME, device.getName());
+                                intent.putExtra(Acquisition.EXTRAS_DEVICE_ADDRESS, device.getAddress());
+                                if (mScanning) {
+                                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                                    mScanning = false;
+                                }
+                                startActivity(intent);
+                            }
                         }
                     });
                 }

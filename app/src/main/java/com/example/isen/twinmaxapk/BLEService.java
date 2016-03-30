@@ -116,6 +116,9 @@ public class BLEService extends Service {
             intent.putExtra(EXTRA_DATA, new String(data) + "\n" +
                     stringBuilder.toString());
         }*/
+        for(byte b: data) {
+            Log.w("VeryRaw data", "Valeur : " + (int)(b & 0xFF));
+        }
 
         intent.putExtra(EXTRA_DATA, data);
         sendBroadcast(intent);

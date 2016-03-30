@@ -22,29 +22,32 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
     protected Integer doInBackground(RawContainer... params) {
         if(params[0] != null) {
             container = params[0];
+
             decode();
         }
         return null;
     }
 
     private boolean isCorrectFrame(byte b) {
-        boolean isGood = true;
+        /*boolean isGood = true;
         if(b % 2 != 0) {
             isGood = false;
         }
         if((int) (b & 0xFF) >= 128) {
             isGood = false;
-        }
-        return isGood;//((int)b % 2 == 0) && ((int)(b&0XFF) <128);
+        }*/
+        return (0x81 & b) == 0x00;
+        //return isGood;//((int)b % 2 == 0) && ((int)(b&0XFF) <128);
     }
 
     private boolean isHeader(byte b) {
-        return ((int) (b & 0XFF) == 128);
+        return ((int)(b & 0xFF) == 128);
     }
     private boolean isFirst = true;
     private void addNewMeasure() {
-        Log.w("Background Decoder", "Capteur 1: " + values[0] + "Capteur 2: " + values[1] + "Capteur 3: " + values[2] + "Capteur 4: " + values[3] );
+       // Log.w("Background Decoder", "Capteur 1: " + values[0] + "Capteur 2: " + values[1] + "Capteur 3: " + values[2] + "Capteur 4: " + values[3] );
         //Compute.addMeasure(new Measure(values[0], values[1], values[2], values[3]));
+
         if(isFirst) {
             for(int i=0;i<4;i++) {
                 prevValues[i] = values[i];
@@ -52,20 +55,33 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
             isFirst = false;
         }
         if(mListener != null) {
+            boolean isTramOK = true;
             for(int i=0;i<4;i++) {
-                if(Math.abs(values[i] - prevValues[i]) > 50) {
+                if(Math.abs(values[i] - prevValues[i]) >250) {
                     values[i] = (prevValues[i] + values[i])/2;
                     //values[i] = 3500;
+                    isTramOK = false;
                 }
                 if(values[i] <= 0) {
                     values[i] = prevValues[i];
                     //values[i] = 3500;
+                    isTramOK = false;
                 }
             }
-            mListener.addCleanData(new Measure(values[0], values[1], values[2], values[3]));
-            for(int i=0;i<4;i++) {
-                prevValues[i] = values[i];
+            if(values[0] == 4095 && values[1] == 4067 && values[2] == 3868 && values[3] == 3903) {
+              //  Log.w("Trame","OK !");
+            } else {
+                //Log.w("Trame", "PAS OK ! 1 : " + values[0] + " 2 : "+values[1] + " 3 : " + values[2] + " 4 : " + values[3]);
             }
+            if(isTramOK) {
+                mListener.addCleanData(new Measure(values[0], values[1], values[2], values[3]));
+                for(int i=0;i<4;i++) {
+                    prevValues[i] = values[i];
+                }
+            }
+
+
+
         }
     }
 
@@ -74,14 +90,17 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
         while(!container.isRawContainerEmpty()) {
             //    Log.w("Decoder", "Current Frame State" + container.rawFrameState );
             //TODO implement ?
-            byte currentByte = container.getFirst();
+            Byte tempB = new Byte(container.getFirst());
+
+            byte currentByte = tempB.byteValue();
+
             switch (container.rawFrameState) {
                 case Head:
                     break;
                 case MSB1:
                     if(isCorrectFrame(currentByte)) {
                         //TODO do correct shifting and add it to int table;
-                        values[0] = (currentByte << 5);
+                        values[0] = ((int)(currentByte & 0xFF) << 5);
                         container.rawFrameState = RawContainer.FrameState.LSB1;
                     } else {
                         container.resetFrameState();
@@ -90,7 +109,7 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
                 case LSB1:
                     if(isCorrectFrame(currentByte)) {
                         //TODO do correct shifting and add it to int table;
-                        values[0] += (currentByte >> 1);
+                        values[0] += ((int)(currentByte & 0xFF) >> 1);
                         container.rawFrameState = RawContainer.FrameState.MSB2;
                     } else {
                         container.resetFrameState();
@@ -99,7 +118,7 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
                 case MSB2:
                     if(isCorrectFrame(currentByte)) {
                         //TODO do correct shifting and add it to int table;
-                        values[1] = (currentByte << 5);
+                        values[1] = ((int)(currentByte & 0xFF) << 5);
                         container.rawFrameState = RawContainer.FrameState.LSB2;
                     } else {
                         container.resetFrameState();
@@ -108,7 +127,7 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
                 case LSB2:
                     if(isCorrectFrame(currentByte)) {
                         //TODO do correct shifting and add it to int table;
-                        values[1] += (currentByte >> 1);
+                        values[1] += ((int)(currentByte & 0xFF) >> 1);
                         container.rawFrameState = RawContainer.FrameState.MSB3;
                     } else {
                         container.resetFrameState();
@@ -117,7 +136,7 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
                 case MSB3:
                     if(isCorrectFrame(currentByte)) {
                         //TODO do correct shifting and add it to int table;
-                        values[2] = (currentByte << 5);
+                        values[2] = ((int)(currentByte & 0xFF) << 5);
                         container.rawFrameState = RawContainer.FrameState.LSB3;
                     } else {
                         container.resetFrameState();
@@ -126,7 +145,7 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
                 case LSB3:
                     if(isCorrectFrame(currentByte)) {
                         //TODO do correct shifting and add it to int table;
-                        values[2] += (currentByte >> 1);
+                        values[2] += ((int)(currentByte & 0xFF) >> 1);
                         container.rawFrameState = RawContainer.FrameState.MSB4;
                     } else {
                         container.resetFrameState();
@@ -135,7 +154,7 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
                 case MSB4:
                     if(isCorrectFrame(currentByte)) {
                         //TODO do correct shifting and add it to int table;
-                        values[3] = (currentByte << 5);
+                        values[3] = ((int)(currentByte & 0xFF) << 5);
                         container.rawFrameState = RawContainer.FrameState.LSB4;
                     } else {
                         container.resetFrameState();
@@ -144,7 +163,7 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
                 case LSB4:
                     if(isCorrectFrame(currentByte)) {
                         //TODO do correct shifting and add it to int table;
-                        values[3] += (currentByte >> 1);
+                        values[3] += ((int)(currentByte & 0xFF) >> 1);
                         addNewMeasure();
                         container.resetFrameState();
                     } else {

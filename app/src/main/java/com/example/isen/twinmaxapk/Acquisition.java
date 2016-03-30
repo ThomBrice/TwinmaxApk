@@ -75,13 +75,16 @@ public class Acquisition extends Activity  {
         @Override
         public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
             changeCounter++;
-            Log.w("TEST", "TEST");
+
             if(changeCounter == 200) {
                 if(sender.size() >= 200) {
-                    //subMeasure.clear();
+                    subMeasure.clear();
                     for(int i=0; i<200;i++) {
-                      //  subMeasure.add(new Measure((Measure) sender.get(0)));
+                        subMeasure.add(new Measure((Measure) sender.get(i)));
                         //sender.remove(0);
+                    }
+                    for(int i=0;i<200;i++) {
+                        sender.remove(0);
                     }
                 }
 
@@ -89,7 +92,7 @@ public class Acquisition extends Activity  {
 
                 changeCounter = 0;
 
-                //updateGraphs();
+                updateGraphs();
                 //Log.w("Update Graph", "Graph starts update !");
             }
         }
@@ -435,9 +438,9 @@ public class Acquisition extends Activity  {
                         @Override
                         public void run() {
                             //nbrPoints = valeurButton;
-                            copyValToSub();
-                            nbrPoints = subMeasure.size();
-                            //nbrPoints = 200;
+                            //copyValToSub();
+                            //nbrPoints = subMeasure.size();
+                            nbrPoints = 200;
 
                            // addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
                             //removeItems(nbrPoints);
@@ -1225,14 +1228,14 @@ public class Acquisition extends Activity  {
             if (BLEService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
                 updateConnectionState(R.string.connected);
-                if(mTimer != null) {
+                /*if(mTimer != null) {
                     mTimer.scheduleAtFixedRate(new TimerTask() {
                         @Override
                         public void run() {
                             updateGraphs();
                         }
                     }, 0, refreshDelay);
-                }
+                }*/
                 //invalidateOptionsMenu();
             } else if (BLEService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;

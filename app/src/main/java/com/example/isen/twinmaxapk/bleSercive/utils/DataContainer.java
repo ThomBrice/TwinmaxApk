@@ -25,36 +25,44 @@ public class DataContainer {
     }
 
 
-    private boolean isFirst = true;
+    public void resetStatics() {
+        isFirst = false;
+    }
+
+    private static boolean isFirst = true;
     private int[] precIndex = {0,0};
-    public synchronized List<Measure> getSub(int indexMin, int indexMax) {
-        if(isFirst) {
-            isFirst = false;
-        } else {
-            for(int i=precIndex[0] ; i<=precIndex[1]; i++) {
-                dataContainer.remove(0);
+    public  List<Measure> getSub(int indexMin, int indexMax) {
+        synchronized (dataContainer) {
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                for (int i = precIndex[0]; i <= precIndex[1]; i++) {
+                    dataContainer.remove(0);
+                }
             }
-        }
-        try {
-            precIndex[0] = indexMin;
-            precIndex[1] = indexMax;
-            return dataContainer.subList(indexMin, indexMax);
-        } catch (IndexOutOfBoundsException e) {
-            return null;
+            try {
+                precIndex[0] = indexMin;
+                precIndex[1] = indexMax;
+                return dataContainer.subList(indexMin, indexMax);
+            } catch (IndexOutOfBoundsException e) {
+                return null;
+            }
         }
     }
 
     private boolean isFFirst = true;
-    public synchronized Measure getFirst() {
-        if(isFFirst) {
-            isFFirst = false;
-        } else if(!dataContainer.isEmpty()){
-            dataContainer.remove(0);
-        }
-        if(!dataContainer.isEmpty()) {
-            return dataContainer.get(0);
-        } else {
-            return null;
+    public Measure getFirst() {
+        synchronized (dataContainer) {
+            if (isFFirst) {
+                isFFirst = false;
+            } else if (!dataContainer.isEmpty()) {
+                dataContainer.remove(0);
+            }
+            if (!dataContainer.isEmpty()) {
+                return dataContainer.get(0);
+            } else {
+                return null;
+            }
         }
     }
 
@@ -62,10 +70,12 @@ public class DataContainer {
         return dataContainer.size();
     }
 
-    public synchronized void addValue(Measure newVal) {
-        if(dataContainer != null) {
-          //  Log.w("Taille data clean", "Taille CLEAN : " + dataContainer.size());
-            dataContainer.add(newVal);
+    public void addValue(Measure newVal) {
+        synchronized (dataContainer) {
+            if (dataContainer != null) {
+                //  Log.w("Taille data clean", "Taille CLEAN : " + dataContainer.size());
+                dataContainer.add(newVal);
+            }
         }
     }
 }
