@@ -16,6 +16,7 @@ import android.widget.Button;
 
 import com.example.isen.twinmaxapk.bleService.activities_frags.BLE_ScanActivity;
 import com.example.isen.twinmaxapk.database.historic.Migration;
+import com.example.isen.twinmaxapk.manual.Manual;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -26,8 +27,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button b0 = (Button) findViewById(R.id.b0);
-        Button b2 = (Button) findViewById(R.id.b2);
+        Button acquisition_button = (Button) findViewById(R.id.Acquisition_button);
+        Button historique_button = (Button) findViewById(R.id.Historique_button);
+        Button manual_button = (Button) findViewById(R.id.Mode_emploi_button);
+        Button reglage_button = (Button) findViewById(R.id.Reglages_button);
 
         //instantiate the realm and do migration (compulsory)
         RealmConfiguration config1 = new RealmConfiguration.Builder(this)
@@ -37,7 +40,7 @@ public class MainActivity extends Activity {
                 .build();
         Compute.setRealm(Realm.getInstance(config1));
 
-        b0.setOnClickListener(new View.OnClickListener() {
+        acquisition_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), BLE_ScanActivity.class);
@@ -45,7 +48,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        b2.setOnClickListener(new View.OnClickListener(){
+        historique_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), HistoricActivity.class);
@@ -53,5 +56,12 @@ public class MainActivity extends Activity {
             }
         });
 
+        manual_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Manual.class);
+                startActivity(intent);
+            }
+        });
     }
 }
