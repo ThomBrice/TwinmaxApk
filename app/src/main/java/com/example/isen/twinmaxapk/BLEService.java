@@ -63,6 +63,7 @@ public class BLEService extends Service {
                 Log.i(TAG, "Disconnect from GATT service");
                 broadcastUpdate(intentAction);
             }
+
         }
 
         @Override
@@ -95,10 +96,11 @@ public class BLEService extends Service {
         final Intent intent = new Intent(action);
         sendBroadcast(intent);
     }
-    private static final Boolean canSendData = true;
+    private static Boolean canSendData = true;
     private static int state=0;
     private static boolean isOk = true;
     private void broadcastUpdate(final String action, final BluetoothGattCharacteristic characteristic) {
+        Log.e("New instance", "New Instance");
         //TODO gestion des données reçues
         /* Proposition 1:
         1. Check UUID (not mandatory in our case)
@@ -110,6 +112,10 @@ public class BLEService extends Service {
         1. Envoyé broadcast avec données à l'activité concerné (qui s'occupera de faire le traitement (i.e. parsing des trames)
          */
         synchronized (canSendData) {
+            while(!canSendData) {
+
+            }
+            canSendData = false;
             final Intent intent = new Intent(action);
             final byte[] data = characteristic.getValue();
         /*if (data != null && data.length > 0) {
@@ -126,7 +132,7 @@ public class BLEService extends Service {
                             state = 1;
                             isOk = true;
                         } else {
-                            printisPasOk();
+                           // printisPasOk();
                         }
                         break;
                     case 1:
@@ -205,10 +211,11 @@ public class BLEService extends Service {
                 }
                // Log.w("VeryRaw data", "Valeur : " + (int) (b & 0xFF));
             }
-
+            canSendData = true;
             intent.putExtra(EXTRA_DATA, data);
             sendBroadcast(intent);
         }
+        Log.e("end of instance", "ond of instance");
     }
     public void printisPasOk() {
         Log.w("isOk", "Valeur : FALSE !");
