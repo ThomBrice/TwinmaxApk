@@ -20,7 +20,7 @@ import com.example.isen.twinmaxapk.manual.Manual;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-
+//tube
 public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
