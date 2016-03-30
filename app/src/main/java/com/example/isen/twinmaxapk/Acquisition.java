@@ -75,7 +75,7 @@ public class Acquisition extends Activity  {
         @Override
         public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
             changeCounter++;
-            Log.w("TEST", "TEST");
+            //Log.w("TEST", "TEST");
             if(changeCounter == 200) {
                 if(sender.size() >= 200) {
                     //subMeasure.clear();
