@@ -22,7 +22,7 @@ public class PageViewHolder extends RecyclerView.ViewHolder{
     //puis ajouter une fonction pour remplir la cellule en fonction de mon objet Page
     public void setPage(Page myPage){
         textView.setText(myPage.getText());
-        if(myPage.getPicture().equals("TwinmaxPhoto")){this.imageView.setImageResource(R.drawable.twinmaxphoto);}
-        if(myPage.getPicture().equals("ApplicationPhoto")){this.imageView.setImageResource(R.drawable.applicationphoto);}
+        if(myPage.getPicture().equals("TwinmaxPhoto")){this.imageView.setImageResource(R.drawable.twinmax_photo);}
+        if(myPage.getPicture().equals("ApplicationPhoto")){this.imageView.setImageResource(R.drawable.application_photo);}
     }
 }
