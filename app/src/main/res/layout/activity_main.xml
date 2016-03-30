@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         android:paddingRight="190dip"
         android:paddingLeft="190dip">
     <Button
-        android:id="@+id/b0"
+        android:id="@+id/Acquisition_button"
         android:layout_weight="1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         android:background="@drawable/bouton"/>
 
     <Button
-        android:id="@+id/b1"
+        android:id="@+id/Mode_emploi_button"
         android:layout_weight="1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
         android:background="@drawable/bouton"/>
 
     <Button
-        android:id="@+id/b2"
+        android:id="@+id/Historique_button"
         android:layout_weight="1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         android:background="@drawable/bouton"/>
 
     <Button
-        android:id="@+id/b3"
+        android:id="@+id/Reglages_button"
         android:layout_weight="1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -49,4 +49,4 @@
         android:textColor="#ffffff"
         android:background="@drawable/bouton"/>
 </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
