@@ -472,20 +472,43 @@ public class Acquisition extends Activity  {
                                 //MeasuresList.get(i).setC3(subMeasure.get(i).get(3));
                             }
                             //Log.w("Update Graph", "Graph starts update !");
+                            data0.clear();
+                            data1.clear();
+                            data2.clear();
+                            data3.clear();
+
                             for (int i = 0; i < nbrPoints; i++) {
-                                data0.get(i).setXIndex(i);
-                                data0.get(i).setVal(MeasuresList.get(i).get(0));
+                                if(MeasuresList.get(i).get(0) >= 3500) {
+                                    data0.add(new Entry(MeasuresList.get(i).get(0), i));
+                                } else {
+                                    data0.add(new Entry(3500, i));
+                                }
+                                //data0.get(i).setXIndex(i);
+                                //data0.get(i).setVal(MeasuresList.get(i).get(0));
 
+                                if(MeasuresList.get(i).get(1) >= 3500) {
+                                    data1.add(new Entry(MeasuresList.get(i).get(1), i));
+                                } else {
+                                    data1.add(new Entry(3500, i));
+                                }
+                                //data1.get(i).setXIndex(i);
+                                //data1.get(i).setVal(MeasuresList.get(i).get(1));
 
-                                data1.get(i).setXIndex(i);
-                                data1.get(i).setVal(MeasuresList.get(i).get(1));
+                                if(MeasuresList.get(i).get(2) >= 3500) {
+                                    data2.add(new Entry(MeasuresList.get(i).get(2), i));
+                                } else {
+                                    data2.add(new Entry(3500, i));
+                                }
+                                //data2.get(i).setXIndex(i);
+                                //data2.get(i).setVal(MeasuresList.get(i).get(2));
 
-
-                                data2.get(i).setXIndex(i);
-                                data2.get(i).setVal(MeasuresList.get(i).get(2));
-
-                                data3.get(i).setXIndex(i);
-                                data3.get(i).setVal(MeasuresList.get(i).get(3));
+                                if(MeasuresList.get(i).get(3) >= 3500) {
+                                    data3.add(new Entry(MeasuresList.get(i).get(3), i));
+                                } else {
+                                    data3.add(new Entry(3500, i));
+                                }
+                                //data3.get(i).setXIndex(i);
+                                //data3.get(i).setVal(MeasuresList.get(i).get(3));
                             }
                             //Log.w("Update Graph", "Graph starts update !");
                             if (nbrPoints > labelsInit.size()) {
