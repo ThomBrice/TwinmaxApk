@@ -31,6 +31,9 @@ public class RawContainer {
         }
     }
     public static boolean isFirst = true;
+    public int getSize() {
+        return container.size();
+    }
     public synchronized byte getFirst() {
         byte b = 0;
         if(!isFirst) {

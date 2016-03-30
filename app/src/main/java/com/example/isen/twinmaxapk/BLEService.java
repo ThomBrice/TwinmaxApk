@@ -100,7 +100,7 @@ public class BLEService extends Service {
     private static int state=0;
     private static boolean isOk = true;
     private void broadcastUpdate(final String action, final BluetoothGattCharacteristic characteristic) {
-        Log.e("New instance", "New Instance");
+        //Log.e("New instance", "New Instance");
         //TODO gestion des données reçues
         /* Proposition 1:
         1. Check UUID (not mandatory in our case)
@@ -215,13 +215,15 @@ public class BLEService extends Service {
             intent.putExtra(EXTRA_DATA, data);
             sendBroadcast(intent);
         }
-        Log.e("end of instance", "ond of instance");
+        //Log.e("end of instance", "ond of instance");
     }
     public void printisPasOk() {
-        Log.w("isOk", "Valeur : FALSE !");
+
+        //Log.w("isOk", "Valeur : FALSE !");
     }
     public void printisOk() {
-        Log.w("isOk", "Valeur : TRUE !");
+
+        //Log.w("isOk", "Valeur : TRUE !");
     }
 
     public class LocalBinder extends Binder {

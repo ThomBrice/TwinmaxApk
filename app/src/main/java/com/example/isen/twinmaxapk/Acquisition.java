@@ -77,19 +77,20 @@ public class Acquisition extends Activity  {
             changeCounter++;
             //Log.w("TEST", "TEST");
             if(changeCounter == 200) {
-                if(sender.size() >= 200) {
-                    //subMeasure.clear();
+
+                /*if(sender.size() >= 200) {
+                    subMeasure.clear();
                     for(int i=0; i<200;i++) {
-                      //  subMeasure.add(new Measure((Measure) sender.get(0)));
-                        //sender.remove(0);
+                        subMeasure.add(new Measure((Measure) sender.get(0)));
+                        sender.remove(0);
                     }
-                }
+                }*/
 
 
 
                 changeCounter = 0;
 
-                //updateGraphs();
+                updateGraphs();
                 //Log.w("Update Graph", "Graph starts update !");
             }
         }
@@ -420,8 +421,10 @@ public class Acquisition extends Activity  {
 
     private void copyValToSub() {
         subMeasure.clear();
-        while(!mCleanData.isEmpty()) {
+        int i= 0;
+        while(!mCleanData.isEmpty() && i<200) {
             subMeasure.add(new Measure(mCleanData.getFirst()));
+            i++;
         }
     }
 
@@ -435,24 +438,53 @@ public class Acquisition extends Activity  {
                         public void run() {
                             //nbrPoints = valeurButton;
                             copyValToSub();
-                            nbrPoints = subMeasure.size();
-                            //nbrPoints = 200;
+                            //nbrPoints = subMeasure.size();
+                            nbrPoints = 200;
 
                            // addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
                             //removeItems(nbrPoints);
                             //Log.w("Update Graph", "Graph starts update !");
                             //Log.w("Size of sublist : ", "value : " + subMeasure.size());
                             for(int i=0;i<nbrPoints;i++) {
-                                MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
-                                MeasuresList.get(i).setC1(subMeasure.get(i).get(1));
-                                MeasuresList.get(i).setC2(subMeasure.get(i).get(2));
-                                MeasuresList.get(i).setC3(subMeasure.get(i).get(3));
+                                if(subMeasure.get(i).get(0) >= 3500) {
+                                    MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
+                                } else {
+                                    MeasuresList.get(i).setC0(3500);
+                                }
+                                if(subMeasure.get(i).get(0) >= 3500) {
+                                    MeasuresList.get(i).setC1(subMeasure.get(i).get(1));
+                                } else {
+                                    MeasuresList.get(i).setC1(3500);
+                                }
+                                if(subMeasure.get(i).get(0) >= 3500) {
+                                    MeasuresList.get(i).setC2(subMeasure.get(i).get(2));
+                                } else {
+                                    MeasuresList.get(i).setC2(3500);
+                                }
+                                if(subMeasure.get(i).get(0) >= 3500) {
+                                    MeasuresList.get(i).setC3(subMeasure.get(i).get(3));
+                                } else {
+                                    MeasuresList.get(i).setC3(3500);
+                                }
+                                //MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
+                                //MeasuresList.get(i).setC1(subMeasure.get(i).get(1));
+                                //MeasuresList.get(i).setC2(subMeasure.get(i).get(2));
+                                //MeasuresList.get(i).setC3(subMeasure.get(i).get(3));
                             }
                             //Log.w("Update Graph", "Graph starts update !");
                             for (int i = 0; i < nbrPoints; i++) {
+                                data0.get(i).setXIndex(i);
                                 data0.get(i).setVal(MeasuresList.get(i).get(0));
+
+
+                                data1.get(i).setXIndex(i);
                                 data1.get(i).setVal(MeasuresList.get(i).get(1));
+
+
+                                data2.get(i).setXIndex(i);
                                 data2.get(i).setVal(MeasuresList.get(i).get(2));
+
+                                data3.get(i).setXIndex(i);
                                 data3.get(i).setVal(MeasuresList.get(i).get(3));
                             }
                             //Log.w("Update Graph", "Graph starts update !");
@@ -471,6 +503,7 @@ public class Acquisition extends Activity  {
                             //Log.w("Update Graph", "Graph starts update !");
                             chart.notifyDataSetChanged();
                             chart.invalidate();
+
                             //Log.w("Update Graph", "Graph starts update !");
                         }
                     });
@@ -1228,7 +1261,7 @@ public class Acquisition extends Activity  {
                     mTimer.scheduleAtFixedRate(new TimerTask() {
                         @Override
                         public void run() {
-                            updateGraphs();
+                            //updateGraphs();
                         }
                     }, 0, refreshDelay);
                 }
