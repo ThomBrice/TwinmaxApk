@@ -9,4 +9,5 @@ public interface MotoListener {
 
     void onViewMaintenance(Moto moto);
     void deleteItem(Moto moto);
+    void addMoto(Moto moto);
 }

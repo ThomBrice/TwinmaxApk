@@ -79,10 +79,10 @@ public class Compute {
             realm.clear(Moto.class);
             realm.commitTransaction();
         }
-
     }
 
-    public void sommeItemsInDatabase(){
+    public void someItemsInDatabase(){
+
 
         Moto moto1 = new Moto("Kawazaki Z750", "10/03/2016");
         Moto moto2 = new Moto("Suzuki GSXR1000", "02/02/2016");
@@ -106,8 +106,13 @@ public class Compute {
         realm.copyToRealm(moto3);
         realm.copyToRealm(moto4);
         realm.commitTransaction();
+    }
 
+    public static void addMoto(Moto moto){
 
+        realm.beginTransaction();
+        realm.copyToRealm(moto);
+        realm.commitTransaction();
     }
 }
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 
@@ -17,6 +18,7 @@ public class MotosAdapter extends BaseAdapter {
 
     private final List<Moto> motos;
     private final LayoutInflater inflater;
+    private CheckBox checkBox;
 
     public MotosAdapter(List<Moto> motos, Context context) {
         this.motos = motos;

@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    android:descendantFocusability="blocksDescendants">
+    android:descendantFocusability="blocksDescendants"
+    >
 
     <ImageView
         android:layout_width="100dp"
@@ -35,6 +36,14 @@
         android:textSize="16dp"
         android:id="@+id/dateListItem"/>
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_toRightOf="@+id/date"
+        android:layout_centerVertical="true"
+        android:id="@+id/checkbox"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,4 +52,5 @@
         android:text="Supprimer"
         android:textSize="10dp"
         android:id="@+id/buttonDeleteListItem"/>
+
 </RelativeLayout>

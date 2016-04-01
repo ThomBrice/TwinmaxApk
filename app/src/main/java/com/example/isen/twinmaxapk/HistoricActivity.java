@@ -20,7 +20,7 @@ public class HistoricActivity extends Activity implements MotoListener {
 
         Compute compute = new Compute();
         compute.emptyDatabase();
-        compute.sommeItemsInDatabase();
+        compute.someItemsInDatabase();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         MotoFragment motoFragment = new MotoFragment(this);
@@ -56,5 +56,12 @@ public class HistoricActivity extends Activity implements MotoListener {
     public void deleteItem(Moto moto) {
 
         Toast.makeText(this,"successful", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void addMoto(Moto moto) {
+
+        Compute.addMoto(moto);
+        Toast.makeText(this, "Moto ajoutée", Toast.LENGTH_LONG).show();
     }
 }
