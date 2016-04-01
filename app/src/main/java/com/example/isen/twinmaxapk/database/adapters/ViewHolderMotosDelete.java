@@ -1,21 +1,24 @@
 package com.example.isen.twinmaxapk.database.adapters;
 
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.isen.twinmaxapk.R;
 
 /**
- * Created by isen on 22/03/2016.
+ * Created by isen on 01/04/2016.
  */
-public class ViewHolder {
+public class ViewHolderMotosDelete {
 
     private TextView name;
     private TextView date;
+    private CheckBox checkBox;
 
-    public ViewHolder(View view) {
-        this.date = (TextView) view.findViewById(R.id.dateListItem);
-        this.name = (TextView) view.findViewById(R.id.motoNameListItem);
+    public ViewHolderMotosDelete(View view) {
+        this.date = (TextView) view.findViewById(R.id.dateDeleteListItem);
+        this.name = (TextView) view.findViewById(R.id.motoNameDeleteListItem);
+        this.checkBox = (CheckBox) view.findViewById(R.id.checkboxDeleteListItem);
     }
 
     public TextView getName() {
@@ -34,3 +37,4 @@ public class ViewHolder {
         this.date = date;
     }
 }
+

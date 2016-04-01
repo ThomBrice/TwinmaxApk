@@ -8,6 +8,6 @@ import com.example.isen.twinmaxapk.database.historic.Moto;
 public interface MotoListener {
 
     void onViewMaintenance(Moto moto);
-    void deleteItem(Moto moto);
+    void onViewDelete();
     void addMoto(Moto moto);
 }

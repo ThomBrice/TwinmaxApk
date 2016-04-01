@@ -116,10 +116,10 @@ public class MotoFragment extends Fragment implements MotoChangeListener, Adapte
         listView.setAdapter(adapter);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
+        @Override
+        public void onStop() {
+            super.onStop();
+        }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -133,30 +133,7 @@ public class MotoFragment extends Fragment implements MotoChangeListener, Adapte
     public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
                 if (null != mListener){
                     final Moto moto = (Moto) adapter.getItemAtPosition(position);
-
-                    CheckBox checkBox;
-                    TextView date;
-
-                    LayoutInflater inflater = LayoutInflater.from(context);
-                    View view1 = inflater.inflate(R.layout.moto_listitem, null);
-
-                    checkBox = (CheckBox) view1.findViewById(R.id.checkbox);
-                    date = (TextView) view1.findViewById(R.id.date);
-
-
-
-                    checkBox.setVisibility(View.VISIBLE);
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)checkBox.getLayoutParams();
-                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-
-                    checkBox.setLayoutParams(params); //causes layout update
-                    /*
-                    RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)date.getLayoutParams();
-                    params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                    params.addRule(RelativeLayout.LEFT_OF, R.id.checkbox);
-                    date.setLayoutParams(params1);
-                    */
-                    mListener.deleteItem(moto);
+                    mListener.onViewDelete();
                 }
         return true;
     }

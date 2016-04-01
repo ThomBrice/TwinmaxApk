@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.isen.twinmaxapk.database.fragments.MaintenancesFragment;
+import com.example.isen.twinmaxapk.database.fragments.MotoDeleteFragment;
 import com.example.isen.twinmaxapk.database.fragments.MotoFragment;
 import com.example.isen.twinmaxapk.database.historic.Maintenance;
 import com.example.isen.twinmaxapk.database.historic.Moto;
@@ -53,9 +54,13 @@ public class HistoricActivity extends Activity implements MotoListener {
 
 
     @Override
-    public void deleteItem(Moto moto) {
+    public void onViewDelete() {
+        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-        Toast.makeText(this,"successful", Toast.LENGTH_LONG).show();
+        final MotoDeleteFragment fragment = new MotoDeleteFragment(this);
+
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null).commit();
     }
 
     @Override
