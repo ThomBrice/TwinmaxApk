@@ -1,18 +1,12 @@
 package com.example.isen.twinmaxapk;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothManager;
-import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.Button;
-
-//import com.example.isen.twinmaxapk.database.historic.Migration;
 
 import com.example.isen.twinmaxapk.bleService.activities_frags.BLE_ScanActivity;
 import com.example.isen.twinmaxapk.database.historic.Migration;
@@ -20,17 +14,17 @@ import com.example.isen.twinmaxapk.manual.Manual;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-//tube
+
 public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button acquisition_button = (Button) findViewById(R.id.Acquisition_button);
-        Button historique_button = (Button) findViewById(R.id.Historique_button);
-        Button manual_button = (Button) findViewById(R.id.Mode_emploi_button);
-        Button reglage_button = (Button) findViewById(R.id.Reglages_button);
+        CardView acquisitionCard = (CardView) findViewById(R.id.Acquisition_card);
+        CardView historiqueCard = (CardView) findViewById(R.id.Historique_card);
+        CardView manualCard = (CardView) findViewById(R.id.Mode_emploi_card);
+        CardView reglageCard = (CardView) findViewById(R.id.Reglage_card);
 
         //instantiate the realm and do migration (compulsory)
         RealmConfiguration config1 = new RealmConfiguration.Builder(this)
@@ -40,7 +34,7 @@ public class MainActivity extends Activity {
                 .build();
         Compute.setRealm(Realm.getInstance(config1));
 
-        acquisition_button.setOnClickListener(new View.OnClickListener() {
+        acquisitionCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), BLE_ScanActivity.class);
@@ -48,7 +42,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        historique_button.setOnClickListener(new View.OnClickListener(){
+        historiqueCard.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), HistoricActivity.class);
@@ -56,7 +50,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        manual_button.setOnClickListener(new View.OnClickListener() {
+        manualCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Manual.class);
