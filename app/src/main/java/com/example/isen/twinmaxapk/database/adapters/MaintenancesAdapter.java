@@ -1,5 +1,6 @@
 package com.example.isen.twinmaxapk.database.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,9 @@ public class MaintenancesAdapter extends BaseAdapter {
     private final List<Maintenance> maintenances;
     private final LayoutInflater inflater;
 
-    public MaintenancesAdapter(List<Maintenance> maintenances, LayoutInflater inflater) {
+    public MaintenancesAdapter(List<Maintenance> maintenances, Context context) {
         this.maintenances = maintenances;
-        this.inflater = inflater;
+        this.inflater = LayoutInflater.from(context);
     }
 
     @Override

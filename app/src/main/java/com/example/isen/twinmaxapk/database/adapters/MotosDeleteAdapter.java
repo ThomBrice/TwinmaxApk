@@ -13,13 +13,13 @@ import com.example.isen.twinmaxapk.database.historic.Moto;
 
 import java.util.List;
 
-public class MotosAdapter extends BaseAdapter {
+public class MotosDeleteAdapter extends BaseAdapter {
 
     private final List<Moto> motos;
     private final LayoutInflater inflater;
     private CheckBox checkBox;
 
-    public MotosAdapter(List<Moto> motos, Context context) {
+    public MotosDeleteAdapter(List<Moto> motos, Context context) {
         this.motos = motos;
         inflater = LayoutInflater.from(context);
     }
@@ -43,18 +43,18 @@ public class MotosAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
 
-        ViewHolderMotos holder;
+        ViewHolderMotosDelete holder;
         // If we don't have any convertView to reuse, inflate one
         if (null == convertView){
-            convertView = inflater.inflate(R.layout.moto_listitem, null);
+            convertView = inflater.inflate(R.layout.moto_delete_listitem, null);
 
             // Instantiate the ViewHolderMotos
-            holder = new ViewHolderMotos(convertView);
+            holder = new ViewHolderMotosDelete(convertView);
             // Set as tag to the convertView to retrieve it easily
             convertView.setTag(holder);
         } else {
             // Just retrieve the ViewHolderMotos instance in the tag of the view
-            holder = (ViewHolderMotos) convertView.getTag();
+            holder = (ViewHolderMotosDelete) convertView.getTag();
         }
 
         final Moto moto = (Moto) getItem(position);
