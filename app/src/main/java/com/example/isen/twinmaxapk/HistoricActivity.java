@@ -20,6 +20,11 @@ public class HistoricActivity extends Activity implements MotoListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historic);
 
+        Compute compute = new Compute();
+
+        compute.emptyDatabase();
+        compute.someItemsInDatabase();
+
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         MotoFragment motoFragment = new MotoFragment(this);
         transaction.add(R.id.container, motoFragment);
