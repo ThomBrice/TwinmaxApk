@@ -436,6 +436,7 @@ public class Acquisition extends Activity  {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             //nbrPoints = valeurButton;
                             copyValToSub();
                             //nbrPoints = subMeasure.size();
@@ -478,35 +479,19 @@ public class Acquisition extends Activity  {
                             data3.clear();
 
                             for (int i = 0; i < nbrPoints; i++) {
-                                if(MeasuresList.get(i).get(0) >= 3500) {
-                                    data0.add(new Entry(MeasuresList.get(i).get(0), i));
-                                } else {
-                                    data0.add(new Entry(3500, i));
-                                }
+                                data0.add(new Entry(MeasuresList.get(i).get(0), i));
                                 //data0.get(i).setXIndex(i);
                                 //data0.get(i).setVal(MeasuresList.get(i).get(0));
 
-                                if(MeasuresList.get(i).get(1) >= 3500) {
-                                    data1.add(new Entry(MeasuresList.get(i).get(1), i));
-                                } else {
-                                    data1.add(new Entry(3500, i));
-                                }
+                                data1.add(new Entry(MeasuresList.get(i).get(1), i));
                                 //data1.get(i).setXIndex(i);
                                 //data1.get(i).setVal(MeasuresList.get(i).get(1));
 
-                                if(MeasuresList.get(i).get(2) >= 3500) {
-                                    data2.add(new Entry(MeasuresList.get(i).get(2), i));
-                                } else {
-                                    data2.add(new Entry(3500, i));
-                                }
+                                data2.add(new Entry(MeasuresList.get(i).get(2), i));
                                 //data2.get(i).setXIndex(i);
                                 //data2.get(i).setVal(MeasuresList.get(i).get(2));
 
-                                if(MeasuresList.get(i).get(3) >= 3500) {
-                                    data3.add(new Entry(MeasuresList.get(i).get(3), i));
-                                } else {
-                                    data3.add(new Entry(3500, i));
-                                }
+                                data3.add(new Entry(MeasuresList.get(i).get(3), i));
                                 //data3.get(i).setXIndex(i);
                                 //data3.get(i).setVal(MeasuresList.get(i).get(3));
                             }

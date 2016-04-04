@@ -217,12 +217,18 @@ public class BLEService extends Service {
         }
         //Log.e("end of instance", "ond of instance");
     }
+    private static int total = 0;
+    private static int bonTrame = 0;
     public void printisPasOk() {
-
+        total++;
         //Log.w("isOk", "Valeur : FALSE !");
     }
     public void printisOk() {
-
+        total++;
+        bonTrame++;
+        if(total%100 == 0) {
+            Log.e("Taux d'erreur", "Nombre de trame : "+ total + "; taux de réussite : " + (float)((float)bonTrame/(float)total) +"; taux d'erreur : " + (float)((float)(total - bonTrame)/(float)total));
+        }
         //Log.w("isOk", "Valeur : TRUE !");
     }
 
