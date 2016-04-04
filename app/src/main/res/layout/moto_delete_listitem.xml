@@ -13,36 +13,36 @@
         android:src="@drawable/default_image"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="5dp"
-        android:id="@+id/imageView"/>
+        android:id="@+id/imageViewDelete"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="nom moto"
         android:textSize="20dp"
-        android:id="@+id/motoNameListItem"
-        android:layout_below="@+id/dateListItem"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView" />
+        android:id="@+id/motoNameDeleteListItem"
+        android:layout_below="@+id/dateDeleteListItem"
+        android:layout_toRightOf="@+id/imageViewDelete"
+        android:layout_toEndOf="@+id/imageViewDelete" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageView"
-        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/imageViewDelete"
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="5dp"
+        android:layout_toLeftOf="@+id/checkboxDeleteListItem"
         android:text="date"
         android:textSize="16dp"
-        android:id="@+id/dateListItem"/>
+        android:id="@+id/dateDeleteListItem"/>
 
-    <Button
+    <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
         android:layout_alignParentRight="true"
-        android:text="Supprimer"
-        android:textSize="10dp"
-        android:id="@+id/buttonDeleteListItem"/>
+        android:id="@+id/checkboxDeleteListItem"/>
 
 </RelativeLayout>

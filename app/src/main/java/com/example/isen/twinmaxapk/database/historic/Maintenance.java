@@ -1,5 +1,6 @@
 package com.example.isen.twinmaxapk.database.historic;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import io.realm.RealmObject;
@@ -7,7 +8,7 @@ import io.realm.RealmObject;
 /**
  * Created by isen on 10/03/2016.
  */
-public class Maintenance extends RealmObject {
+public class Maintenance extends RealmObject implements Serializable {
 
     private String date;
     private String note;

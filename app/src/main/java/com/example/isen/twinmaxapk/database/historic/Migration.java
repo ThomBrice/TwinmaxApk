@@ -16,7 +16,6 @@ public class Migration implements RealmMigration {
         if (oldVersion == 0) {
             RealmObjectSchema motoSchema = schema.get("Moto");
 
-            // Combine 'firstName' and 'lastName' in a new field called 'fullName'
             motoSchema
                     .addField("name", String.class, FieldAttribute.REQUIRED);
 
