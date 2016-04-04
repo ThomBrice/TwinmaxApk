@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark">
 
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -12,10 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        card_view:cardCornerRadius="0dp"
+        card_view:cardCornerRadius="5dp"
         card_view:cardElevation="15dp"
         card_view:cardPreventCornerOverlap="true"
-        card_view:cardUseCompatPadding="true">
+        card_view:cardUseCompatPadding="true"
+        card_view:cardBackgroundColor="@color/colorPrimary">
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart"
@@ -32,10 +34,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="8"
-        card_view:cardCornerRadius="0dp"
+        card_view:cardCornerRadius="5dp"
         card_view:cardElevation="15dp"
         card_view:cardPreventCornerOverlap="true"
-        card_view:cardUseCompatPadding="true">
+        card_view:cardUseCompatPadding="true"
+        card_view:cardBackgroundColor="@color/colorPrimary">
 
         <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -52,18 +55,19 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/valeur"
                 android:text="1200"
-                android:textColor="@android:color/black"
                 android:textSize="20sp"
                 android:layout_marginRight="10dp"
                 android:layout_centerHorizontal="true"
-                android:layout_alignBottom="@+id/arcView"/>
+                android:layout_alignBottom="@+id/arcView"
+                android:textColor="@color/colorText"/>
             <CheckBox
                 android:id="@+id/c0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="data1"
                 android:checked="true"
-                android:layout_below="@+id/arcView"/>
+                android:layout_below="@+id/arcView"
+                android:textColor="@color/colorText"/>
             <CheckBox
                 android:id="@+id/c1"
                 android:layout_width="wrap_content"
@@ -71,14 +75,16 @@
                 android:text="data2"
                 android:checked="true"
                 android:layout_below="@id/arcView"
-                android:layout_toRightOf="@+id/c0"/>
+                android:layout_toRightOf="@+id/c0"
+                android:textColor="@color/colorText"/>
             <CheckBox
                 android:id="@+id/c2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="data3"
                 android:checked="true"
-                android:layout_below="@id/c1"/>
+                android:layout_below="@id/c1"
+                android:textColor="@color/colorText"/>
             <CheckBox
                 android:id="@+id/c3"
                 android:layout_width="wrap_content"
@@ -86,7 +92,8 @@
                 android:text="data4"
                 android:checked="true"
                 android:layout_below="@id/c1"
-                android:layout_toRightOf="@+id/c2"/>
+                android:layout_toRightOf="@+id/c2"
+                android:textColor="@color/colorText"/>
             <Button
                 android:id="@+id/b0"
                 android:layout_width="wrap_content"
@@ -94,7 +101,6 @@
                 android:text="Auto Scale"
                 android:layout_below="@id/c3"
                 android:layout_centerHorizontal="true"/>
-
             <Button
                 android:id="@+id/plus"
                 android:layout_width="50dp"
@@ -115,13 +121,15 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/moins"
                 android:text="Disconnected"
-                android:id="@+id/acquisition_connection_state"/>
+                android:id="@+id/acquisition_connection_state"
+                android:textColor="@color/colorText"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/acquisition_connection_state"
                 android:text="No Data"
-                android:id="@+id/acquisition_data_field"/>
+                android:id="@+id/acquisition_data_field"
+                android:textColor="@color/colorText"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
