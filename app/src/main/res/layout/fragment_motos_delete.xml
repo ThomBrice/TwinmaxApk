@@ -13,4 +13,12 @@
         android:id="@+id/motosDeleteListView">
     </ListView>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Supprimer"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/deleteButton"/>
+
 </RelativeLayout>

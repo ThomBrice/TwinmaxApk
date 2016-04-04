@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.isen.twinmaxapk.database.fragments.AddMotoFragment;
 import com.example.isen.twinmaxapk.database.fragments.MaintenancesFragment;
 import com.example.isen.twinmaxapk.database.fragments.MotoDeleteFragment;
 import com.example.isen.twinmaxapk.database.fragments.MotoFragment;
@@ -18,10 +19,6 @@ public class HistoricActivity extends Activity implements MotoListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historic);
-
-        Compute compute = new Compute();
-        compute.emptyDatabase();
-        compute.someItemsInDatabase();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         MotoFragment motoFragment = new MotoFragment(this);
@@ -67,6 +64,11 @@ public class HistoricActivity extends Activity implements MotoListener {
     public void addMoto(Moto moto) {
 
         Compute.addMoto(moto);
-        Toast.makeText(this, "Moto ajoutée", Toast.LENGTH_LONG).show();
+        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        final MotoFragment fragment = new MotoFragment(this);
+
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null).commit();
     }
 }
