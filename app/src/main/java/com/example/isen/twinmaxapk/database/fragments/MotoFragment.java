@@ -11,6 +11,7 @@ import io.realm.RealmResults;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,9 +25,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.isen.twinmaxapk.Compute;
 import com.example.isen.twinmaxapk.R;
@@ -79,8 +77,12 @@ public class MotoFragment extends Fragment implements MotoChangeListener, Adapte
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    Moto moto = new Moto("VFR 1200", "10/03/2016");
-                    mListener.addMoto(moto);
+                    final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                    final AddMotoFragment fragment = new AddMotoFragment(context);
+
+                    transaction.replace(R.id.container, fragment);
+                    transaction.addToBackStack(null).commit();
                 }
             }
         });

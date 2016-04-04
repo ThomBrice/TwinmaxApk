@@ -36,13 +36,4 @@
         android:textSize="16dp"
         android:id="@+id/dateListItem"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_alignParentRight="true"
-        android:text="Supprimer"
-        android:textSize="10dp"
-        android:id="@+id/buttonDeleteListItem"/>
-
 </RelativeLayout>
