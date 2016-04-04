@@ -95,10 +95,14 @@ public class Compute {
         maintenances.add(maintenance);
         maintenances.add(maintenance1);
 
+        RealmList<Maintenance> maintenances1 = new RealmList<>();
+        Maintenance maintenance2 = new Maintenance("22/02/2010","tension de chaine");
+
         moto1.setMaintenances(maintenances);
         moto2.setMaintenances(maintenances);
         moto3.setMaintenances(maintenances);
         moto3.setMaintenances(maintenances);
+        moto4.setMaintenances(maintenances1);
 
         realm.beginTransaction();
         realm.copyToRealm(moto1);
