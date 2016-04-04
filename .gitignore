@@ -33,7 +33,7 @@ proguard/
 # Android Studio captures folder
 captures/
 Appli.iml
-
+*.iml
 .idea/workspace.xml
 
 .idea/libraries/library_2_4_0.xml
