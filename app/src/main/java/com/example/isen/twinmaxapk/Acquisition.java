@@ -47,7 +47,7 @@ import java.util.UUID;
 public class Acquisition extends Activity  {
 
 
-//Lol
+
     //Decoder fields
     private RawContainer mRawContainer;
     private DecodeFrameAsyncTask mDecoder;
