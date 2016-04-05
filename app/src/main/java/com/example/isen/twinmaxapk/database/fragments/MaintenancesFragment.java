@@ -1,6 +1,7 @@
 package com.example.isen.twinmaxapk.database.fragments;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -19,20 +20,20 @@ import com.example.isen.twinmaxapk.database.adapters.MotosAdapter;
 import com.example.isen.twinmaxapk.database.historic.Maintenance;
 import com.example.isen.twinmaxapk.database.historic.Moto;
 import com.example.isen.twinmaxapk.database.interfaces.MaintenanceChangeListener;
+import com.example.isen.twinmaxapk.database.interfaces.MaintenanceListener;
+import com.example.isen.twinmaxapk.database.interfaces.MotoListener;
 
 import java.io.Serializable;
 
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
-/**
- * Created by isen on 20/03/2016.
- */
 public class MaintenancesFragment extends Fragment implements MaintenanceChangeListener {
 
     private ListView listView;
     private Context context;
     private Moto moto;
+    private MaintenanceListener mListener;
 
     public MaintenancesFragment() {
     }
@@ -63,6 +64,15 @@ public class MaintenancesFragment extends Fragment implements MaintenanceChangeL
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof MotoListener){
+            mListener = (MaintenanceListener) activity;
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         onMotoRetrieved(moto.getMaintenances());
@@ -70,7 +80,7 @@ public class MaintenancesFragment extends Fragment implements MaintenanceChangeL
 
     @Override
     public void onMotoRetrieved(RealmList<Maintenance> maintenances) {
-        final MaintenancesAdapter adapter = new MaintenancesAdapter(maintenances, context);
+        final MaintenancesAdapter adapter = new MaintenancesAdapter(maintenances, context, mListener);
         listView.setAdapter(adapter);
     }
 }
