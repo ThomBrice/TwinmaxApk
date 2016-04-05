@@ -385,4 +385,10 @@ public class BLEService extends Service {
 
         return mBGatt.getServices();
     }
+
+
+
+
+
+
 }
