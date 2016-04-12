@@ -55,7 +55,7 @@ import java.util.logging.LogRecord;
 
 public class Acquisition extends Activity  {
 
-
+    private static LineData pointsDur;
 
     //Decoder fields
     private RawContainer mRawContainer;
@@ -295,6 +295,7 @@ public class Acquisition extends Activity  {
         lines.add(new LineDataSet(data3, "data3"));
         //Mettre data dans chart
         chart.setData(new LineData(labelsInit, lines));
+
 
         //options générales
         chart.getAxisRight().setEnabled(false);

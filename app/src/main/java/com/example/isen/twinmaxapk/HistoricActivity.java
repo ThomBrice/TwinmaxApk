@@ -6,19 +6,27 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.isen.twinmaxapk.database.fragments.AddMotoFragment;
+import com.example.isen.twinmaxapk.database.fragments.ChartFragment;
 import com.example.isen.twinmaxapk.database.fragments.MaintenancesFragment;
 import com.example.isen.twinmaxapk.database.fragments.MotoDeleteFragment;
 import com.example.isen.twinmaxapk.database.fragments.MotoFragment;
 import com.example.isen.twinmaxapk.database.historic.Maintenance;
 import com.example.isen.twinmaxapk.database.historic.Moto;
+import com.example.isen.twinmaxapk.database.interfaces.MaintenanceListener;
 import com.example.isen.twinmaxapk.database.interfaces.MotoListener;
+import com.github.mikephil.charting.data.LineData;
 
-public class HistoricActivity extends Activity implements MotoListener {
+public class HistoricActivity extends Activity implements MotoListener, MaintenanceListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historic);
+
+        Compute compute = new Compute();
+
+        compute.emptyDatabase();
+        compute.someItemsInDatabase();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         MotoFragment motoFragment = new MotoFragment(this);
@@ -67,6 +75,16 @@ public class HistoricActivity extends Activity implements MotoListener {
         final FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         final MotoFragment fragment = new MotoFragment(this);
+
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null).commit();
+    }
+
+    @Override
+    public void onViewGraph(LineData lineData) {
+        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        final ChartFragment fragment = new ChartFragment(this, lineData);
 
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null).commit();
