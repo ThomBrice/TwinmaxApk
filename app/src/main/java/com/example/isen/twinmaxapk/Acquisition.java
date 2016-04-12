@@ -1,6 +1,8 @@
 package com.example.isen.twinmaxapk;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
@@ -16,6 +18,8 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +31,7 @@ import com.example.isen.twinmaxapk.bleSercive.utils.DataContainer;
 import com.example.isen.twinmaxapk.bleSercive.utils.DecodeFrameAsyncTask;
 import com.example.isen.twinmaxapk.bleSercive.utils.DecoderListener;
 import com.example.isen.twinmaxapk.bleSercive.utils.RawContainer;
+import com.example.isen.twinmaxapk.bleService.activities_frags.BTScanActivity;
 import com.example.isen.twinmaxapk.database.Measure;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -36,6 +41,8 @@ import com.hookedonplay.decoviewlib.DecoView;
 import com.hookedonplay.decoviewlib.charts.SeriesItem;
 import com.hookedonplay.decoviewlib.events.DecoEvent;
 
+import android.os.Handler;
+import android.widget.Toast;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -43,6 +50,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+//import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 public class Acquisition extends Activity  {
 
@@ -152,10 +161,9 @@ public class Acquisition extends Activity  {
     public final static String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     private String mDeviceAdrress;
     private String mDeviceName;
-    private BLEService mBluetoothLeService;
+
     private boolean mConnected = false;
     private TextView mConnectionState;
-    private BluetoothGattCharacteristic mCharacteristic;
     private TextView mDataField;
     //End of Ble fields
 
@@ -177,6 +185,69 @@ public class Acquisition extends Activity  {
     ArrayList<Measure> MeasuresList = new ArrayList<>();
     static int valeurButton = 150;
 
+
+
+
+    //BT normal service vars
+    private BTService mBTService = null;
+
+    private BluetoothAdapter mBluetoothAdapter;
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Constants.MESSAGE_STATE_CHANGE:
+                    switch (msg.arg1) {
+                        case BTService.STATE_CONNECTED:
+                            //setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
+                            Log.e("Connection érablie", "connection was established !");
+                            mConnectionState.setText(R.string.connected);
+                            break;
+                        case BTService.STATE_CONNECTING:
+
+                            break;
+                        case BTService.STATE_LISTEN:
+                        case BTService.STATE_NONE:
+
+                            break;
+                    }
+                    break;
+                case Constants.MESSAGE_WRITE:
+                    byte[] writeBuf = (byte[]) msg.obj;
+                    // construct a string from the buffer
+                    String writeMessage = new String(writeBuf);
+                    break;
+                case Constants.MESSAGE_READ:
+                    byte[] readBuf = (byte[]) msg.obj;
+                    // construct a string from the valid bytes in the buffer
+                    String readMessage = new String(readBuf, 0, msg.arg1);
+                    mRawContainer.addFrame(readBuf);
+                   // Log.e("data received : ", "value : " + readBuf.toString());
+                    break;
+                case Constants.MESSAGE_DEVICE_NAME:
+                    // save the connected device's name
+
+
+                    break;
+                case Constants.MESSAGE_TOAST:
+
+                    break;
+            }
+        }
+    };
+
+    private void connectDevice(Intent data, boolean secure) {
+        // Get the device MAC address
+        String address = data.getExtras()
+                .getString(BTScanActivity.EXTRA_DEVICE_ADDRESS);
+        // Get the BluetoothDevice object
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+
+        // Attempt to connect to the device
+        mBTService.connect(device, secure);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -189,18 +260,18 @@ public class Acquisition extends Activity  {
         mDecoder = null;
 
         mCleanData = new DataContainer(mCleanDataCallback);
-        //Setup BLE connection (i.e. getting the adress and name in the intent)
+
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+
+        mBTService = new BTService(getApplicationContext(), mHandler);
         final Intent intent = getIntent();
-        mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAdrress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+
+        connectDevice(intent, false);
 
         mConnectionState = (TextView) findViewById(R.id.acquisition_connection_state);
         mDataField = (TextView) findViewById(R.id.acquisition_data_field);
-
-        Intent gattServiceIntent = new Intent(this, BLEService.class);
-        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-        //End of BLE setup !
-
 
         chart = new LineChart(this);
         chart = (LineChart) findViewById(R.id.chart);
@@ -366,11 +437,7 @@ public class Acquisition extends Activity  {
         super.onResume();
 
         //Setup BLE
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        if (mBluetoothLeService != null) {
-            final boolean result = mBluetoothLeService.connect(mDeviceAdrress);
-            Log.d("Acquisition", "Connect request result = " + result);
-        }
+
         //End of BLE setup
 
 /*
@@ -524,14 +591,14 @@ public class Acquisition extends Activity  {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(mGattUpdateReceiver);
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mServiceConnection);
-        mBluetoothLeService = null;
+
+
     }
 
     private void updateConnectionState(final int resourceId) {
@@ -549,42 +616,6 @@ public class Acquisition extends Activity  {
             //mConnectionState.setText(data);
         }
     }
-
-    private void connectToService(List<BluetoothGattService> gattServices) {
-        //TODO implement (will be used at the onResume)
-        //UUID of the service is 0xFFE0
-        UUID uuid = null;
-        for(BluetoothGattService gattService : gattServices) {
-            uuid = gattService.getUuid();
-            Log.e("UUID ", "UUID is " + uuid.toString());
-            if(uuid.toString().contains("0000ffe0")){
-                final List<BluetoothGattCharacteristic> characteristic = gattService.getCharacteristics();
-
-                Log.e("Charac", "Value : " + characteristic.toString());
-                if(characteristic.isEmpty()) {
-                    return;
-                }
-                if(characteristic.get(0) != null) {
-                    final int charaProp = characteristic.get(0).getProperties();
-                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
-                        Log.e("REA", "OK !");
-                        if (mCharacteristic != null) {
-                            mBluetoothLeService.setCharacteristicNotification(mCharacteristic, false);
-                            mCharacteristic = null;
-                        }
-                        mBluetoothLeService.readCharacterestic(characteristic.get(0));
-                    }
-                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
-                        Log.e("NOTIFIY", "OK !");
-                        mCharacteristic = characteristic.get(0);
-                        mBluetoothLeService.setCharacteristicNotification(
-                                characteristic.get(0), true);
-                    }
-                }
-            }
-        }
-    }
-
 
     public void removeItems(int points) {
         if (MeasuresList.size() >= points) {
@@ -1238,68 +1269,9 @@ public class Acquisition extends Activity  {
         arcView.addEvent(new DecoEvent.Builder(data).setIndex(serie1Index).setDelay(0).build());
     }
 
-    // Code to manage Service lifecycle.
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            mBluetoothLeService = ((BLEService.LocalBinder) service).getService();
-            if (!mBluetoothLeService.initialize()) {
-                Log.e("Acquisition", "Unable to initialize Bluetooth");
-                finish();
-            }
-            // Automatically connects to the device upon successful start-up initialization.
-            mBluetoothLeService.connect(mDeviceAdrress);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            mBluetoothLeService = null;
-        }
-    };
-
-    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if (BLEService.ACTION_GATT_CONNECTED.equals(action)) {
-                mConnected = true;
-                updateConnectionState(R.string.connected);
-                if(mTimer != null) {
-                    mTimer.scheduleAtFixedRate(new TimerTask() {
-                        @Override
-                        public void run() {
-                            //updateGraphs();
-                        }
-                    }, 0, refreshDelay);
-                }
-                //invalidateOptionsMenu();
-            } else if (BLEService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                mConnected = false;
-                updateConnectionState(R.string.disconnected);
-                invalidateOptionsMenu();
-                //clearUI();
-            } else if (BLEService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                // Show all the supported services and characteristics on the user interface.
-                //displayGattServices(mBluetoothLeService.getSupportedGattServices());
-                connectToService(mBluetoothLeService.getSupportedGattServices());
-            } else if (BLEService.ACTION_DATA_AVAILABLE.equals(action)) {
-                //TODO the work on decoding the frame starts here (keep the UI thread master of the data)
-//                displayData(intent.getStringExtra(BLEService.EXTRA_DATA));
-                mRawContainer.addFrame(intent.getByteArrayExtra(BLEService.EXTRA_DATA));
-            }
-        }
-    };
-
-
-
-
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BLEService.ACTION_GATT_CONNECTED);
-        intentFilter.addAction(BLEService.ACTION_GATT_DISCONNECTED);
-        intentFilter.addAction(BLEService.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(BLEService.ACTION_DATA_AVAILABLE);
+
         return intentFilter;
     }
 

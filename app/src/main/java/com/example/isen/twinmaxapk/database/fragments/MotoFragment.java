@@ -3,7 +3,7 @@ package com.example.isen.twinmaxapk.database.fragments;
 
 import android.app.ActionBar;
 
-import com.example.isen.twinmaxapk.bleService.activities_frags.BLE_ScanActivity;
+
 import com.example.isen.twinmaxapk.database.adapters.MotosAdapter;
 import com.example.isen.twinmaxapk.database.historic.Moto;
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.isen.twinmaxapk">
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+
 
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
@@ -23,6 +23,8 @@
             android:name=".Acquisition"
             android:screenOrientation="landscape">
         </activity>
+        <activity android:name=".bleService.activities_frags.BTScanActivity"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".manual.Manual"
             android:screenOrientation="landscape">
@@ -33,7 +35,6 @@
             android:screenOrientation="landscape">
         </activity>
 
-        <service android:name=".BLEService" android:enabled="true"/>
     </application>
 
 </manifest>

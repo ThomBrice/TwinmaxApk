@@ -1,3 +1,4 @@
+
 package com.example.isen.twinmaxapk;
 
 import android.app.Activity;
@@ -8,7 +9,8 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.isen.twinmaxapk.bleService.activities_frags.BLE_ScanActivity;
+
+import com.example.isen.twinmaxapk.bleService.activities_frags.BTScanActivity;
 import com.example.isen.twinmaxapk.database.historic.Migration;
 import com.example.isen.twinmaxapk.manual.Manual;
 
@@ -37,7 +39,7 @@ public class MainActivity extends Activity {
         acquisitionCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), BLE_ScanActivity.class);
+                Intent intent = new Intent(getApplicationContext(), BTScanActivity.class);
                 startActivity(intent);
             }
         });

@@ -27,11 +27,11 @@ public class BTService {
     private static final UUID MY_UUID_SECURE =
             UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
     private static final UUID MY_UUID_INSECURE =
-            UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
+            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     // Name for the SDP record when creating server socket
-    private static final String NAME_SECURE = "BluetoothChatSecure";
-    private static final String NAME_INSECURE = "BluetoothChatInsecure";
+    private static final String NAME_SECURE = "TwinMax";
+    private static final String NAME_INSECURE = "TwinMax";
 
     private final BluetoothAdapter mAdapter;
     private final Handler mHandler;
@@ -114,7 +114,7 @@ public class BTService {
             mConnectedThread.cancel();
             mConnectedThread = null;
         }
-
+        Log.e("BTService", "connecting to remote device");
         mConnectThread = new ConnectThread(device,secure);
         mConnectThread.start();
         setState(STATE_CONNECTING);
@@ -194,7 +194,7 @@ public class BTService {
         bundle.putString(Constants.TOAST, "Unable to connect device");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
-
+        Log.e("BTService","connection failed !");
         // Start the service over to restart listening mode
         BTService.this.start();
     }
@@ -328,7 +328,7 @@ public class BTService {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
-
+                    Log.e("Value :" , buffer.toString());
                     // Send the obtained bytes to the UI Activity
                     mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
                             .sendToTarget();
