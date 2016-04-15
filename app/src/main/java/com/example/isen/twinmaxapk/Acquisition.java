@@ -127,12 +127,12 @@ public class Acquisition extends Activity  {
 
         @Override
         public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
-
+           //Log.e("value added !","value added");
             if(mDecoder == null || mDecoder.getStatus().compareTo(AsyncTask.Status.FINISHED) == 0) {
                 mDecoder = new DecodeFrameAsyncTask(mDocedListener);
                 mDecoder.execute(mRawContainer);
             }
-        }
+        } 
 
         @Override
         public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {
@@ -222,7 +222,11 @@ public class Acquisition extends Activity  {
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
-                    mRawContainer.addFrame(readBuf);
+                    mRawContainer.addFrame(readBuf,msg.arg1);
+                    //for (int i=0;i<msg.arg1;i++) {
+                        //Log.e("buf", "value:"+readBuf[i]);
+                    //}
+
                    // Log.e("data received : ", "value : " + readBuf.toString());
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:

@@ -21,9 +21,12 @@ public class RawContainer {
         rawFrameState = FrameState.END;
     }
 
-    public synchronized void addFrame(byte[] data){
+    public synchronized void addFrame(byte[] data, int size){
         if(container != null && data != null) {
             for(byte b: data) {
+                if(b == 0) {
+                    return;
+                }
                 container.add(new Byte(b));
                 //container.add(0, new Byte(b));
             }

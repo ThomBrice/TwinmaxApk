@@ -328,7 +328,11 @@ public class BTService {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
-                    Log.e("Value :" , buffer.toString());
+                    byte[] bufferBis = new byte[1024];
+                    for(int i=0;i<bytes;i++) {
+                        //bufferBis[i] = new Byte(buffer[i]).byteValue();
+                        //bufferBis[i] = buffer[i];
+                    }
                     // Send the obtained bytes to the UI Activity
                     mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
                             .sendToTarget();
