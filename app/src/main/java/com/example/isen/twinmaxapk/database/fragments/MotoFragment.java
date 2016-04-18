@@ -116,7 +116,7 @@ public class MotoFragment extends Fragment implements MotoChangeListener, Adapte
 
     @Override
     public void onMotoRetrieved(RealmResults<Moto> motos) {
-        final MotosAdapter adapter = new MotosAdapter(motos, context);
+        final MotosAdapter adapter = new MotosAdapter(motos, getActivity());
         listView.setAdapter(adapter);
     }
 

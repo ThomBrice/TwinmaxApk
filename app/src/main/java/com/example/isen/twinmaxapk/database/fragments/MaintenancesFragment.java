@@ -85,7 +85,7 @@ public class MaintenancesFragment extends Fragment implements MaintenanceChangeL
     @Override
     public void onMotoRetrieved(RealmList<Maintenance> maintenances) {
 
-        final MaintenancesAdapter adapter = new MaintenancesAdapter(maintenances, context, mListener);
+        final MaintenancesAdapter adapter = new MaintenancesAdapter(maintenances, getActivity(), mListener);
         listView.setAdapter(adapter);
     }
 

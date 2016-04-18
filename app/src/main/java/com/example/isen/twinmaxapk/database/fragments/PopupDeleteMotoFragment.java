@@ -76,6 +76,7 @@ public class PopupDeleteMotoFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
 
+                mListener.dismissPopupMoto();
                 mListener.onViewMoto();
             }
         });
