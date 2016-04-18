@@ -77,8 +77,7 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
             Byte actual = new Byte(container.getFirst());
             //byte currentByte = container.getFirst();
             byte currentByte = actual.byteValue();
-           // Log.w("Taille rawDataBuffer", "Valeur : " + (int)(currentByte & 0xFF));
-            Log.e("Current byte","Value : " + (int)(currentByte&0XFF));
+            //Log.e("Current byte","Value : " + (int)(currentByte&0XFF));
             switch (container.rawFrameState) {
                 case Head:
                     break;

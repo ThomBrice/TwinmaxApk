@@ -40,7 +40,8 @@ public class BTScanActivity extends Activity{
      * Member fields
      */
     private BluetoothAdapter mBtAdapter;
-
+    private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    private final static int REQUEST_ENABLE_BT=1;
     /**
      * Newly discovered devices
      */
@@ -53,6 +54,13 @@ public class BTScanActivity extends Activity{
         // Setup the window
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.bt_list_devices);
+        if(!mBluetoothAdapter.isEnabled())
+        {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+
+
 
         // Set result CANCELED in case the user backs out
         setResult(Activity.RESULT_CANCELED);

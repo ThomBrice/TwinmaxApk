@@ -66,7 +66,7 @@ public class Acquisition extends Activity  {
     //Scheudled task for graph refreshing !
     private Timer mTimer;
     private int refreshDelay = 400;
-
+    private boolean mustRefresh = true;
 
     public ObservableArrayList.OnListChangedCallback mCleanDataCallback = new ObservableList.OnListChangedCallback() {
         public int changeCounter = 0;
@@ -85,7 +85,8 @@ public class Acquisition extends Activity  {
         public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
             changeCounter++;
             //Log.w("TEST", "TEST");
-            if(changeCounter == 200) {
+           // Log.e("taille", "val: "+sender.size());
+                if (mCleanData.getSizeOfList() >= 600 && mustRefresh) {
 
                 /*if(sender.size() >= 200) {
                     subMeasure.clear();
@@ -95,13 +96,13 @@ public class Acquisition extends Activity  {
                     }
                 }*/
 
+                    mustRefresh = false;
+                    changeCounter = 0;
+                    Log.e("UPDATE GRAPH", "REfreshing GRAPH !");
+                    updateGraphs();
+                    //Log.w("Update Graph", "Graph starts update !");
+                }
 
-
-                changeCounter = 0;
-
-                updateGraphs();
-                //Log.w("Update Graph", "Graph starts update !");
-            }
         }
 
         @Override
@@ -245,6 +246,7 @@ public class Acquisition extends Activity  {
         // Get the device MAC address
         String address = data.getExtras()
                 .getString(BTScanActivity.EXTRA_DEVICE_ADDRESS);
+        mDeviceAdrress = address;
         // Get the BluetoothDevice object
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
 
@@ -440,7 +442,12 @@ public class Acquisition extends Activity  {
 
     protected void onResume() {
         super.onResume();
-
+        if(mBTService != null && mDeviceAdrress != null && mBluetoothAdapter != null) {
+            if(mBTService.getState() == BTService.STATE_NONE) {
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(mDeviceAdrress);
+                mBTService.connect(device, false);
+            }
+        }
         //Setup BLE
 
         //End of BLE setup
@@ -494,14 +501,22 @@ public class Acquisition extends Activity  {
     private void copyValToSub() {
         subMeasure.clear();
         int i= 0;
-        while(!mCleanData.isEmpty() && i<200) {
+        /*while(!mCleanData.isEmpty() && i<200) {
             subMeasure.add(new Measure(mCleanData.getFirst()));
             i++;
-        }
+        }*/
+        subMeasure = mCleanData.getGraphValues();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mBluetoothAdapter.disable();
+        finish();
+    }
+    private Thread mThread;
     private void updateGraphs() {
-        new Thread(new Runnable() {
+        mThread = new Thread(new Runnable() {
             @Override
             public void run() {
 
@@ -583,26 +598,28 @@ public class Acquisition extends Activity  {
                             //Log.w("Update Graph", "Graph starts update !");
                             chart.notifyDataSetChanged();
                             chart.invalidate();
-
+                            mustRefresh = true;
+                            Log.e("Can refresh", "CAN REFRESH !!");
                             //Log.w("Update Graph", "Graph starts update !");
                         }
                     });
 
             }
-        }).start();
+        });
+        mThread.start();
     }
 
 
     @Override
     protected void onPause() {
         super.onPause();
-
+        mBTService.stop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        mBTService.stop();
 
     }
 

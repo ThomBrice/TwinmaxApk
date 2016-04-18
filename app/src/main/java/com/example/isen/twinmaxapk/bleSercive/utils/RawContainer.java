@@ -22,6 +22,9 @@ public class RawContainer {
     }
 
     public synchronized void addFrame(byte[] data, int size){
+        if(container.size() >= 2000) {
+            container.clear();
+        }
         if(container != null && data != null) {
             for(byte b: data) {
                 if(b == 0) {

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.isen.twinmaxapk.database.Measure;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +15,35 @@ import java.util.List;
  */
 public class DataContainer {
     private ObservableArrayList<Measure> dataContainer;
+    private int graphToSkip;
+    private int sizeOfGraph;
+
+
+    public int getSizeOfList() {
+        synchronized (dataContainer) {
+            return dataContainer.size();
+        }
+    }
+
+    public void setSizeOfGraph(int sizeOfGraph) {
+        this.sizeOfGraph = sizeOfGraph;
+    }
+
+    public int getSizeOfGraph() {
+        return sizeOfGraph;
+    }
 
     public DataContainer(ObservableList.OnListChangedCallback callback) {
         dataContainer = new ObservableArrayList<>();
         dataContainer.addOnListChangedCallback(callback);
+        graphToSkip = 0;
+        sizeOfGraph = 200;
     }
 
     public boolean isEmpty() {
-        return dataContainer.isEmpty();
+        synchronized (dataContainer) {
+            return dataContainer.isEmpty();
+        }
     }
 
 
@@ -45,6 +67,39 @@ public class DataContainer {
     }
 
     private boolean isFFirst = true;
+
+    public List<Measure> getGraphValues() {
+        synchronized (dataContainer) {
+            List<Measure> tempList = new ArrayList<>();
+            for (int i = 0; i < sizeOfGraph; i++) {
+                if (!dataContainer.isEmpty()) {
+                    tempList.add(dataContainer.remove(0));
+                }
+            }
+
+
+            if (mSkipsGraph == null || mSkipsGraph.getState().compareTo(Thread.State.TERMINATED) == 0) {
+                mSkipsGraph = new SkipGraphs();
+                mSkipsGraph.start();
+            }
+
+            return tempList;
+            //return dataContainer.subList(0,200);
+        }
+    }
+    private SkipGraphs mSkipsGraph;
+    private class SkipGraphs extends Thread {
+        @Override
+        public void run() {
+            synchronized(dataContainer) {
+                for (int i = 0; i < graphToSkip; i++) {
+                    getGraphValues();
+                }
+            }
+        }
+    }
+
+
     public synchronized Measure getFirst() {
         if(isFFirst) {
             isFFirst = false;
@@ -62,10 +117,19 @@ public class DataContainer {
         return dataContainer.size();
     }
 
-    public synchronized void addValue(Measure newVal) {
-        if(dataContainer != null) {
-          //  Log.w("Taille data clean", "Taille CLEAN : " + dataContainer.size());
-            dataContainer.add(newVal);
+
+    public int getGraphToSkip() {
+        return graphToSkip;
+    }
+
+    public void addValue(Measure newVal) {
+        synchronized (dataContainer) {
+            if (dataContainer != null) {
+
+                dataContainer.add(newVal);
+                graphToSkip = (int) (dataContainer.size() / 1000) + 2;
+                //Log.e("Taille data clean", "Taille CLEAN : " + dataContainer.size() + "\n" +"TO SKIP : " + graphToSkip);
+            }
         }
     }
 }
