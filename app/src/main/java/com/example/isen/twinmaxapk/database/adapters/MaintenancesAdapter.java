@@ -72,9 +72,14 @@ public class MaintenancesAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Maintenance m = (Maintenance) getItem(position);
-                LineData lineData = fillLineData(m.getMeasures());
-                if (null != mListener){
-                    mListener.onViewGraph(lineData);
+                if (m.getMeasures().size() !=0) {
+                    LineData lineData = fillLineData(m.getMeasures());
+                    if (null != mListener) {
+                        mListener.onViewGraph(lineData);
+                    }
+                }
+                else{
+                    Toast.makeText(context,"Vous n'avez pas enregistré de courbes",Toast.LENGTH_SHORT).show();
                 }
             }
         });

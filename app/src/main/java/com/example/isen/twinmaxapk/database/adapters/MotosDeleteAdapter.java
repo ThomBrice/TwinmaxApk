@@ -5,19 +5,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 
+import com.example.isen.twinmaxapk.Compute;
 import com.example.isen.twinmaxapk.R;
+import com.example.isen.twinmaxapk.database.historic.Maintenance;
 import com.example.isen.twinmaxapk.database.historic.Moto;
 
 import java.util.List;
+
+import io.realm.RealmResults;
 
 public class MotosDeleteAdapter extends BaseAdapter {
 
     private final List<Moto> motos;
     private final LayoutInflater inflater;
     private CheckBox checkBox;
+    private Button delete;
 
     public MotosDeleteAdapter(List<Moto> motos, Context context) {
         this.motos = motos;
@@ -43,25 +50,32 @@ public class MotosDeleteAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
 
-        ViewHolderMotosDelete holder;
-        // If we don't have any convertView to reuse, inflate one
-        if (null == convertView){
-            convertView = inflater.inflate(R.layout.moto_delete_listitem, null);
 
-            // Instantiate the ViewHolderMotos
-            holder = new ViewHolderMotosDelete(convertView);
-            // Set as tag to the convertView to retrieve it easily
-            convertView.setTag(holder);
-        } else {
-            // Just retrieve the ViewHolderMotos instance in the tag of the view
-            holder = (ViewHolderMotosDelete) convertView.getTag();
-        }
+        final View view = inflater.inflate(R.layout.moto_delete_listitem, null);
 
         final Moto moto = (Moto) getItem(position);
 
-        holder.getDate().setText(moto.getDate());
-        holder.getName().setText(moto.getName());
+        final TextView name = (TextView) view.findViewById(R.id.motoNameDeleteListItem);
+        name.setText(moto.getName());
 
-        return convertView;
+        final TextView date = (TextView) view.findViewById(R.id.dateDeleteListItem);
+        date.setText(moto.getDate());
+
+        checkBox = (CheckBox) view.findViewById(R.id.checkboxDeleteListItem);
+
+        return view;
+    }
+
+    public void deleteItemSelected(int i){
+        if (checkBox.isChecked()){
+
+
+            Moto m = (Moto) getItem(i);
+
+
+            Compute.getRealm().beginTransaction();
+            ((Moto) getItem(i)).removeFromRealm();
+            Compute.getRealm().commitTransaction();
+        }
     }
 }

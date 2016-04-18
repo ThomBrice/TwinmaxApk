@@ -8,7 +8,8 @@ import io.realm.RealmObject;
 /**
  * Created by isen on 10/03/2016.
  */
-public class Moto extends RealmObject implements Serializable {
+public class Moto extends RealmObject  {
+    //implements Serializable
 
     private String name;
     private RealmList<Maintenance> maintenances;

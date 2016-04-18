@@ -96,6 +96,8 @@ public class MotoFragment extends Fragment implements MotoChangeListener, Adapte
         return rootView;
     }
 
+
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -135,7 +137,11 @@ public class MotoFragment extends Fragment implements MotoChangeListener, Adapte
     public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
                 if (null != mListener){
                     final Moto moto = (Moto) adapter.getItemAtPosition(position);
-                    mListener.onViewDelete();
+                    mListener.onViewPopupDeleteMoto(moto);
+                    /*
+                    final Moto moto = (Moto) adapter.getItemAtPosition(position);
+                    mListener.onViewDeleteMoto();
+                    */
                 }
         return true;
     }

@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -28,7 +29,7 @@ import java.io.Serializable;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
-public class MaintenancesFragment extends Fragment implements MaintenanceChangeListener {
+public class MaintenancesFragment extends Fragment implements MaintenanceChangeListener, AdapterView.OnItemLongClickListener {
 
     private ListView listView;
     private Context context;
@@ -38,8 +39,9 @@ public class MaintenancesFragment extends Fragment implements MaintenanceChangeL
     public MaintenancesFragment() {
     }
 
-    public MaintenancesFragment(Context context) {
+    public MaintenancesFragment(Context context, Moto moto) {
         this.context = context;
+        this.moto = moto;
     }
 
     @Override
@@ -55,10 +57,12 @@ public class MaintenancesFragment extends Fragment implements MaintenanceChangeL
         progressBar.setIndeterminate(true);
         listView.setEmptyView(progressBar);
 
+        //bmoto = (Moto) getArguments().getSerializable("moto");
+
         ViewGroup root = (ViewGroup) rootView.findViewById(R.id.maintenancesRootRelativeLayout);
         root.addView(progressBar);
 
-        moto = (Moto) getArguments().getSerializable("moto");
+        listView.setOnItemLongClickListener(this);
 
         return rootView;
     }
@@ -80,7 +84,23 @@ public class MaintenancesFragment extends Fragment implements MaintenanceChangeL
 
     @Override
     public void onMotoRetrieved(RealmList<Maintenance> maintenances) {
+
         final MaintenancesAdapter adapter = new MaintenancesAdapter(maintenances, context, mListener);
         listView.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
+
+        if (null != mListener) {
+            final Maintenance maintenance = (Maintenance) adapter.getItemAtPosition(position);
+            mListener.onViewPopupDeleteMaintenance(maintenance,moto);
+        /*
+        if (null != mListener){
+            mListener.onViewDeleteMaintenance(moto);
+        }
+        */
+        }
+            return true;
     }
 }

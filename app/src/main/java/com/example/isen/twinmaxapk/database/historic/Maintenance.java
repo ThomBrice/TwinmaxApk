@@ -4,9 +4,6 @@ package com.example.isen.twinmaxapk.database.historic;
 
 import com.example.isen.twinmaxapk.database.Measure;
 import com.example.isen.twinmaxapk.database.RealmMeasure;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,6 +23,7 @@ public class Maintenance extends RealmObject implements Serializable {
     public Maintenance(String  date, String note) {
         this.date = date;
         this.note = note;
+        measures = new RealmList<>();
     }
 
     public Maintenance(String date, String note, ArrayList<Measure> measures1) {

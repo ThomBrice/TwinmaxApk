@@ -36,5 +36,13 @@ public class ViewHolderMotosDelete {
     public void setDate(TextView date) {
         this.date = date;
     }
+
+    public CheckBox getCheckBox() {
+        return checkBox;
+    }
+
+    public void setCheckBox(CheckBox checkBox) {
+        this.checkBox = checkBox;
+    }
 }
 

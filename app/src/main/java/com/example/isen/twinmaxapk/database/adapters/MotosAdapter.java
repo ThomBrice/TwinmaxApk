@@ -17,11 +17,13 @@ public class MotosAdapter extends BaseAdapter {
 
     private final List<Moto> motos;
     private final LayoutInflater inflater;
+    private final Context context;
     private CheckBox checkBox;
 
     public MotosAdapter(List<Moto> motos, Context context) {
         this.motos = motos;
         inflater = LayoutInflater.from(context);
+        this.context = context;
     }
 
     @Override

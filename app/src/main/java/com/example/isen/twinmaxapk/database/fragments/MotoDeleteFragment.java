@@ -1,5 +1,6 @@
 package com.example.isen.twinmaxapk.database.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.example.isen.twinmaxapk.Compute;
@@ -15,6 +17,7 @@ import com.example.isen.twinmaxapk.R;
 import com.example.isen.twinmaxapk.database.adapters.MotosDeleteAdapter;
 import com.example.isen.twinmaxapk.database.historic.Moto;
 import com.example.isen.twinmaxapk.database.interfaces.MotoDeleteChangeListener;
+import com.example.isen.twinmaxapk.database.interfaces.MotoListener;
 
 import java.util.ArrayList;
 
@@ -26,6 +29,8 @@ public class MotoDeleteFragment extends Fragment implements MotoDeleteChangeList
     private ListView listView;
     private Button delete;
     private Context context;
+    private MotosDeleteAdapter adapter;
+    private MotoListener mListener;
 
     public MotoDeleteFragment() {
         // Required empty public constructor
@@ -50,11 +55,25 @@ public class MotoDeleteFragment extends Fragment implements MotoDeleteChangeList
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int size = adapter.getCount();
+                for (int i=0; i<size;i++){
+                    adapter.deleteItemSelected(i);
+                }
+                mListener.onViewMoto();
             }
         });
 
 
         return rootView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof MotoListener){
+            mListener = (MotoListener) activity;
+        }
     }
 
     @Override
@@ -66,7 +85,7 @@ public class MotoDeleteFragment extends Fragment implements MotoDeleteChangeList
 
     @Override
     public void onMotoDeleteRetrieved(RealmResults<Moto> motos) {
-        final MotosDeleteAdapter adapter = new MotosDeleteAdapter(motos, context);
+        adapter = new MotosDeleteAdapter(motos, context);
         listView.setAdapter(adapter);
     }
 
