@@ -14,15 +14,9 @@ import android.widget.Button;
 
 import com.example.isen.twinmaxapk.Compute;
 import com.example.isen.twinmaxapk.R;
-import com.example.isen.twinmaxapk.database.historic.Maintenance;
 import com.example.isen.twinmaxapk.database.historic.Moto;
 import com.example.isen.twinmaxapk.database.interfaces.MotoListener;
 
-import io.realm.RealmResults;
-
-/**
- * Created by isen on 15/04/2016.
- */
 public class PopupDeleteMotoFragment extends DialogFragment {
 
     private Context context;
@@ -75,13 +69,10 @@ public class PopupDeleteMotoFragment extends DialogFragment {
         noButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mListener.dismissPopupMoto();
                 mListener.onViewMoto();
             }
         });
-
-
 
         return rootView;
     }
