@@ -86,7 +86,7 @@ public class Acquisition extends Activity  {
             changeCounter++;
             //Log.w("TEST", "TEST");
            // Log.e("taille", "val: "+sender.size());
-                if (mCleanData.getSizeOfList() >= 600 && mustRefresh) {
+                //if (mCleanData.getSizeOfList() >= 600 && mustRefresh) {
 
                 /*if(sender.size() >= 200) {
                     subMeasure.clear();
@@ -98,10 +98,10 @@ public class Acquisition extends Activity  {
 
                     mustRefresh = false;
                     changeCounter = 0;
-                    Log.e("UPDATE GRAPH", "REfreshing GRAPH !");
+                  //  Log.e("UPDATE GRAPH", "REfreshing GRAPH !");
                     updateGraphs();
                     //Log.w("Update Graph", "Graph starts update !");
-                }
+                //}
 
         }
 
@@ -129,7 +129,9 @@ public class Acquisition extends Activity  {
         @Override
         public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
            //Log.e("value added !","value added");
+            //Log.e("Fuck there","Fuck there is data available ! That's fucking lame ");
             if(mDecoder == null || mDecoder.getStatus().compareTo(AsyncTask.Status.FINISHED) == 0) {
+                Log.e("Starting decodin","STARTING TO DECODE THE FUCKING LAME FRAME FUCK FUCK FUCK");
                 mDecoder = new DecodeFrameAsyncTask(mDocedListener);
                 mDecoder.execute(mRawContainer);
             }
@@ -152,6 +154,7 @@ public class Acquisition extends Activity  {
         public void addCleanData(Measure measure) {
             if(mCleanData != null) {
                 mCleanData.addValue(measure);
+                //Log.e("taille buffer : ", "Clean data : " + mCleanData.sizeOfList() + "\n Raw data : " + mRawContainer.getSize());
             }
         }
     };
@@ -223,6 +226,7 @@ public class Acquisition extends Activity  {
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
+
                     mRawContainer.addFrame(readBuf,msg.arg1);
                     //for (int i=0;i<msg.arg1;i++) {
                         //Log.e("buf", "value:"+readBuf[i]);
@@ -511,7 +515,8 @@ public class Acquisition extends Activity  {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        mBluetoothAdapter.disable();
+        mBTService.stop();
+        //mBluetoothAdapter.disable();
         finish();
     }
     private Thread mThread;
@@ -612,15 +617,14 @@ public class Acquisition extends Activity  {
 
     @Override
     protected void onPause() {
-        super.onPause();
         mBTService.stop();
+        super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         mBTService.stop();
-
+        super.onDestroy();
     }
 
     private void updateConnectionState(final int resourceId) {

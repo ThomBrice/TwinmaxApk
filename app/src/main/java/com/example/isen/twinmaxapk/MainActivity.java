@@ -2,6 +2,7 @@
 package com.example.isen.twinmaxapk;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
 
 import android.content.Intent;
@@ -18,6 +19,10 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 public class MainActivity extends Activity {
+
+    private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    private final static int REQUEST_ENABLE_BT=1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +44,17 @@ public class MainActivity extends Activity {
         acquisitionCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), BTScanActivity.class);
-                startActivity(intent);
+
+                if(!mBluetoothAdapter.isEnabled())
+                {
+                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    //star
+                    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), BTScanActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -59,5 +73,12 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Intent intent = new Intent(getApplicationContext(), BTScanActivity.class);
+        startActivity(intent);
     }
 }

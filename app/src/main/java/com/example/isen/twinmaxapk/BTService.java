@@ -330,11 +330,19 @@ public class BTService {
                     bytes = mmInStream.read(buffer);
                     byte[] bufferBis = new byte[1024];
                     for(int i=0;i<bytes;i++) {
-                        //bufferBis[i] = new Byte(buffer[i]).byteValue();
+                        bufferBis[i] = new Byte(buffer[i]).byteValue();
                         //bufferBis[i] = buffer[i];
+
                     }
+                    if(bytes <= 1024) {
+                        bufferBis[bytes] = -1;
+                    }
+                    for(int i=0;i<1024;i++) {
+                        buffer[i] = 0;
+                    }
+
                     // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
+                    mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, bufferBis)
                             .sendToTarget();
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);

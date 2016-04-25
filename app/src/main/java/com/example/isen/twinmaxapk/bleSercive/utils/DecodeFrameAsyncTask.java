@@ -6,6 +6,8 @@ import android.util.Log;
 import com.example.isen.twinmaxapk.Compute;
 import com.example.isen.twinmaxapk.database.Measure;
 
+import java.io.IOException;
+
 /**
  * Created by Matthieu on 21/03/2016.
  */
@@ -66,6 +68,7 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
             for(int i=0;i<4;i++) {
                 prevValues[i] = values[i];
             }
+            Log.e("Adding clean","Clean data added (pov : DEcoder");
         }
     }
 
@@ -74,7 +77,14 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
         while(!container.isRawContainerEmpty()) {
             //Log.e("Decoder", "Current Frame State" + container.rawFrameState );
             //TODO implement ?
-            Byte actual = new Byte(container.getFirst());
+            //Byte actual = new Byte(container.getFirst());
+            Byte actual = null;
+            try {
+                actual = container.getFirst();
+            } catch (IOException e) {
+
+                return;
+            }
             //byte currentByte = container.getFirst();
             byte currentByte = actual.byteValue();
             //Log.e("Current byte","Value : " + (int)(currentByte&0XFF));
