@@ -54,11 +54,11 @@ public class BTScanActivity extends Activity{
         // Setup the window
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.bt_list_devices);
-        if(!mBluetoothAdapter.isEnabled())
+        /*if(!mBluetoothAdapter.isEnabled())
         {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
+        }*/
 
 
 

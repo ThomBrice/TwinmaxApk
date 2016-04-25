@@ -30,8 +30,8 @@ public class BTService {
             UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     // Name for the SDP record when creating server socket
-    private static final String NAME_SECURE = "TwinMax2";
-    private static final String NAME_INSECURE = "TwinMax2";
+    private static final String NAME_SECURE = "TwinMax";
+    private static final String NAME_INSECURE = "TwinMax";
 
     private final BluetoothAdapter mAdapter;
     private final Handler mHandler;
