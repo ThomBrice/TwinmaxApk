@@ -25,13 +25,13 @@ public class BTService {
 
     // Unique UUID for this application
     private static final UUID MY_UUID_SECURE =
-            UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
+            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private static final UUID MY_UUID_INSECURE =
             UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     // Name for the SDP record when creating server socket
-    private static final String NAME_SECURE = "TwinMax";
-    private static final String NAME_INSECURE = "TwinMax";
+    private static final String NAME_SECURE = "TwinMax2";
+    private static final String NAME_INSECURE = "TwinMax2";
 
     private final BluetoothAdapter mAdapter;
     private final Handler mHandler;
@@ -333,6 +333,11 @@ public class BTService {
                         //bufferBis[i] = new Byte(buffer[i]).byteValue();
                         //bufferBis[i] = buffer[i];
                     }
+                    for(byte b:buffer) {
+                        if(b != 0) {
+                            Log.e("Value","Content : " + (int)(b & 0xFF));
+                        }
+                    }
                     // Send the obtained bytes to the UI Activity
                     mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
                             .sendToTarget();
@@ -342,6 +347,7 @@ public class BTService {
                     // Start the service over to restart listening mode
                     BTService.this.start();
                     break;
+
                 }
             }
         }

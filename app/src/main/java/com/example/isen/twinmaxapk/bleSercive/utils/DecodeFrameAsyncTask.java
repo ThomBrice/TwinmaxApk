@@ -35,10 +35,13 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
         if((int) (b & 0xFF) >= 128) {
             isGood = false;
         }
+        //return true;
         return isGood;//((int)b % 2 == 0) && ((int)(b&0XFF) <128);
     }
 
     private boolean isHeader(byte b) {
+        //return true;
+        //
         return ((int) (b & 0XFF) == 128);
     }
     private boolean isFirst = true;

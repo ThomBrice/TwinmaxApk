@@ -202,7 +202,7 @@ public class Acquisition extends Activity  {
                     switch (msg.arg1) {
                         case BTService.STATE_CONNECTED:
                             //setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                            Log.e("Connection érablie", "connection was established !");
+                            Log.e("Connection établie", "connection was established !");
                             mConnectionState.setText(R.string.connected);
                             break;
                         case BTService.STATE_CONNECTING:
@@ -224,6 +224,7 @@ public class Acquisition extends Activity  {
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     mRawContainer.addFrame(readBuf,msg.arg1);
+
                     //for (int i=0;i<msg.arg1;i++) {
                         //Log.e("buf", "value:"+readBuf[i]);
                     //}
@@ -511,7 +512,7 @@ public class Acquisition extends Activity  {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        mBluetoothAdapter.disable();
+        mBTService.stop();
         finish();
     }
     private Thread mThread;
@@ -534,7 +535,7 @@ public class Acquisition extends Activity  {
                             //Log.w("Update Graph", "Graph starts update !");
                             //Log.w("Size of sublist : ", "value : " + subMeasure.size());
                             for(int i=0;i<nbrPoints;i++) {
-                                if(subMeasure.get(i).get(0) >= 3500) {
+                                /*if(subMeasure.get(i).get(0) >= 3500) {
                                     MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
                                 } else {
                                     MeasuresList.get(i).setC0(3500);
@@ -553,17 +554,19 @@ public class Acquisition extends Activity  {
                                     MeasuresList.get(i).setC3(subMeasure.get(i).get(3));
                                 } else {
                                     MeasuresList.get(i).setC3(3500);
-                                }
-                                //MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
-                                //MeasuresList.get(i).setC1(subMeasure.get(i).get(1));
-                                //MeasuresList.get(i).setC2(subMeasure.get(i).get(2));
-                                //MeasuresList.get(i).setC3(subMeasure.get(i).get(3));
+                                }*/
+                                MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
+                                MeasuresList.get(i).setC1(subMeasure.get(i).get(1));
+                                MeasuresList.get(i).setC2(subMeasure.get(i).get(2));
+                                MeasuresList.get(i).setC3(subMeasure.get(i).get(3));
+
                             }
                             //Log.w("Update Graph", "Graph starts update !");
                             data0.clear();
                             data1.clear();
                             data2.clear();
                             data3.clear();
+
 
                             for (int i = 0; i < nbrPoints; i++) {
                                 data0.add(new Entry(MeasuresList.get(i).get(0), i));
@@ -595,6 +598,26 @@ public class Acquisition extends Activity  {
                                     }
                                 }
                             }
+                            float val1 = data1.get(0).getVal();
+                            float val2 = data2.get(0).getVal();
+                            float val3 = data3.get(0).getVal();
+                            for(int i = 1; i <= nbrPoints-1; i++){
+
+                                if(Math.abs(data1.get(i).getVal() - val1) >= 150){
+                                    data1.get(i).setVal(val1);
+                                    val1 = data1.get(i).getVal();
+                                }
+
+                                if(Math.abs(data2.get(i).getVal() - val2) >= 200){
+                                    data2.get(i).setVal(val2);
+                                    val2 = data2.get(i).getVal();
+                                }
+
+                                if(Math.abs(data3.get(i).getVal() - val3) >= 250){
+                                    data3.get(i).setVal(val3);
+                                    val3 = data3.get(i).getVal();
+                                }
+                            }
                             //Log.w("Update Graph", "Graph starts update !");
                             chart.notifyDataSetChanged();
                             chart.invalidate();
@@ -612,15 +635,14 @@ public class Acquisition extends Activity  {
 
     @Override
     protected void onPause() {
-        super.onPause();
         mBTService.stop();
+        super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         mBTService.stop();
-
+        super.onDestroy();
     }
 
     private void updateConnectionState(final int resourceId) {
