@@ -27,7 +27,7 @@ public class RawContainer {
         }
         if(container != null && data != null) {
             for(byte b: data) {
-                if(b == 0) {
+                if(b == -1) {
                     return;
                 }
                 container.add(new Byte(b));

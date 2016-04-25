@@ -68,6 +68,9 @@ public class Acquisition extends Activity  {
     private int refreshDelay = 400;
     private boolean mustRefresh = true;
 
+
+    private final int FILER_TRIGGER = 500;
+
     public ObservableArrayList.OnListChangedCallback mCleanDataCallback = new ObservableList.OnListChangedCallback() {
         public int changeCounter = 0;
 
@@ -98,7 +101,7 @@ public class Acquisition extends Activity  {
 
                     mustRefresh = false;
                     changeCounter = 0;
-                    Log.e("UPDATE GRAPH", "REfreshing GRAPH !");
+                   // Log.e("UPDATE GRAPH", "REfreshing GRAPH !");
                     updateGraphs();
                     //Log.w("Update Graph", "Graph starts update !");
                 }
@@ -598,22 +601,28 @@ public class Acquisition extends Activity  {
                                     }
                                 }
                             }
-                            float val1 = data1.get(0).getVal();
+                            //float val0 = data0.get(0).getVal();
+                            //float val1 = data1.get(0).getVal();
                             float val2 = data2.get(0).getVal();
                             float val3 = data3.get(0).getVal();
                             for(int i = 1; i <= nbrPoints-1; i++){
 
-                                if(Math.abs(data1.get(i).getVal() - val1) >= 150){
+                               /* if(Math.abs(data0.get(i).getVal() - val0) >= FILER_TRIGGER){
+                                    data0.get(i).setVal(val0);
+                                    val0 = data0.get(i).getVal();
+                                }*/
+
+                                /*if(Math.abs(data1.get(i).getVal() - val1) >= FILER_TRIGGER - 150){
                                     data1.get(i).setVal(val1);
                                     val1 = data1.get(i).getVal();
-                                }
+                                }*/
 
-                                if(Math.abs(data2.get(i).getVal() - val2) >= 200){
+                                if(Math.abs(data2.get(i).getVal() - val2) >= FILER_TRIGGER + 500){
                                     data2.get(i).setVal(val2);
                                     val2 = data2.get(i).getVal();
                                 }
 
-                                if(Math.abs(data3.get(i).getVal() - val3) >= 250){
+                                if(Math.abs(data3.get(i).getVal() - val3) >= FILER_TRIGGER + 500){
                                     data3.get(i).setVal(val3);
                                     val3 = data3.get(i).getVal();
                                 }
@@ -622,7 +631,7 @@ public class Acquisition extends Activity  {
                             chart.notifyDataSetChanged();
                             chart.invalidate();
                             mustRefresh = true;
-                            Log.e("Can refresh", "CAN REFRESH !!");
+                            //Log.e("Can refresh", "CAN REFRESH !!");
                             //Log.w("Update Graph", "Graph starts update !");
                         }
                     });
