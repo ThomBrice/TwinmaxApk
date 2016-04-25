@@ -339,11 +339,11 @@ public class BTService {
                     for(int i=0;i<bytes;i++) {
                         buffer[i] = -1;
                     }
-                    for(byte b:bufferBis) {
+                    /*for(byte b:bufferBis) {
                         if(b != -1 && b !=0) {
-                            Log.e("Value","Content : " + (int)(b & 0xFF));
+                            //Log.e("Value","Content : " + (int)(b & 0xFF));
                         }
-                    }
+                    }*/
                     // Send the obtained bytes to the UI Activity
                     mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, bufferBis)
                             .sendToTarget();

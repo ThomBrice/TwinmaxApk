@@ -22,7 +22,7 @@ public class RawContainer {
     }
 
     public synchronized void addFrame(byte[] data, int size){
-        if(container.size() >= 2000) {
+        if(container.size() >= 5000) {
             container.clear();
         }
         if(container != null && data != null) {

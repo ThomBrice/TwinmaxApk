@@ -69,7 +69,10 @@ public class Acquisition extends Activity  {
     private boolean mustRefresh = true;
 
 
-    private final int FILER_TRIGGER = 500;
+    //Conv fatctor  = - 315)/1.837
+    private final int DIF_FACTOR = 315;
+    private final double CONV_FACTOR = 1.837;
+    private final int FILER_TRIGGER = 400;
 
     public ObservableArrayList.OnListChangedCallback mCleanDataCallback = new ObservableList.OnListChangedCallback() {
         public int changeCounter = 0;
@@ -89,7 +92,7 @@ public class Acquisition extends Activity  {
             changeCounter++;
             //Log.w("TEST", "TEST");
            // Log.e("taille", "val: "+sender.size());
-                if (mCleanData.getSizeOfList() >= 600 && mustRefresh) {
+                if (mCleanData.getSizeOfList() >= 600 && mustRefresh && changeCounter >= 200) {
 
                 /*if(sender.size() >= 200) {
                     subMeasure.clear();
@@ -312,7 +315,7 @@ public class Acquisition extends Activity  {
         chart.setTouchEnabled(false);
         chart.getAxisLeft().setDrawGridLines(false);
         chart.getXAxis().setDrawGridLines(false);
-        chart.setDescription("Acquisition");
+        chart.setDescription("Pression (mBar)");
         chart.setTouchEnabled(true);
         //options data0
         chart.getLineData().getDataSetByIndex(0).setDrawCubic(true);
@@ -501,15 +504,75 @@ public class Acquisition extends Activity  {
         }).start();*/
 
     }
-
+    private int mOscTrigger = 1850;
+    private final int DELTA_TRIGGER = 25;
     private void copyValToSub() {
-        subMeasure.clear();
-        int i= 0;
-        /*while(!mCleanData.isEmpty() && i<200) {
-            subMeasure.add(new Measure(mCleanData.getFirst()));
-            i++;
-        }*/
-        subMeasure = mCleanData.getGraphValues();
+        synchronized (subMeasure) {
+            int i = 0;
+            int tryCounter = 0;
+            boolean found = false;
+            while (!found) {
+                i = 0;
+                tryCounter++;
+
+                subMeasure.clear();
+                subMeasure = mCleanData.getGraphValues();
+                if (tryCounter >= 50) {
+                    return;
+
+                }
+                if (subMeasure.size() != 200) {
+                    continue;
+                }
+                if (mOscTrigger != 0) {
+                    while (i < 200 && !found) {
+                        if (subMeasure.get(0) != null) {
+                            if ((subMeasure.get(0).get(0) >= mOscTrigger - DELTA_TRIGGER) && (subMeasure.get(0).get(0) <= mOscTrigger + DELTA_TRIGGER)) {
+                                found = true;
+                                fillSubMeasureCorrectly(i);
+                            }
+
+                        } else {
+                            subMeasure.remove(0);
+                        }
+                        i++;
+                    }
+                    if (!found) {
+                        //TODO should remove found = true ! b
+                        found = true;
+                        fillSubMeasureCorrectly(i);
+                    }
+                } else {
+                    //mOscTrigger = subMeasure.get(0).get(0);
+
+                    return;
+                }
+            }
+            findOscTrigger();
+        }
+    }
+
+    private void findOscTrigger() {
+        /*int max = 0;
+        for(Measure m:subMeasure) {
+            if(m != null) {
+                if (m.get(0) > max) {
+                    max = m.get(0);
+                }
+            }
+        }
+        mOscTrigger = max;*/
+    }
+
+    private void fillSubMeasureCorrectly(int startingCorrectFrame) {
+        Log.e("Value deleted","Value DELETED : " + startingCorrectFrame + " ; value to ADD : " );
+        for(int i=0;i<startingCorrectFrame-1;i++) {
+            if(subMeasure.size() >0) {
+                subMeasure.remove(0);
+            }
+            subMeasure.add(mCleanData.getFirst());
+        }
+        Log.e("SubMeasure size", "After DELETION : " + subMeasure.size());
     }
 
     @Override
@@ -532,12 +595,18 @@ public class Acquisition extends Activity  {
                             copyValToSub();
                             //nbrPoints = subMeasure.size();
                             nbrPoints = 200;
+                            //nbrPoints = subMeasure.size();
+                            if(nbrPoints <200) {
+                                return;
+                            }
 
-                           // addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
-                            //removeItems(nbrPoints);
-                            //Log.w("Update Graph", "Graph starts update !");
-                            //Log.w("Size of sublist : ", "value : " + subMeasure.size());
-                            for(int i=0;i<nbrPoints;i++) {
+                            synchronized (subMeasure) {
+                                Log.e("NBRpoint", "Taile subMeasure : " + nbrPoints);
+                                // addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
+                                //removeItems(nbrPoints);
+                                //Log.w("Update Graph", "Graph starts update !");
+                                //Log.w("Size of sublist : ", "value : " + subMeasure.size());
+                                for (int i = 0; i < nbrPoints; i++) {
                                 /*if(subMeasure.get(i).get(0) >= 3500) {
                                     MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
                                 } else {
@@ -558,11 +627,15 @@ public class Acquisition extends Activity  {
                                 } else {
                                     MeasuresList.get(i).setC3(3500);
                                 }*/
-                                MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
-                                MeasuresList.get(i).setC1(subMeasure.get(i).get(1));
-                                MeasuresList.get(i).setC2(subMeasure.get(i).get(2));
-                                MeasuresList.get(i).setC3(subMeasure.get(i).get(3));
-
+                                    if (i < subMeasure.size()) {
+                                        if (subMeasure.get(i) != null) {
+                                            MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
+                                            MeasuresList.get(i).setC1(subMeasure.get(i).get(1));
+                                            MeasuresList.get(i).setC2(subMeasure.get(i).get(2));
+                                            MeasuresList.get(i).setC3(subMeasure.get(i).get(3));
+                                        }
+                                    }
+                                }
                             }
                             //Log.w("Update Graph", "Graph starts update !");
                             data0.clear();
@@ -571,7 +644,7 @@ public class Acquisition extends Activity  {
                             data3.clear();
 
 
-                            for (int i = 0; i < nbrPoints; i++) {
+                            /*for (int i = 0; i < nbrPoints; i++) {
                                 data0.add(new Entry(MeasuresList.get(i).get(0), i));
                                 //data0.get(i).setXIndex(i);
                                 //data0.get(i).setVal(MeasuresList.get(i).get(0));
@@ -600,22 +673,44 @@ public class Acquisition extends Activity  {
                                         //labelsInit.remove(i);
                                     }
                                 }
-                            }
-                            //float val0 = data0.get(0).getVal();
-                            //float val1 = data1.get(0).getVal();
-                            float val2 = data2.get(0).getVal();
-                            float val3 = data3.get(0).getVal();
+                            }*/
+                            float val0 = MeasuresList.get(0).get(0);
+                            float val1 = MeasuresList.get(0).get(1);
+                            float val2 = MeasuresList.get(0).get(2);
+                            float val3 = MeasuresList.get(0).get(3);
                             for(int i = 1; i <= nbrPoints-1; i++){
 
-                               /* if(Math.abs(data0.get(i).getVal() - val0) >= FILER_TRIGGER){
-                                    data0.get(i).setVal(val0);
-                                    val0 = data0.get(i).getVal();
-                                }*/
+                                if(Math.abs(MeasuresList.get(i).get(0) - val0) >= FILER_TRIGGER){
+                                    MeasuresList.get(i).setC0((int)val0);
+                                }
+                                data0.add(new Entry((float)((MeasuresList.get(i-1).get(0)-DIF_FACTOR)/CONV_FACTOR),i-1));
+                                val0 = MeasuresList.get(i).get(0);
 
-                                /*if(Math.abs(data1.get(i).getVal() - val1) >= FILER_TRIGGER - 150){
+                                if(Math.abs(MeasuresList.get(i).get(1) - val1) >= FILER_TRIGGER){
+                                    MeasuresList.get(i).setC1((int)val1);
+                                }
+                                data1.add(new Entry((float)((MeasuresList.get(i-1).get(1)-DIF_FACTOR)/CONV_FACTOR),i-1));
+                                val1 = MeasuresList.get(i).get(1);
+
+
+                                if(Math.abs(MeasuresList.get(i).get(2) - val2) >= FILER_TRIGGER){
+                                    MeasuresList.get(i).setC2((int)val2);
+                                }
+                                data2.add(new Entry((float)((MeasuresList.get(i-1).get(2)-315)/CONV_FACTOR),i-1));
+                                val2 = MeasuresList.get(i).get(2);
+
+
+                                if(Math.abs(MeasuresList.get(i).get(3) - val3) >= FILER_TRIGGER){
+                                    MeasuresList.get(i).setC3((int)val3);
+                                }
+                                data3.add(new Entry((float)((MeasuresList.get(i-1).get(0)-315)/CONV_FACTOR),i-1));
+                                val3 = MeasuresList.get(i).get(3);
+
+                                /*
+                                if(Math.abs(data1.get(i).getVal() - val1) >= FILER_TRIGGER - 150){
                                     data1.get(i).setVal(val1);
                                     val1 = data1.get(i).getVal();
-                                }*/
+                                }
 
                                 if(Math.abs(data2.get(i).getVal() - val2) >= FILER_TRIGGER + 500){
                                     data2.get(i).setVal(val2);
@@ -625,7 +720,7 @@ public class Acquisition extends Activity  {
                                 if(Math.abs(data3.get(i).getVal() - val3) >= FILER_TRIGGER + 500){
                                     data3.get(i).setVal(val3);
                                     val3 = data3.get(i).getVal();
-                                }
+                                }*/
                             }
                             //Log.w("Update Graph", "Graph starts update !");
                             chart.notifyDataSetChanged();
@@ -731,7 +826,7 @@ public class Acquisition extends Activity  {
         Measure measure41 = new Measure(98);
         Measure measure42 = new Measure(100);
         Measure measure43 = new Measure(101);
-        Measure measure44 = new Measure(4101);
+        Measure measure44 = new Measure((int)((2250-315)/CONV_FACTOR));
         Measure measure45 = new Measure(100);
         Measure measure46 = new Measure(100);
         Measure measure47 = new Measure(100);
@@ -882,8 +977,8 @@ public class Acquisition extends Activity  {
         Measure measure192 = new Measure(100);
         Measure measure193 = new Measure(101);
         Measure measure194 = new Measure(101);
-        Measure measure195 = new Measure(4100);
-        Measure measure196 = new Measure(-2100);
+        Measure measure195 = new Measure(100);
+        Measure measure196 = new Measure(100);
         Measure measure197 = new Measure(100);
         Measure measure198 = new Measure(99);
         Measure measure199 = new Measure(100);
@@ -987,7 +1082,7 @@ public class Acquisition extends Activity  {
         Measure measure297 = new Measure(100);
         Measure measure298 = new Measure(101);
         Measure measure299 = new Measure(100);
-        Measure measure300 = new Measure(4499);
+        Measure measure300 = new Measure((int)((2199-315)/CONV_FACTOR));
 
         MeasuresList.add(measure1);
         MeasuresList.add(measure2);

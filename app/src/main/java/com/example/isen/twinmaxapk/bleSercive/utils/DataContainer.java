@@ -72,7 +72,7 @@ public class DataContainer {
         synchronized (dataContainer) {
             List<Measure> tempList = new ArrayList<>();
             for (int i = 0; i < sizeOfGraph; i++) {
-                if (!dataContainer.isEmpty()) {
+                if (!dataContainer.isEmpty() && dataContainer.size() > 0) {
                     tempList.add(dataContainer.remove(0));
                 }
             }
@@ -103,7 +103,7 @@ public class DataContainer {
     public synchronized Measure getFirst() {
         if(isFFirst) {
             isFFirst = false;
-        } else if(!dataContainer.isEmpty()){
+        } else if(!dataContainer.isEmpty() && dataContainer.size() > 0){
             dataContainer.remove(0);
         }
         if(!dataContainer.isEmpty()) {
