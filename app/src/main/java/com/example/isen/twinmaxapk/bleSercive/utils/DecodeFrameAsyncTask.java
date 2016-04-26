@@ -56,14 +56,14 @@ public class DecodeFrameAsyncTask extends AsyncTask<RawContainer, Integer, Integ
         }
         if(mListener != null) {
             for(int i=0;i<4;i++) {
-                if(Math.abs(values[i] - prevValues[i]) > 50) {
+                /*if(Math.abs(values[i] - prevValues[i]) > 50) {
                     values[i] = (prevValues[i] + values[i])/2;
                     //values[i] = 3500;
                 }
                 if(values[i] <= 0) {
                     values[i] = prevValues[i];
                     //values[i] = 3500;
-                }
+                }*/
             }
             mListener.addCleanData(new Measure(values[0], values[1], values[2], values[3]));
             for(int i=0;i<4;i++) {

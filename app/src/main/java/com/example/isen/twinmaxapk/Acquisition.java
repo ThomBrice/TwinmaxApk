@@ -455,54 +455,6 @@ public class Acquisition extends Activity  {
                 mBTService.connect(device, false);
             }
         }
-        //Setup BLE
-
-        //End of BLE setup
-
-/*
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //nbrPoints = valeurButton;
-                            nbrPoints = 200;
-                            addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
-                            removeItems(nbrPoints);
-                            for (int i = 0; i <= nbrPoints; i++) {
-                                data0.get(i).setVal(MeasuresList.get(i).get(0));
-                                data1.get(i).setVal(MeasuresList.get(i).get(1));
-                                data2.get(i).setVal(MeasuresList.get(i).get(2));
-                                data3.get(i).setVal(MeasuresList.get(i).get(3));
-                            }
-                            if (nbrPoints > labelsInit.size()) {
-                                for (int i = 0; i <= (nbrPoints - labelsInit.size()); i++) {
-                                    labelsInit.add("");
-                                }
-                            } else {
-                                if (nbrPoints < labelsInit.size()) {
-                                    for (int i = nbrPoints; i < labelsInit.size() - 1; i++) {
-                                        labelsInit.remove(i);
-                                    }
-                                }
-                            }
-                            chart.notifyDataSetChanged();
-                            chart.invalidate();
-                        }
-                    });
-
-                    // pause
-                    try {
-                        Thread.sleep(60);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();*/
-
     }
     private int mOscTrigger = 1850;
     private final int DELTA_TRIGGER = 25;
@@ -586,47 +538,45 @@ public class Acquisition extends Activity  {
         mThread = new Thread(new Runnable() {
             @Override
             public void run() {
-
+                    copyValToSub();
+                nbrPoints = 200;
+                synchronized (subMeasure) {
+                    Log.e("NBRpoint", "Taile subMeasure : " + nbrPoints);
+                    // addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
+                    //removeItems(nbrPoints);
+                    //Log.w("Update Graph", "Graph starts update !");
+                    //Log.w("Size of sublist : ", "value : " + subMeasure.size());
+                    for (int i = 0; i < nbrPoints; i++) {
+                        if (i < subMeasure.size()) {
+                            if (subMeasure.get(i) != null) {
+                                MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
+                                MeasuresList.get(i).setC1(subMeasure.get(i).get(1));
+                                MeasuresList.get(i).setC2(subMeasure.get(i).get(2));
+                                MeasuresList.get(i).setC3(subMeasure.get(i).get(3));
+                            }
+                        }
+                    }
+                }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
                             //nbrPoints = valeurButton;
-                            copyValToSub();
+                            ////copyValToSub();
                             //nbrPoints = subMeasure.size();
-                            nbrPoints = 200;
+                            ////nbrPoints = 200;
                             //nbrPoints = subMeasure.size();
-                            if(nbrPoints <200) {
+                            /*if(nbrPoints <200) {
                                 return;
-                            }
+                            }*/
 
-                            synchronized (subMeasure) {
+                            /*synchronized (subMeasure) {
                                 Log.e("NBRpoint", "Taile subMeasure : " + nbrPoints);
                                 // addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
                                 //removeItems(nbrPoints);
                                 //Log.w("Update Graph", "Graph starts update !");
                                 //Log.w("Size of sublist : ", "value : " + subMeasure.size());
                                 for (int i = 0; i < nbrPoints; i++) {
-                                /*if(subMeasure.get(i).get(0) >= 3500) {
-                                    MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
-                                } else {
-                                    MeasuresList.get(i).setC0(3500);
-                                }
-                                if(subMeasure.get(i).get(0) >= 3500) {
-                                    MeasuresList.get(i).setC1(subMeasure.get(i).get(1));
-                                } else {
-                                    MeasuresList.get(i).setC1(3500);
-                                }
-                                if(subMeasure.get(i).get(0) >= 3500) {
-                                    MeasuresList.get(i).setC2(subMeasure.get(i).get(2));
-                                } else {
-                                    MeasuresList.get(i).setC2(3500);
-                                }
-                                if(subMeasure.get(i).get(0) >= 3500) {
-                                    MeasuresList.get(i).setC3(subMeasure.get(i).get(3));
-                                } else {
-                                    MeasuresList.get(i).setC3(3500);
-                                }*/
                                     if (i < subMeasure.size()) {
                                         if (subMeasure.get(i) != null) {
                                             MeasuresList.get(i).setC0(subMeasure.get(i).get(0));
@@ -636,49 +586,31 @@ public class Acquisition extends Activity  {
                                         }
                                     }
                                 }
-                            }
+                            }*/
                             //Log.w("Update Graph", "Graph starts update !");
                             data0.clear();
                             data1.clear();
                             data2.clear();
                             data3.clear();
 
-
-                            /*for (int i = 0; i < nbrPoints; i++) {
-                                data0.add(new Entry(MeasuresList.get(i).get(0), i));
-                                //data0.get(i).setXIndex(i);
-                                //data0.get(i).setVal(MeasuresList.get(i).get(0));
-
-                                data1.add(new Entry(MeasuresList.get(i).get(1), i));
-                                //data1.get(i).setXIndex(i);
-                                //data1.get(i).setVal(MeasuresList.get(i).get(1));
-
-                                data2.add(new Entry(MeasuresList.get(i).get(2), i));
-                                //data2.get(i).setXIndex(i);
-                                //data2.get(i).setVal(MeasuresList.get(i).get(2));
-
-                                data3.add(new Entry(MeasuresList.get(i).get(3), i));
-                                //data3.get(i).setXIndex(i);
-                                //data3.get(i).setVal(MeasuresList.get(i).get(3));
-                            }
-                            //Log.w("Update Graph", "Graph starts update !");
-                            if (nbrPoints > labelsInit.size()) {
-                                for (int i = 0; i <= (nbrPoints - labelsInit.size()); i++) {
-                                    labelsInit.add("");
-                                }
-                              //  Log.w("Update Graph", "Graph starts update !");
-                            } else {
-                                if (nbrPoints < labelsInit.size()) {
-                                    for (int i = nbrPoints; i < labelsInit.size() - 1; i++) {
-                                        //labelsInit.remove(i);
-                                    }
-                                }
-                            }*/
                             float val0 = MeasuresList.get(0).get(0);
                             float val1 = MeasuresList.get(0).get(1);
                             float val2 = MeasuresList.get(0).get(2);
                             float val3 = MeasuresList.get(0).get(3);
-                            for(int i = 1; i <= nbrPoints-1; i++){
+                            for(int i = 1; i < nbrPoints; i++){
+
+                                /*float v0 = (MeasuresList.get(i-2).get(0) + MeasuresList.get(i-1).get(0) + MeasuresList.get(i).get(0) + MeasuresList.get(i+1).get(0) + MeasuresList.get(i+2).get(0))/5;
+                                float v1 = (MeasuresList.get(i-2).get(1) + MeasuresList.get(i-1).get(1) + MeasuresList.get(i).get(1) + MeasuresList.get(i+1).get(1) + MeasuresList.get(i+2).get(1))/5;
+                                float v2 = (MeasuresList.get(i-2).get(2) + MeasuresList.get(i-1).get(2) + MeasuresList.get(i).get(2) + MeasuresList.get(i+1).get(2) + MeasuresList.get(i+2).get(2))/5;
+                                float v3 = (MeasuresList.get(i-2).get(3) + MeasuresList.get(i-1).get(3) + MeasuresList.get(i).get(3) + MeasuresList.get(i+1).get(3) + MeasuresList.get(i+2).get(3))/5;
+
+
+                                data0.add(new Entry((float)((v0 - DIF_FACTOR)/CONV_FACTOR),i-2));
+                                data1.add(new Entry((float)((v1 - DIF_FACTOR)/CONV_FACTOR),i-2));
+                                data2.add(new Entry((float)((v2 - DIF_FACTOR)/CONV_FACTOR),i-2));
+                                data3.add(new Entry((float)((v3 - DIF_FACTOR)/CONV_FACTOR),i-2));*/
+
+
 
                                 if(Math.abs(MeasuresList.get(i).get(0) - val0) >= FILER_TRIGGER){
                                     MeasuresList.get(i).setC0((int)val0);
@@ -705,22 +637,6 @@ public class Acquisition extends Activity  {
                                 }
                                 data3.add(new Entry((float)((MeasuresList.get(i-1).get(0)-315)/CONV_FACTOR),i-1));
                                 val3 = MeasuresList.get(i).get(3);
-
-                                /*
-                                if(Math.abs(data1.get(i).getVal() - val1) >= FILER_TRIGGER - 150){
-                                    data1.get(i).setVal(val1);
-                                    val1 = data1.get(i).getVal();
-                                }
-
-                                if(Math.abs(data2.get(i).getVal() - val2) >= FILER_TRIGGER + 500){
-                                    data2.get(i).setVal(val2);
-                                    val2 = data2.get(i).getVal();
-                                }
-
-                                if(Math.abs(data3.get(i).getVal() - val3) >= FILER_TRIGGER + 500){
-                                    data3.get(i).setVal(val3);
-                                    val3 = data3.get(i).getVal();
-                                }*/
                             }
                             //Log.w("Update Graph", "Graph starts update !");
                             chart.notifyDataSetChanged();

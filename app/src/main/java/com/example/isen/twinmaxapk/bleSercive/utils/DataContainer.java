@@ -106,7 +106,7 @@ public class DataContainer {
         } else if(!dataContainer.isEmpty() && dataContainer.size() > 0){
             dataContainer.remove(0);
         }
-        if(!dataContainer.isEmpty()) {
+        if(!dataContainer.isEmpty() && dataContainer.size() > 0) {
             return dataContainer.get(0);
         } else {
             return null;
