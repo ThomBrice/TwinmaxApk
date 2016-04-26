@@ -516,6 +516,22 @@ public class Acquisition extends Activity  {
         mOscTrigger = max;
     }
 
+    private void smoothenSubMeasureIntoMeasureList() {
+
+        for(int i=2;i<nbrPoints - 2;i++) {
+            if (i < subMeasure.size()) {
+                if (subMeasure.get(i) != null) {
+                   // Log.e("Adding a value","ADDING A VALUE INTO BEACH");
+                    MeasuresList.get(i-2).setC0((subMeasure.get(i-2).get(0) + subMeasure.get(i-1).get(0) + subMeasure.get(i).get(0) + subMeasure.get(i+1).get(0) + subMeasure.get(i+2).get(0))/5);
+                    MeasuresList.get(i-2).setC1((subMeasure.get(i-2).get(1) + subMeasure.get(i-1).get(1) + subMeasure.get(i).get(1) + subMeasure.get(i+1).get(1) + subMeasure.get(i+2).get(1))/5);
+                    MeasuresList.get(i-2).setC2((subMeasure.get(i-2).get(2) + subMeasure.get(i-1).get(2) + subMeasure.get(i).get(2) + subMeasure.get(i+1).get(2) + subMeasure.get(i+2).get(2))/5);
+                    MeasuresList.get(i-2).setC3((subMeasure.get(i-2).get(3) + subMeasure.get(i-1).get(3) + subMeasure.get(i).get(3) + subMeasure.get(i+1).get(3) + subMeasure.get(i+2).get(3))/5);
+                }
+            }
+        }
+    }
+
+
     private void fillSubMeasureCorrectly(int startingCorrectFrame) {
         //Log.e("Value deleted","Value DELETED : " + startingCorrectFrame + " ; value to ADD : " );
         for(int i=0;i<startingCorrectFrame;i++) {
@@ -545,10 +561,6 @@ public class Acquisition extends Activity  {
                 nbrPoints = subMeasure.size();
                 synchronized (subMeasure) {
                     Log.e("NBRpoint", "Taile subMeasure : " + subMeasure.size());
-                    // addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
-                    //removeItems(nbrPoints);
-                    //Log.w("Update Graph", "Graph starts update !");
-                    //Log.w("Size of sublist : ", "value : " + subMeasure.size());
                     for (int i = 0; i < nbrPoints; i++) {
                         if (i < subMeasure.size()) {
                             if (subMeasure.get(i) != null) {
@@ -559,6 +571,7 @@ public class Acquisition extends Activity  {
                             }
                         }
                     }
+                    //smoothenSubMeasureIntoMeasureList();
                 }
                     runOnUiThread(new Runnable() {
                         @Override
@@ -600,6 +613,7 @@ public class Acquisition extends Activity  {
                             float val1 = MeasuresList.get(0).get(1);
                             float val2 = MeasuresList.get(0).get(2);
                             float val3 = MeasuresList.get(0).get(3);
+                            Log.e("MeasureList","Size : " + MeasuresList.size() + " ; First value : " + val0 + ";" + val1 + ";" + val2 + ";" + val3 + ";");
                             for(int i = 1; i < nbrPoints-1; i++){
 
                                 /*float v0 = (MeasuresList.get(i-2).get(0) + MeasuresList.get(i-1).get(0) + MeasuresList.get(i).get(0) + MeasuresList.get(i+1).get(0) + MeasuresList.get(i+2).get(0))/5;
@@ -627,13 +641,11 @@ public class Acquisition extends Activity  {
                                 data1.add(new Entry((float)((MeasuresList.get(i-1).get(1)-DIF_FACTOR)/CONV_FACTOR),i-1));
                                 val1 = MeasuresList.get(i).get(1);
 
-
                                 if(Math.abs(MeasuresList.get(i).get(2) - val2) >= FILER_TRIGGER){
                                     MeasuresList.get(i).setC2((int)val2);
                                 }
                                 data2.add(new Entry((float)((MeasuresList.get(i-1).get(2)-315)/CONV_FACTOR),i-1));
                                 val2 = MeasuresList.get(i).get(2);
-
 
                                 if(Math.abs(MeasuresList.get(i).get(3) - val3) >= FILER_TRIGGER){
                                     MeasuresList.get(i).setC3((int)val3);
