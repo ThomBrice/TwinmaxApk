@@ -456,8 +456,9 @@ public class Acquisition extends Activity  {
             }
         }
     }
-    private int mOscTrigger = 1850;
-    private final int DELTA_TRIGGER = 25;
+    //private int mOscTrigger = 1650;
+    private int mOscTrigger = 0;
+    private final int DELTA_TRIGGER = 50;
     private void copyValToSub() {
         synchronized (subMeasure) {
             int i = 0;
@@ -469,7 +470,10 @@ public class Acquisition extends Activity  {
 
                 subMeasure.clear();
                 subMeasure = mCleanData.getGraphValues();
-                if (tryCounter >= 50) {
+                if (tryCounter >= 5) {
+                    fillSubMeasureCorrectly(200);
+                    //Log.e("Didn'tfind","Couldn't find trigger point ! ");
+                    findOscTrigger();
                     return;
 
                 }
@@ -482,20 +486,16 @@ public class Acquisition extends Activity  {
                             if ((subMeasure.get(0).get(0) >= mOscTrigger - DELTA_TRIGGER) && (subMeasure.get(0).get(0) <= mOscTrigger + DELTA_TRIGGER)) {
                                 found = true;
                                 fillSubMeasureCorrectly(i);
+                            } else {
+                                subMeasure.remove(0);
                             }
-
                         } else {
                             subMeasure.remove(0);
                         }
                         i++;
                     }
-                    if (!found) {
-                        //TODO should remove found = true ! b
-                        found = true;
-                        fillSubMeasureCorrectly(i);
-                    }
                 } else {
-                    //mOscTrigger = subMeasure.get(0).get(0);
+                    mOscTrigger = subMeasure.get(0).get(0);
 
                     return;
                 }
@@ -505,7 +505,7 @@ public class Acquisition extends Activity  {
     }
 
     private void findOscTrigger() {
-        /*int max = 0;
+        int max = 0;
         for(Measure m:subMeasure) {
             if(m != null) {
                 if (m.get(0) > max) {
@@ -513,18 +513,20 @@ public class Acquisition extends Activity  {
                 }
             }
         }
-        mOscTrigger = max;*/
+        mOscTrigger = max;
     }
 
     private void fillSubMeasureCorrectly(int startingCorrectFrame) {
-        Log.e("Value deleted","Value DELETED : " + startingCorrectFrame + " ; value to ADD : " );
-        for(int i=0;i<startingCorrectFrame-1;i++) {
-            if(subMeasure.size() >0) {
+        //Log.e("Value deleted","Value DELETED : " + startingCorrectFrame + " ; value to ADD : " );
+        for(int i=0;i<startingCorrectFrame;i++) {
+            /*if(subMeasure.size() >0) {
                 subMeasure.remove(0);
+            }*/
+            if(subMeasure.size() < 200) {
+                subMeasure.add(mCleanData.getFirst());
             }
-            subMeasure.add(mCleanData.getFirst());
         }
-        Log.e("SubMeasure size", "After DELETION : " + subMeasure.size());
+        //Log.e("SubMeasure size", "After DELETION : " + subMeasure.size());
     }
 
     @Override
@@ -539,9 +541,10 @@ public class Acquisition extends Activity  {
             @Override
             public void run() {
                     copyValToSub();
-                nbrPoints = 200;
+                //nbrPoints = 200;
+                nbrPoints = subMeasure.size();
                 synchronized (subMeasure) {
-                    Log.e("NBRpoint", "Taile subMeasure : " + nbrPoints);
+                    Log.e("NBRpoint", "Taile subMeasure : " + subMeasure.size());
                     // addItemsAtTheEnd(nbrPoints); //Fais automatiquement normalement
                     //removeItems(nbrPoints);
                     //Log.w("Update Graph", "Graph starts update !");
@@ -597,7 +600,7 @@ public class Acquisition extends Activity  {
                             float val1 = MeasuresList.get(0).get(1);
                             float val2 = MeasuresList.get(0).get(2);
                             float val3 = MeasuresList.get(0).get(3);
-                            for(int i = 1; i < nbrPoints; i++){
+                            for(int i = 1; i < nbrPoints-1; i++){
 
                                 /*float v0 = (MeasuresList.get(i-2).get(0) + MeasuresList.get(i-1).get(0) + MeasuresList.get(i).get(0) + MeasuresList.get(i+1).get(0) + MeasuresList.get(i+2).get(0))/5;
                                 float v1 = (MeasuresList.get(i-2).get(1) + MeasuresList.get(i-1).get(1) + MeasuresList.get(i).get(1) + MeasuresList.get(i+1).get(1) + MeasuresList.get(i+2).get(1))/5;
@@ -635,14 +638,14 @@ public class Acquisition extends Activity  {
                                 if(Math.abs(MeasuresList.get(i).get(3) - val3) >= FILER_TRIGGER){
                                     MeasuresList.get(i).setC3((int)val3);
                                 }
-                                data3.add(new Entry((float)((MeasuresList.get(i-1).get(0)-315)/CONV_FACTOR),i-1));
+                                data3.add(new Entry((float)((MeasuresList.get(i-1).get(3)-315)/CONV_FACTOR),i-1));
                                 val3 = MeasuresList.get(i).get(3);
                             }
                             //Log.w("Update Graph", "Graph starts update !");
                             chart.notifyDataSetChanged();
                             chart.invalidate();
                             mustRefresh = true;
-                            //Log.e("Can refresh", "CAN REFRESH !!");
+                            Log.e("Can refresh", "CAN REFRESH !!");
                             //Log.w("Update Graph", "Graph starts update !");
                         }
                     });
