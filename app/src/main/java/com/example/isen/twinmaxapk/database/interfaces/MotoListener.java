@@ -9,6 +9,6 @@ public interface MotoListener {
     void dismissPopupMoto();
     void onViewPopupDeleteMoto(Moto moto);
     void addMoto(Moto moto);
-
+    void addMaintenanceView(Moto moto);
     void quitHistoricActivity();
 }

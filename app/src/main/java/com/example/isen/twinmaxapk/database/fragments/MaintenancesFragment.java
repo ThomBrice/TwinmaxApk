@@ -3,6 +3,7 @@ package com.example.isen.twinmaxapk.database.fragments;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -35,6 +37,7 @@ public class MaintenancesFragment extends Fragment implements MaintenanceChangeL
     private Context context;
     private Moto moto;
     private MaintenanceListener mListener;
+    private Button addMaintenance;
 
     public MaintenancesFragment() {
     }
@@ -51,18 +54,23 @@ public class MaintenancesFragment extends Fragment implements MaintenanceChangeL
         View rootView = inflater.inflate(R.layout.fragment_maintenances, container, false);
 
         listView = (ListView) rootView.findViewById(R.id.motosListView);
+        addMaintenance = (Button) rootView.findViewById(R.id.add);
 
-        final ProgressBar progressBar = new ProgressBar(getActivity());
-        progressBar.setLayoutParams(new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
-        progressBar.setIndeterminate(true);
-        listView.setEmptyView(progressBar);
+        addMaintenance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    final AddMaintenanceFragment fragment = new AddMaintenanceFragment(getActivity(), moto, null);
+                    transaction.replace(R.id.container, fragment);
+                    transaction.addToBackStack(null).commit();
+                }
+            }
+        });
 
-        //bmoto = (Moto) getArguments().getSerializable("moto");
-
-        ViewGroup root = (ViewGroup) rootView.findViewById(R.id.maintenancesRootRelativeLayout);
-        root.addView(progressBar);
 
         listView.setOnItemLongClickListener(this);
+
 
         return rootView;
     }

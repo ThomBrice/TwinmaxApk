@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
+import com.example.isen.twinmaxapk.database.fragments.AddMaintenanceFragment;
 import com.example.isen.twinmaxapk.database.fragments.AddMotoFragment;
 import com.example.isen.twinmaxapk.database.fragments.ChartFragment;
+import com.example.isen.twinmaxapk.database.fragments.ListMotoFragment;
 import com.example.isen.twinmaxapk.database.fragments.MaintenancesFragment;
 import com.example.isen.twinmaxapk.database.fragments.MotoFragment;
 import com.example.isen.twinmaxapk.database.fragments.PopupDeleteMaintenanceFragment;
@@ -39,14 +41,22 @@ public class HistoricActivity extends Activity implements MotoListener, Maintena
         MaintenanceWithList maintenance = (MaintenanceWithList) getIntent().getExtras().getSerializable("maintenance");
 
         int from = Integer.parseInt(fromWhere);
-        /*Compute compute = new Compute();
+        /*
+        Compute compute = new Compute();
 
         compute.emptyDatabase();
-        compute.someItemsInDatabase();*/
-
+        compute.someItemsInDatabase();
+        */
         if (from== 1) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             AddMotoFragment fragment = new AddMotoFragment(getApplicationContext(),maintenance);
+            transaction.replace(R.id.container, fragment);
+            transaction.addToBackStack(null).commit();
+            isFromAcqu = true;
+        }
+        else if (from == 2){
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            ListMotoFragment fragment = new ListMotoFragment(getApplicationContext());
             transaction.replace(R.id.container, fragment);
             transaction.addToBackStack(null).commit();
             isFromAcqu = true;
@@ -100,7 +110,7 @@ public class HistoricActivity extends Activity implements MotoListener, Maintena
 
         popupMoto = new PopupDeleteMotoFragment(this, moto);
 
-        popupMoto.show(transaction,"popupMoto");
+        popupMoto.show(transaction, "popupMoto");
 
     }
 
@@ -111,6 +121,29 @@ public class HistoricActivity extends Activity implements MotoListener, Maintena
         final FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         final MotoFragment fragment = new MotoFragment(this);
+
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null).commit();
+    }
+
+    @Override
+    public void addMaintenanceView(Moto moto) {
+        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        final AddMaintenanceFragment fragment = new AddMaintenanceFragment(getApplicationContext(), moto, null);
+
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null).commit();
+    }
+
+    @Override
+    public void addMaintenance(Moto moto, Maintenance maintenance) {
+        Compute.getRealm().beginTransaction();
+        moto.getMaintenances().add(maintenance);
+        Compute.getRealm().commitTransaction();
+
+        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        final MaintenancesFragment fragment = new MaintenancesFragment(getApplication(),moto);
 
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null).commit();

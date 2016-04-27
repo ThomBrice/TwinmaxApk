@@ -70,7 +70,12 @@ public class PopupSaveHistoric extends DialogFragment {
         addExistingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Acquisition.hasSavedSomething = true;
+                Intent intent = new Intent(getActivity(), HistoricActivity.class);
+                final Bundle extras = new Bundle();
+                extras.putString(Constants.GOTOHISTORIC, "2");
+                intent.putExtras(extras);
+                startActivity(intent);
             }
         });
 
