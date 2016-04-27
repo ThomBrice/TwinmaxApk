@@ -11,6 +11,7 @@ import com.example.isen.twinmaxapk.database.fragments.MotoFragment;
 import com.example.isen.twinmaxapk.database.fragments.PopupDeleteMaintenanceFragment;
 import com.example.isen.twinmaxapk.database.fragments.PopupDeleteMotoFragment;
 import com.example.isen.twinmaxapk.database.historic.Maintenance;
+import com.example.isen.twinmaxapk.database.historic.MaintenanceWithList;
 import com.example.isen.twinmaxapk.database.historic.Moto;
 import com.example.isen.twinmaxapk.database.interfaces.MaintenanceListener;
 import com.example.isen.twinmaxapk.database.interfaces.MotoListener;
@@ -21,13 +22,22 @@ public class HistoricActivity extends Activity implements MotoListener, Maintena
 
     PopupDeleteMotoFragment popupMoto;
     PopupDeleteMaintenanceFragment popupMaintenance;
+    public static boolean isFromAcqu;
+
+    @Override
+    public void quitHistoricActivity() {
+        isFromAcqu = false;
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historic);
-
+        isFromAcqu = false;
         String fromWhere = getIntent().getExtras().get(Constants.GOTOHISTORIC).toString();
+        MaintenanceWithList maintenance = (MaintenanceWithList) getIntent().getExtras().getSerializable("maintenance");
+
         int from = Integer.parseInt(fromWhere);
         Compute compute = new Compute();
 
@@ -36,9 +46,10 @@ public class HistoricActivity extends Activity implements MotoListener, Maintena
 
         if (from== 1) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            AddMotoFragment fragment = new AddMotoFragment(getApplicationContext());
+            AddMotoFragment fragment = new AddMotoFragment(getApplicationContext(),maintenance);
             transaction.replace(R.id.container, fragment);
             transaction.addToBackStack(null).commit();
+            isFromAcqu = true;
         }
         else{
             FragmentTransaction transaction = getFragmentManager().beginTransaction();

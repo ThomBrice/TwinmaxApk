@@ -71,7 +71,7 @@ public class MotoFragment extends Fragment implements MotoChangeListener, Adapte
                 if (null != mListener) {
                     final FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-                    final AddMotoFragment fragment = new AddMotoFragment(context);
+                    final AddMotoFragment fragment = new AddMotoFragment(context, null);
 
                     transaction.replace(R.id.container, fragment);
                     transaction.addToBackStack(null).commit();

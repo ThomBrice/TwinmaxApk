@@ -12,11 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.isen.twinmaxapk.Acquisition;
 import com.example.isen.twinmaxapk.Compute;
 import com.example.isen.twinmaxapk.Constants;
 import com.example.isen.twinmaxapk.HistoricActivity;
 import com.example.isen.twinmaxapk.R;
 import com.example.isen.twinmaxapk.database.historic.Maintenance;
+import com.example.isen.twinmaxapk.database.historic.MaintenanceWithList;
 import com.example.isen.twinmaxapk.database.historic.Moto;
 import com.example.isen.twinmaxapk.database.interfaces.MaintenanceListener;
 import com.example.isen.twinmaxapk.database.interfaces.MotoListener;
@@ -29,14 +31,16 @@ public class PopupSaveHistoric extends DialogFragment {
 
     private Context context;
     private Moto moto;
+    private MaintenanceWithList maintenance;
     private Button addNewButton;
     private Button addExistingButton;
 
     public PopupSaveHistoric() {
     }
 
-    public PopupSaveHistoric(Context context) {
+    public PopupSaveHistoric(Context context, MaintenanceWithList maintenance) {
         this.context = getActivity();
+        this.maintenance = maintenance;
     }
 
     @Nullable
@@ -53,9 +57,11 @@ public class PopupSaveHistoric extends DialogFragment {
         addNewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Acquisition.hasSavedSomething = true;
                 Intent intent = new Intent(getActivity(), HistoricActivity.class);
                 final Bundle extras = new Bundle();
                 extras.putString(Constants.GOTOHISTORIC, "1");
+                extras.putSerializable("maintenance", maintenance);
                 intent.putExtras(extras);
                 startActivity(intent);
             }

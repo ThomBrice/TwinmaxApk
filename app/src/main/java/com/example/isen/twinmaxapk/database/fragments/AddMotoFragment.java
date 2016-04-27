@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.isen.twinmaxapk.HistoricActivity;
 import com.example.isen.twinmaxapk.R;
 import com.example.isen.twinmaxapk.database.historic.Maintenance;
+import com.example.isen.twinmaxapk.database.historic.MaintenanceWithList;
 import com.example.isen.twinmaxapk.database.historic.Moto;
 import com.example.isen.twinmaxapk.database.interfaces.MotoListener;
 
@@ -23,6 +25,7 @@ import io.realm.RealmList;
 public class AddMotoFragment extends Fragment {
 
     private Context context;
+    private MaintenanceWithList maintenance;
     private EditText nameMoto;
     private EditText date;
     private EditText note;
@@ -34,8 +37,9 @@ public class AddMotoFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public AddMotoFragment(Context context) {
+    public AddMotoFragment(Context context, MaintenanceWithList maintenance) {
         this.context = context;
+        this.maintenance = maintenance;
     }
 
     @Override
@@ -51,14 +55,32 @@ public class AddMotoFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Maintenance maintenance = new Maintenance(date.getText().toString(),note.getText().toString());
+                if (maintenance !=null){
+
+                    Maintenance maintenance1 = new Maintenance(date.getText().toString(), note.getText().toString(), maintenance.getMeasures());;
+                    RealmList<Maintenance> maintenances = new RealmList<Maintenance>();
+                    maintenances.add(maintenance1);
+                    Moto moto = new Moto(nameMoto.getText().toString(),date.getText().toString());
+                    moto.setMaintenances(maintenances);
+
+                    if (mListener !=null) {
+                        mListener.addMoto(moto);
+                    }
+                }
+                else {
+                    Maintenance maintenance = new Maintenance(date.getText().toString(), note.getText().toString());
 
                 RealmList<Maintenance> maintenances = new RealmList<Maintenance>();
                 maintenances.add(maintenance);
                 Moto moto = new Moto(nameMoto.getText().toString(),date.getText().toString());
                 moto.setMaintenances(maintenances);
+
                 if (mListener !=null) {
                     mListener.addMoto(moto);
+                }
+                }
+                if(HistoricActivity.isFromAcqu) {
+                    mListener.quitHistoricActivity();
                 }
             }
         });

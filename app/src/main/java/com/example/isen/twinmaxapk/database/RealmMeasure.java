@@ -1,8 +1,10 @@
 package com.example.isen.twinmaxapk.database;
 
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 
-public class RealmMeasure extends RealmObject {
+public class RealmMeasure extends RealmObject implements Serializable {
 
     private int c0;
     private int c1;

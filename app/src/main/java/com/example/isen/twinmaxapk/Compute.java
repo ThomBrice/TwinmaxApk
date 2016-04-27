@@ -702,9 +702,9 @@ public class Compute {
         fillMeasuresList();
 
         RealmList<Maintenance> maintenances = new RealmList<>();
-        Maintenance maintenance = new Maintenance("22/02/2012","RAS",MeasuresList);
+        //Maintenance maintenance = new Maintenance("22/02/2012","RAS",MeasuresList);
         Maintenance maintenance1 = new Maintenance("22/02/2011","Problème carbu");
-        maintenances.add(maintenance);
+        //maintenances.add(maintenance);
         maintenances.add(maintenance1);
 
         RealmList<Maintenance> maintenances1 = new RealmList<>();

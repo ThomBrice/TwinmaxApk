@@ -1,6 +1,7 @@
 package com.example.isen.twinmaxapk;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -38,6 +39,7 @@ import com.example.isen.twinmaxapk.database.RealmMeasure;
 import com.example.isen.twinmaxapk.database.fragments.PopupDeleteMaintenanceFragment;
 import com.example.isen.twinmaxapk.database.fragments.PopupSaveHistoric;
 import com.example.isen.twinmaxapk.database.historic.Maintenance;
+import com.example.isen.twinmaxapk.database.historic.MaintenanceWithList;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -424,7 +426,7 @@ public class Acquisition extends Activity  {
 
         saveHistorique.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                RealmList<RealmMeasure> measuresSaved = new RealmList<RealmMeasure>();
+                ArrayList<RealmMeasure> measuresSaved = new ArrayList<RealmMeasure>();
                 List<Entry> entry0 = chart.getLineData().getDataSetByIndex(0).getYVals();
                 List<Entry> entry1 = chart.getLineData().getDataSetByIndex(1).getYVals();
                 List<Entry> entry2 = chart.getLineData().getDataSetByIndex(2).getYVals();
@@ -434,11 +436,13 @@ public class Acquisition extends Activity  {
                     measuresSaved.add(new RealmMeasure((int)entry0.get(i).getVal(),(int)entry1.get(i).getVal(),(int)entry2.get(i).getVal(),(int)entry3.get(i).getVal()));
                 }
 
-                Maintenance maintenance = new Maintenance(null,null);
+                MaintenanceWithList maintenance = new MaintenanceWithList("","");
                 maintenance.setMeasures(measuresSaved);
 
+
+
                 final FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                popupSaveHistoric = new PopupSaveHistoric(getApplication());
+                popupSaveHistoric = new PopupSaveHistoric(getApplication(), maintenance);
                 popupSaveHistoric.show(transaction, "test");
             }
         });
@@ -498,9 +502,15 @@ public class Acquisition extends Activity  {
         });
 
     }
+    public static boolean hasSavedSomething = false;
 
     protected void onResume() {
         super.onResume();
+        if(hasSavedSomething) {
+
+            popupSaveHistoric.dismiss();
+            hasSavedSomething = false;
+        }
         if(mBTService != null && mDeviceAdrress != null && mBluetoothAdapter != null) {
             if(mBTService.getState() == BTService.STATE_NONE) {
                 BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(mDeviceAdrress);

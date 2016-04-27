@@ -25,7 +25,7 @@ public class Maintenance extends RealmObject implements Serializable {
         this.note = note;
         measures = new RealmList<>();
     }
-
+    /*
     public Maintenance(String date, String note, ArrayList<Measure> measures1) {
         this.date = date;
         this.note = note;
@@ -39,6 +39,26 @@ public class Maintenance extends RealmObject implements Serializable {
             c1 = measures1.get(i).get(1);
             c2 = measures1.get(i).get(2);
             c3 = measures1.get(i).get(3);
+            RealmMeasure realmMeasure = new RealmMeasure(c0,c1,c2,c3);
+            this.measures.add(realmMeasure);
+        }
+
+    }
+    */
+
+    public Maintenance(String date, String note, ArrayList<RealmMeasure> measures1) {
+        this.date = date;
+        this.note = note;
+        measures = new RealmList<>();
+        int c0;
+        int c1;
+        int c2;
+        int c3;
+        for(int i=0;i<measures1.size();i++){
+            c0 = measures1.get(i).getC0();
+            c1 = measures1.get(i).getC1();
+            c2 = measures1.get(i).getC2();
+            c3 = measures1.get(i).getC3();
             RealmMeasure realmMeasure = new RealmMeasure(c0,c1,c2,c3);
             this.measures.add(realmMeasure);
         }
