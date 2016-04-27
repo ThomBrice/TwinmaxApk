@@ -32,7 +32,6 @@ public class MainActivity extends Activity {
         CardView acquisitionCard = (CardView) findViewById(R.id.Acquisition_card);
         CardView historiqueCard = (CardView) findViewById(R.id.Historique_card);
         CardView manualCard = (CardView) findViewById(R.id.Mode_emploi_card);
-        CardView reglageCard = (CardView) findViewById(R.id.Reglage_card);
 
         //instantiate the realm and do migration (compulsory)
         RealmConfiguration config1 = new RealmConfiguration.Builder(this)
@@ -45,7 +44,7 @@ public class MainActivity extends Activity {
         acquisitionCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!mBluetoothAdapter.isEnabled()) {
+                if (!mBluetoothAdapter.isEnabled()) {
                     Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
                 } else {
@@ -73,6 +72,7 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
+
     }
 
     @Override

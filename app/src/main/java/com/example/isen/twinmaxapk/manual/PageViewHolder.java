@@ -23,6 +23,13 @@ public class PageViewHolder extends RecyclerView.ViewHolder{
     public void setPage(Page myPage){
         textView.setText(myPage.getText());
         if(myPage.getPicture().equals("TwinmaxPhoto")){this.imageView.setImageResource(R.drawable.twinmax_photo);}
-        if(myPage.getPicture().equals("ApplicationPhoto")){this.imageView.setImageResource(R.drawable.application_photo);}
+        if(myPage.getPicture().equals("accueil1")){this.imageView.setImageResource(R.drawable.accueil1);}
+        if(myPage.getPicture().equals("choix_bluetooth")){this.imageView.setImageResource(R.drawable.choix_bluetooth);}
+        if(myPage.getPicture().equals("graphiques")){this.imageView.setImageResource(R.drawable.graphiques);}
+        if(myPage.getPicture().equals("choix_bluetooth")){this.imageView.setImageResource(R.drawable.choix_bluetooth);}
+        if(myPage.getPicture().equals("accueil2")){this.imageView.setImageResource(R.drawable.accueil2);}
+        if(myPage.getPicture().equals("ajout_commentaire")){this.imageView.setImageResource(R.drawable.ajout_commentaire);}
+        if(myPage.getPicture().equals("ajout_moto")){this.imageView.setImageResource(R.drawable.ajout_moto);}
+        if(myPage.getPicture().equals("historique")){this.imageView.setImageResource(R.drawable.historique);}
     }
 }
