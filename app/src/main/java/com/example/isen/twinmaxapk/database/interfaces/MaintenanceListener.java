@@ -11,5 +11,6 @@ public interface MaintenanceListener {
     void onViewPopupDeleteMaintenance(Maintenance maintenance, Moto moto);
     void onViewMaintenanceForPopup(Moto moto);
     void addMaintenance(Moto moto, Maintenance maintenance);
+    void quitHistoricActivityFromMaintenance();
 }
 

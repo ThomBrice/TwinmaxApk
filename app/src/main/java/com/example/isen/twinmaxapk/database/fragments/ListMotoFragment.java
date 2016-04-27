@@ -15,6 +15,7 @@ import android.widget.ListView;
 import com.example.isen.twinmaxapk.Compute;
 import com.example.isen.twinmaxapk.R;
 import com.example.isen.twinmaxapk.database.adapters.MotosAdapter;
+import com.example.isen.twinmaxapk.database.historic.MaintenanceWithList;
 import com.example.isen.twinmaxapk.database.historic.Moto;
 import com.example.isen.twinmaxapk.database.interfaces.MotoChangeListener;
 import com.example.isen.twinmaxapk.database.interfaces.MotoListener;
@@ -26,14 +27,16 @@ import io.realm.RealmResults;
 public class ListMotoFragment extends Fragment implements MotoChangeListener, AdapterView.OnItemClickListener {
 
     private Context context;
+    private MaintenanceWithList maintenance;
     private ListView listView;
     private MotoListener mListener;
 
     public ListMotoFragment() {
     }
 
-    public ListMotoFragment(Context  context) {
+    public ListMotoFragment(Context  context, MaintenanceWithList maintenance) {
         this.context = context;
+        this.maintenance = maintenance;
     }
 
     @Nullable
@@ -77,7 +80,7 @@ public class ListMotoFragment extends Fragment implements MotoChangeListener, Ad
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener){
             final Moto moto = (Moto) parent.getItemAtPosition(position);
-            mListener.addMaintenanceView(moto);
+            mListener.addMaintenanceView(moto,maintenance);
         }
     }
 }

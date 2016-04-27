@@ -74,6 +74,7 @@ public class PopupSaveHistoric extends DialogFragment {
                 Intent intent = new Intent(getActivity(), HistoricActivity.class);
                 final Bundle extras = new Bundle();
                 extras.putString(Constants.GOTOHISTORIC, "2");
+                extras.putSerializable("maintenance", maintenance);
                 intent.putExtras(extras);
                 startActivity(intent);
             }

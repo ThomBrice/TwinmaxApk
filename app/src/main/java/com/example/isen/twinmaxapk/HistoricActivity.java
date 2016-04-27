@@ -24,10 +24,17 @@ public class HistoricActivity extends Activity implements MotoListener, Maintena
 
     PopupDeleteMotoFragment popupMoto;
     PopupDeleteMaintenanceFragment popupMaintenance;
+    MaintenanceWithList maintenance;
     public static boolean isFromAcqu;
 
     @Override
     public void quitHistoricActivity() {
+        isFromAcqu = false;
+        finish();
+    }
+
+    @Override
+    public void quitHistoricActivityFromMaintenance() {
         isFromAcqu = false;
         finish();
     }
@@ -38,7 +45,7 @@ public class HistoricActivity extends Activity implements MotoListener, Maintena
         setContentView(R.layout.activity_historic);
         isFromAcqu = false;
         String fromWhere = getIntent().getExtras().get(Constants.GOTOHISTORIC).toString();
-        MaintenanceWithList maintenance = (MaintenanceWithList) getIntent().getExtras().getSerializable("maintenance");
+        maintenance = (MaintenanceWithList) getIntent().getExtras().getSerializable("maintenance");
 
         int from = Integer.parseInt(fromWhere);
         /*
@@ -56,7 +63,7 @@ public class HistoricActivity extends Activity implements MotoListener, Maintena
         }
         else if (from == 2){
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            ListMotoFragment fragment = new ListMotoFragment(getApplicationContext());
+            ListMotoFragment fragment = new ListMotoFragment(getApplicationContext(),maintenance);
             transaction.replace(R.id.container, fragment);
             transaction.addToBackStack(null).commit();
             isFromAcqu = true;
@@ -127,9 +134,9 @@ public class HistoricActivity extends Activity implements MotoListener, Maintena
     }
 
     @Override
-    public void addMaintenanceView(Moto moto) {
+    public void addMaintenanceView(Moto moto, MaintenanceWithList maintenance) {
         final FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        final AddMaintenanceFragment fragment = new AddMaintenanceFragment(getApplicationContext(), moto, null);
+        final AddMaintenanceFragment fragment = new AddMaintenanceFragment(getApplicationContext(), moto, maintenance);
 
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null).commit();

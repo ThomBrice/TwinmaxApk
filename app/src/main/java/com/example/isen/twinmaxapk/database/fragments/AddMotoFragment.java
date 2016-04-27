@@ -57,7 +57,7 @@ public class AddMotoFragment extends Fragment {
             public void onClick(View v) {
                 if (maintenance !=null){
 
-                    Maintenance maintenance1 = new Maintenance(date.getText().toString(), note.getText().toString(), maintenance.getMeasures());;
+                    Maintenance maintenance1 = new Maintenance(date.getText().toString(), note.getText().toString(), maintenance.getMeasures());
                     RealmList<Maintenance> maintenances = new RealmList<Maintenance>();
                     maintenances.add(maintenance1);
                     Moto moto = new Moto(nameMoto.getText().toString(),date.getText().toString());

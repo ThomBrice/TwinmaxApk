@@ -12,11 +12,15 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.isen.twinmaxapk.Compute;
+import com.example.isen.twinmaxapk.HistoricActivity;
 import com.example.isen.twinmaxapk.R;
 import com.example.isen.twinmaxapk.database.historic.Maintenance;
+import com.example.isen.twinmaxapk.database.historic.MaintenanceWithList;
 import com.example.isen.twinmaxapk.database.historic.Moto;
 import com.example.isen.twinmaxapk.database.interfaces.MaintenanceListener;
 import com.example.isen.twinmaxapk.database.interfaces.MotoListener;
+
+import io.realm.RealmList;
 
 public class AddMaintenanceFragment extends Fragment {
 
@@ -25,13 +29,13 @@ public class AddMaintenanceFragment extends Fragment {
     private Button add;
     private Context context;
     private Moto moto;
-    private Maintenance maintenance;
+    private MaintenanceWithList maintenance;
     private MaintenanceListener mListener;
 
     public AddMaintenanceFragment() {
     }
 
-    public AddMaintenanceFragment(Context context, Moto moto, Maintenance maintenance) {
+    public AddMaintenanceFragment(Context context, Moto moto, MaintenanceWithList maintenance) {
         this.context= context;
         this.moto = moto;
         this.maintenance = maintenance;
@@ -49,10 +53,23 @@ public class AddMaintenanceFragment extends Fragment {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Maintenance maintenance = new Maintenance(date.getText().toString(),note.getText().toString());
 
-                if (mListener !=null) {
-                    mListener.addMaintenance(moto, maintenance);
+                if(maintenance!=null){
+                    Maintenance maintenance1 = new Maintenance(date.getText().toString(), note.getText().toString(), maintenance.getMeasures());
+                    if (mListener !=null) {
+                        mListener.addMaintenance(moto, maintenance1);
+                    }
+                }
+                else {
+                    Maintenance maintenance1 = new Maintenance(date.getText().toString(), note.getText().toString());
+
+                    if (mListener !=null) {
+                        mListener.addMaintenance(moto, maintenance1);
+                    }
+                }
+
+                if(HistoricActivity.isFromAcqu) {
+                    mListener.quitHistoricActivityFromMaintenance();
                 }
             }
         });
