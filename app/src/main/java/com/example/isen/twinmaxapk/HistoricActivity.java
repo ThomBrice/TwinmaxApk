@@ -39,10 +39,10 @@ public class HistoricActivity extends Activity implements MotoListener, Maintena
         MaintenanceWithList maintenance = (MaintenanceWithList) getIntent().getExtras().getSerializable("maintenance");
 
         int from = Integer.parseInt(fromWhere);
-        Compute compute = new Compute();
+        /*Compute compute = new Compute();
 
         compute.emptyDatabase();
-        compute.someItemsInDatabase();
+        compute.someItemsInDatabase();*/
 
         if (from== 1) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();

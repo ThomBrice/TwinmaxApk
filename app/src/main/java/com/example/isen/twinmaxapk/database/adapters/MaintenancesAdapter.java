@@ -73,7 +73,9 @@ public class MaintenancesAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Maintenance m = (Maintenance) getItem(position);
                 if (m.getMeasures().size() !=0) {
-                    LineData lineData = fillLineData(m.getMeasures());
+                    RealmList<RealmMeasure> measureList = m.getMeasures();
+
+                    LineData lineData = fillLineData(measureList);
                     if (null != mListener) {
                         mListener.onViewGraph(lineData);
                     }
@@ -90,15 +92,24 @@ public class MaintenancesAdapter extends BaseAdapter {
     public LineData fillLineData(RealmList<RealmMeasure> measures){
 
         ArrayList<Entry> data0 = new ArrayList<>();
+        ArrayList<Entry> data1 = new ArrayList<>();
+        ArrayList<Entry> data2 = new ArrayList<>();
+        ArrayList<Entry> data3 = new ArrayList<>();
         ArrayList<String> labelsInit = new ArrayList<>();
 
         for (int i=0; i<measures.size();i++){
             data0.add(new Entry(measures.get(i).getC0(),i));
+            data1.add(new Entry(measures.get(i).getC1(),i));
+            data2.add(new Entry(measures.get(i).getC2(),i));
+            data3.add(new Entry(measures.get(i).getC3(),i));
             labelsInit.add("");
         }
 
         ArrayList<LineDataSet> lines = new ArrayList<>();
         lines.add(new LineDataSet(data0,"data0"));
+        lines.add(new LineDataSet(data1,"data1"));
+        lines.add(new LineDataSet(data2,"data2"));
+        lines.add(new LineDataSet(data3,"data3"));
 
         return new LineData(labelsInit, lines);
     }

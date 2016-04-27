@@ -529,15 +529,12 @@ public class Acquisition extends Activity  {
             while (!found) {
                 i = 0;
                 tryCounter++;
-
                 subMeasure.clear();
                 subMeasure = mCleanData.getGraphValues();
                 if (tryCounter >= 5) {
                     fillSubMeasureCorrectly(200);
-                    //Log.e("Didn'tfind","Couldn't find trigger point ! ");
                     findOscTrigger();
                     return;
-
                 }
                 if (subMeasure.size() != 200) {
                     continue;
@@ -558,7 +555,6 @@ public class Acquisition extends Activity  {
                     }
                 } else {
                     mOscTrigger = subMeasure.get(0).get(0);
-
                     return;
                 }
             }
