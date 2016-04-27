@@ -34,8 +34,10 @@ import com.example.isen.twinmaxapk.bleSercive.utils.DecoderListener;
 import com.example.isen.twinmaxapk.bleSercive.utils.RawContainer;
 import com.example.isen.twinmaxapk.bleService.activities_frags.BTScanActivity;
 import com.example.isen.twinmaxapk.database.Measure;
+import com.example.isen.twinmaxapk.database.RealmMeasure;
 import com.example.isen.twinmaxapk.database.fragments.PopupDeleteMaintenanceFragment;
 import com.example.isen.twinmaxapk.database.fragments.PopupSaveHistoric;
+import com.example.isen.twinmaxapk.database.historic.Maintenance;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -56,6 +58,8 @@ import java.util.TimerTask;
 import java.util.UUID;
 //import java.util.logging.Handler;
 import java.util.logging.LogRecord;
+
+import io.realm.RealmList;
 
 public class Acquisition extends Activity  {
 
@@ -351,7 +355,7 @@ public class Acquisition extends Activity  {
         chart.getLineData().getDataSetByIndex(3).setColor(Color.rgb(247, 35, 12));
 
         //checkbox
-        CheckBox c0 = (CheckBox) findViewById(R.id.c0);
+        final CheckBox c0 = (CheckBox) findViewById(R.id.c0);
         c0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -364,7 +368,7 @@ public class Acquisition extends Activity  {
             }
         });
 
-        CheckBox c1 = (CheckBox) findViewById(R.id.c1);
+        final CheckBox c1 = (CheckBox) findViewById(R.id.c1);
         c1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -377,7 +381,7 @@ public class Acquisition extends Activity  {
             }
         });
 
-        CheckBox c2 = (CheckBox) findViewById(R.id.c2);
+        final CheckBox c2 = (CheckBox) findViewById(R.id.c2);
         c2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -390,7 +394,8 @@ public class Acquisition extends Activity  {
             }
         });
 
-        CheckBox c3 = (CheckBox) findViewById(R.id.c3);
+
+        final CheckBox c3 = (CheckBox) findViewById(R.id.c3);
         c3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -419,10 +424,22 @@ public class Acquisition extends Activity  {
 
         saveHistorique.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                RealmList<RealmMeasure> measuresSaved = new RealmList<RealmMeasure>();
+                List<Entry> entry0 = chart.getLineData().getDataSetByIndex(0).getYVals();
+                List<Entry> entry1 = chart.getLineData().getDataSetByIndex(1).getYVals();
+                List<Entry> entry2 = chart.getLineData().getDataSetByIndex(2).getYVals();
+                List<Entry> entry3 = chart.getLineData().getDataSetByIndex(3).getYVals();
 
+                for(int i=0;i<entry0.size() && i<entry1.size() && i<entry2.size() && i< entry3.size(); i++) {
+                    measuresSaved.add(new RealmMeasure((int)entry0.get(i).getVal(),(int)entry1.get(i).getVal(),(int)entry2.get(i).getVal(),(int)entry3.get(i).getVal()));
+                }
+
+                Maintenance maintenance = new Maintenance(null,null);
+                maintenance.setMeasures(measuresSaved);
+
+                final FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 popupSaveHistoric = new PopupSaveHistoric(getApplication());
-                popupSaveHistoric.show(transaction,"test");
+                popupSaveHistoric.show(transaction, "test");
             }
         });
 
