@@ -60,7 +60,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), HistoricActivity.class);
                 final Bundle extras = new Bundle();
-                extras.putInt( Constants.GOTOHISTORIC, 1);
+                extras.putInt( Constants.GOTOHISTORIC, 0);
                 intent.putExtras(extras);
                 startActivity(intent);
             }

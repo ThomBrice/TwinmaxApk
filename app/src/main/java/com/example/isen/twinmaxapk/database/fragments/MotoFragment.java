@@ -65,14 +65,6 @@ public class MotoFragment extends Fragment implements MotoChangeListener, Adapte
         add = (Button) rootView.findViewById(R.id.add);
 
 
-        final ProgressBar progressBar = new ProgressBar(getActivity());
-        progressBar.setLayoutParams(new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
-        progressBar.setIndeterminate(true);
-        listView.setEmptyView(progressBar);
-
-        ViewGroup root = (ViewGroup) rootView.findViewById(R.id.motosRootRelativeLayout);
-        root.addView(progressBar);
-
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
