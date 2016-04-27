@@ -12,12 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".SplashActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="landscape">
         </activity>
         <activity
             android:name=".Acquisition"
@@ -29,8 +32,6 @@
             android:name=".manual.Manual"
             android:screenOrientation="landscape">
         </activity>
-        <activity android:name=".bleService.activities_frags.BLE_ScanActivity"
-            android:screenOrientation="landscape"/>
         <activity android:name=".HistoricActivity"
             android:screenOrientation="landscape">
         </activity>

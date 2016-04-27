@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -7,12 +7,12 @@
     android:background="@color/colorPrimaryDark"
     android:gravity="center_vertical|fill_vertical|center_horizontal">
 
-    <GridLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="2"
-        android:rowCount="2"
-        android:layout_gravity="center">
+        android:id="@+id/top">
+
         <android.support.v7.widget.CardView
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -23,7 +23,8 @@
             card_view:cardElevation="15dp"
             card_view:cardPreventCornerOverlap="true"
             card_view:cardUseCompatPadding="true"
-            card_view:cardBackgroundColor="@color/colorPrimary">
+            card_view:cardBackgroundColor="@color/colorPrimary"
+            android:layout_centerInParent="true">
             <RelativeLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
@@ -35,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/graphic_icon"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="3dp"/>
+                    android:layout_marginTop="3dp" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -47,40 +48,51 @@
                     android:textColor="@color/colorText"/>
             </RelativeLayout>
         </android.support.v7.widget.CardView>
-        <android.support.v7.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/Historique_card"
-        android:layout_width="200dp"
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardElevation="15dp"
-        card_view:cardPreventCornerOverlap="true"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardBackgroundColor="@color/colorPrimary">
-        <RelativeLayout
+        android:id="@+id/bottom"
+        android:layout_below="@id/top"
+        android:layout_centerHorizontal="true">
+        <android.support.v7.widget.CardView
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/Historique_card"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
-            <ImageView
-                android:id="@+id/icon_histo"
+            card_view:cardCornerRadius="10dp"
+            card_view:cardElevation="15dp"
+            card_view:cardPreventCornerOverlap="true"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardBackgroundColor="@color/colorPrimary"
+            android:layout_gravity="bottom">
+            <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/historique_icon"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="3dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Historique"
-                android:textSize="20dp"
-                android:layout_below="@+id/icon_histo"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="bottom"
-                android:textColor="@color/colorText"/>
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+                android:layout_gravity="center_horizontal">
+                <ImageView
+                    android:id="@+id/icon_histo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/historique_icon"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Historique"
+                    android:textSize="20dp"
+                    android:layout_below="@+id/icon_histo"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="bottom"
+                    android:textColor="@color/colorText"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
         <android.support.v7.widget.CardView
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -91,7 +103,11 @@
             card_view:cardElevation="15dp"
             card_view:cardPreventCornerOverlap="true"
             card_view:cardUseCompatPadding="true"
-            card_view:cardBackgroundColor="@color/colorPrimary">
+            card_view:cardBackgroundColor="@color/colorPrimary"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/Historique_card"
+            android:layout_marginLeft="37dp"
+            android:layout_marginStart="37dp">
             <RelativeLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
@@ -115,42 +131,6 @@
                     android:textColor="@color/colorText"/>
             </RelativeLayout>
         </android.support.v7.widget.CardView>
-        <android.support.v7.widget.CardView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/Reglage_card"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            card_view:cardCornerRadius="10dp"
-            card_view:cardElevation="15dp"
-            card_view:cardPreventCornerOverlap="true"
-            card_view:cardUseCompatPadding="true"
-            card_view:cardBackgroundColor="@color/colorPrimary">
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal">
-                <ImageView
-                    android:id="@+id/icon_regl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/reglage_icon"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="3dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Réglages"
-                    android:textSize="20dp"
-                    android:layout_below="@+id/icon_regl"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="bottom"
-                    android:textColor="@color/colorText"/>
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
 
-
-    </GridLayout>
-
-</LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
