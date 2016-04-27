@@ -1,6 +1,7 @@
 package com.example.isen.twinmaxapk;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -33,6 +34,8 @@ import com.example.isen.twinmaxapk.bleSercive.utils.DecoderListener;
 import com.example.isen.twinmaxapk.bleSercive.utils.RawContainer;
 import com.example.isen.twinmaxapk.bleService.activities_frags.BTScanActivity;
 import com.example.isen.twinmaxapk.database.Measure;
+import com.example.isen.twinmaxapk.database.fragments.PopupDeleteMaintenanceFragment;
+import com.example.isen.twinmaxapk.database.fragments.PopupSaveHistoric;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -44,6 +47,7 @@ import com.hookedonplay.decoviewlib.events.DecoEvent;
 import android.os.Handler;
 import android.widget.Toast;
 
+import java.nio.channels.Pipe;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +60,9 @@ import java.util.logging.LogRecord;
 public class Acquisition extends Activity  {
 
     private static LineData pointsDur;
+
+    //popup
+    PopupSaveHistoric popupSaveHistoric;
 
     //Decoder fields
     private RawContainer mRawContainer;
@@ -174,7 +181,7 @@ public class Acquisition extends Activity  {
 
     private boolean mConnected = false;
     private TextView mConnectionState;
-    private TextView mDataField;
+    private Button saveHistorique;
     //End of Ble fields
 
 
@@ -289,7 +296,7 @@ public class Acquisition extends Activity  {
         connectDevice(intent, false);
 
         mConnectionState = (TextView) findViewById(R.id.acquisition_connection_state);
-        mDataField = (TextView) findViewById(R.id.acquisition_data_field);
+        saveHistorique = (Button) findViewById(R.id.acquisition_save_historique);
 
         chart = new LineChart(this);
         chart = (LineChart) findViewById(R.id.chart);
@@ -410,6 +417,14 @@ public class Acquisition extends Activity  {
             }
         });
 
+        saveHistorique.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                popupSaveHistoric = new PopupSaveHistoric(getApplication());
+                popupSaveHistoric.show(transaction,"test");
+            }
+        });
 
         // compte tour
         Button buttonMoins = (Button) findViewById(R.id.moins);
@@ -707,13 +722,6 @@ public class Acquisition extends Activity  {
                 mConnectionState.setText(resourceId);
             }
         });
-    }
-
-    private void displayData(String data) {
-        if (data != null) {
-            mDataField.setText(data);
-            //mConnectionState.setText(data);
-        }
     }
 
     public void removeItems(int points) {

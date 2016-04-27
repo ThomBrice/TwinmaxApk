@@ -59,6 +59,9 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), HistoricActivity.class);
+                final Bundle extras = new Bundle();
+                extras.putInt( Constants.GOTOHISTORIC, 1);
+                intent.putExtras(extras);
                 startActivity(intent);
             }
         });

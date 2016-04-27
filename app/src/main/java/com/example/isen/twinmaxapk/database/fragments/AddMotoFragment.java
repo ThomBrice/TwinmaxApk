@@ -74,4 +74,6 @@ public class AddMotoFragment extends Fragment {
             mListener = (MotoListener) activity;
         }
     }
+
+
 }

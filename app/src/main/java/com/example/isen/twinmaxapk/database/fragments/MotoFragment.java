@@ -4,6 +4,7 @@ package com.example.isen.twinmaxapk.database.fragments;
 import android.app.ActionBar;
 
 
+import com.example.isen.twinmaxapk.HistoricActivity;
 import com.example.isen.twinmaxapk.database.adapters.MotosAdapter;
 import com.example.isen.twinmaxapk.database.historic.Moto;
 
@@ -53,7 +54,6 @@ public class MotoFragment extends Fragment implements MotoChangeListener, Adapte
     public MotoFragment(Context context) {
         this.context = context;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

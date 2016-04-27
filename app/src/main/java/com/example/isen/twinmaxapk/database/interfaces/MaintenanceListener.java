@@ -7,7 +7,6 @@ import com.github.mikephil.charting.data.LineData;
 public interface MaintenanceListener {
 
     void onViewGraph(LineData lineData);
-    void onViewDeleteMaintenance(Moto moto);
     void dismissPopupMaintenance();
     void onViewPopupDeleteMaintenance(Maintenance maintenance, Moto moto);
     void onViewMaintenanceForPopup(Moto moto);
