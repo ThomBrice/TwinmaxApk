@@ -89,6 +89,9 @@ public class Acquisition extends Activity  {
 
         @Override
         public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
+            if(isStop) {
+                return;
+            }
             changeCounter++;
             //Log.w("TEST", "TEST");
            // Log.e("taille", "val: "+sender.size());
@@ -192,8 +195,8 @@ public class Acquisition extends Activity  {
     ArrayList<Measure> MeasuresList = new ArrayList<>();
     static int valeurButton = 150;
 
-
-
+    private Button mStopButton;
+    private boolean isStop = false;
 
     //BT normal service vars
     private BTService mBTService = null;
@@ -229,7 +232,9 @@ public class Acquisition extends Activity  {
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
-                    mRawContainer.addFrame(readBuf,msg.arg1);
+                    if(!isStop) {
+                        mRawContainer.addFrame(readBuf, msg.arg1);
+                    }
 
                     //for (int i=0;i<msg.arg1;i++) {
                         //Log.e("buf", "value:"+readBuf[i]);
@@ -261,6 +266,8 @@ public class Acquisition extends Activity  {
         mBTService.connect(device, secure);
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -276,11 +283,9 @@ public class Acquisition extends Activity  {
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-
         mBTService = new BTService(getApplicationContext(), mHandler);
         final Intent intent = getIntent();
         mDeviceAdrress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
-
         connectDevice(intent, false);
 
         mConnectionState = (TextView) findViewById(R.id.acquisition_connection_state);
@@ -422,8 +427,8 @@ public class Acquisition extends Activity  {
             }
         });
 
-        Button buttonPlus = (Button) findViewById(R.id.plus);
-        buttonPlus.setOnClickListener(new Button.OnClickListener() {
+        //Button buttonPlus = (Button) findViewById(R.id.plus);
+        /*buttonPlus.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 data = data + 500;
                 arcView.addEvent(new DecoEvent.Builder(data).setIndex(serie1Index).setDelay(0).setDuration(0).build());
@@ -435,7 +440,7 @@ public class Acquisition extends Activity  {
                     valeurButton++;
                 }
             }
-        });
+        });*/
 
         arcView = (DecoView) findViewById(R.id.arcView);
 
@@ -445,6 +450,21 @@ public class Acquisition extends Activity  {
 
         //setup events
         createEvents();
+        isStop = false;
+        mStopButton = (Button)findViewById(R.id.moins);
+        mStopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isStop) {
+                    isStop = false;
+                    mStopButton.setText("Stop");
+                } else {
+                    isStop = true;
+                    mStopButton.setText("Start");
+                }
+            }
+        });
+
     }
 
     protected void onResume() {
@@ -556,7 +576,7 @@ public class Acquisition extends Activity  {
         mThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                    copyValToSub();
+                copyValToSub();
                 //nbrPoints = 200;
                 nbrPoints = subMeasure.size();
                 synchronized (subMeasure) {

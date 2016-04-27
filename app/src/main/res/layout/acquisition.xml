@@ -102,20 +102,12 @@
                 android:layout_below="@id/c3"
                 android:layout_centerHorizontal="true"/>
             <Button
-                android:id="@+id/plus"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:text="+"
-                android:layout_below="@id/b0"
-                android:layout_marginLeft="20dp"/>
-            <Button
                 android:id="@+id/moins"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-"
-                android:layout_toRightOf="@+id/plus"
+                android:text="Stop"
+                android:layout_centerHorizontal="true"
                 android:layout_below="@id/b0"/>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

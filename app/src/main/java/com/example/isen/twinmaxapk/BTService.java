@@ -331,7 +331,6 @@ public class BTService {
                     byte[] bufferBis = new byte[1024];
                     for(int i=0;i<bytes;i++) {
                         bufferBis[i] = new Byte(buffer[i]).byteValue();
-                        //bufferBis[i] = buffer[i];
                     }
                     if(bytes < 1024) {
                         bufferBis[bytes] = -1;
@@ -339,14 +338,8 @@ public class BTService {
                     for(int i=0;i<bytes;i++) {
                         buffer[i] = -1;
                     }
-                    /*for(byte b:bufferBis) {
-                        if(b != -1 && b !=0) {
-                            //Log.e("Value","Content : " + (int)(b & 0xFF));
-                        }
-                    }*/
                     // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, bufferBis)
-                            .sendToTarget();
+                    mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, bufferBis).sendToTarget();
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();

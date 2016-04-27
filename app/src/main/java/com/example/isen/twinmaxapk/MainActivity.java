@@ -7,8 +7,10 @@ import android.os.Bundle;
 
 import android.content.Intent;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 import com.example.isen.twinmaxapk.bleService.activities_frags.BTScanActivity;
@@ -73,7 +75,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Intent intent = new Intent(getApplicationContext(), BTScanActivity.class);
-        startActivity(intent);
+        if(resultCode == -1) {
+            Intent intent = new Intent(getApplicationContext(), BTScanActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(),"La Bluetooth n'a pas été allumé. Veuillez réessayer.", Toast.LENGTH_LONG).show();
+        }
     }
 }

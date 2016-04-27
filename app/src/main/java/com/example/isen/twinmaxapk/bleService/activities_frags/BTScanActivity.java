@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.isen.twinmaxapk.Acquisition;
 import com.example.isen.twinmaxapk.R;
@@ -40,7 +41,7 @@ public class BTScanActivity extends Activity{
      * Member fields
      */
     private BluetoothAdapter mBtAdapter;
-    private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
     private final static int REQUEST_ENABLE_BT=1;
     /**
      * Newly discovered devices
@@ -54,13 +55,6 @@ public class BTScanActivity extends Activity{
         // Setup the window
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.bt_list_devices);
-        /*if(!mBluetoothAdapter.isEnabled())
-        {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }*/
-
-
 
         // Set result CANCELED in case the user backs out
         setResult(Activity.RESULT_CANCELED);
@@ -151,7 +145,7 @@ public class BTScanActivity extends Activity{
         mBtAdapter.startDiscovery();
     }
 
-    /**
+     /**
      * The on-click listener for all devices in the ListViews
      */
     private AdapterView.OnItemClickListener mDeviceClickListener
@@ -160,20 +154,22 @@ public class BTScanActivity extends Activity{
             // Cancel discovery because it's costly and we're about to connect
             mBtAdapter.cancelDiscovery();
 
+
+
             // Get the device MAC address, which is the last 17 chars in the View
             String info = ((TextView) v).getText().toString();
+            if(!info.contains("TwinMax")) {
+                Toast.makeText(getApplicationContext(),"L'appareil choisi n'est pas un TwinMax. Veuillez réessayer.",Toast.LENGTH_LONG).show();
+                return;
+            }
             String address = "";
             if(info != null && info.length() > 18) {
                 address = info.substring(info.length() - 17);
             }
-
-
-
             // Create the result Intent and include the MAC address
             //Intent intent = new Intent();
             Intent intent = new Intent(getApplicationContext(), Acquisition.class);
             intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
-
             startActivity(intent);
             // Set result and finish this Activity
             //setResult(Activity.RESULT_OK, intent);
