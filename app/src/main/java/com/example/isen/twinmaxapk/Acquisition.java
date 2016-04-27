@@ -506,8 +506,8 @@ public class Acquisition extends Activity  {
 
     protected void onResume() {
         super.onResume();
-        if(hasSavedSomething) {
 
+        if(hasSavedSomething) {
             popupSaveHistoric.dismiss();
             hasSavedSomething = false;
         }
